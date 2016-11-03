@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>SRM Dispatch</title>
+
+	<link rel="shortcut icon" href="./image/sr.ico" />
+	<link rel="stylesheet/less" type="text/css" href="./css/srstyle.less"/>
+	
+	<script type="text/javascript" src="libs/less.min.js"></script>
+	<script type="text/javascript" src="js/util.js"></script>
+	<!-- Bootstrapping UI5 -->
+	<script id="sap-ui-bootstrap"
+			src="resources/sap-ui-core.js"
+			data-sap-ui-libs="sap.m"
+			data-sap-ui-theme="sap_bluecrystal"
+			data-sap-ui-compatVersion="edge"
+			data-sap-ui-resourceroots='{"sap.it.sr.ui": "."}'
+			data-sap-ui-frameOptions="trusted">
+	</script>
+
+	<script>
+		sap.ui.getCore().attachInit(function () {
+			sap.ui.require([
+				"sap/m/Shell",
+				"sap/ui/core/ComponentContainer",
+				"sap/ui/core/IconPool",
+				"sap/ui/unified/ShellHeadItem",
+				"sap/ui/unified/ShellHeadUserItem"
+			], function (Shell, ComponentContainer, IconPool, ShellHeadItem, ShellHeadUserItem) {
+		        var isMozilla = false;
+		        
+		        if ($.browser.mozilla) {
+		            isMozilla = true;
+		        }            
+// 		        if(<%= IsLogin %>){
+// 		            util.isLogin = true;
+// 		            util.userName = '<%= UserName%>';
+// 		            util.userMail = '<%= UserMail%>';
+// 		            util.userId = '<%= UserId%>';
+// 		            util.avatar = fnFormatter.userAvatarLinkFormatter(util.userId);
+// 		        }
+// 		        else{
+		            util.isLogin = false;
+		            util.userName = "";
+		            util.userMail = "";
+		            util.userId = "";
+		            util.avatar = IconPool.getIconURI("person-placeholder");
+//		        }
+		
+		        var oMyShell = new Shell('my_shell',{
+		            title: "SRM []",
+		            showLogout: false,
+		            appWidthLimited: false,
+		            app: new ComponentContainer({
+		                name: 'sap.it.sr.ui'
+		            })
+		        });
+// 		        var oActionSheet = new sap.m.ActionSheet({
+// 		            buttons: [
+// 		                new sap.m.Button({
+// 		                    icon: IconPool.getIconURI("less"),
+// 		                    text: "One Click Login",
+// 		                    visible: !isMozilla,
+// 		                    tooltip: 'SSO Login',
+// 		                    press: function () {
+// 		                        window.location.reload();
+// 		                    }
+// 		                }),
+// 		                new sap.m.Button({
+// 		                    icon: IconPool.getIconURI("home"),
+// 		                    text: "Domain Account",
+// 		                    tooltip: 'Login with domain account',
+// 		                    press: function () {
+// 		                        bk.openLoginWindow();
+// 		                    }
+// 		                })
+// 		            ]
+// 		        });
+		        var oHomeShell = new sap.ui.unified.Shell("main_shell", {
+		            icon: "image/sap_logo.png",
+		            headItems: [
+		                new ShellHeadItem({
+		                    icon: sap.ui.core.IconPool.getIconURI("home"),
+		                    visible: true,
+		                    press: function() {
+		                        window.location.hash = "main"
+		                    }
+		                })
+		            ],
+		            headEndItems: [
+		                new ShellHeadItem("shell_end_logoff", {
+		                    icon: sap.ui.core.IconPool.getIconURI("log"),
+		                    visible: isMozilla && util.isLogin,
+		                    press: function() {
+		                    	util.logoff();
+		                    }
+		                })
+		            ],
+		            user: [
+		                new sap.ui.unified.ShellHeadUserItem("shell_head_user", {
+		                    image: util.avatar,
+		                    username: util.userName,
+		                    //showPopupIndicator: !util.isLogin,
+		                    showPopupIndicator: false,
+		                    press: function(oEvent){
+		                    	window.location.hash = "login";
+// 		                        if (!util.isLogin) {                          
+// 		                            //oActionSheet.openBy(oEvent.getSource());
+// 		                            util.openLoginWindow();
+// 		                        }
+		                    }
+		                })
+		            ],
+		            content: [
+		                oMyShell
+		            ]
+		        });
+		        oHomeShell.placeAt('content');
+
+			});
+		});
+	</script>
+
+</head>
+
+<!-- UI Content -->
+<body class="sapUiBody" id="content">
+</body>
+</html>

@@ -1,0 +1,50 @@
+<core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m" xmlns:l="sap.ui.layout"
+	controllerName="sap.it.sr.ui.view.ExportEmployeeData" xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page 
+		title="{i18n>exportEmployeeData}"
+		id="exportEmployeeDataPage">
+	
+		<Table id="idEmployeeDataTable"
+			mode="MultiSelect"
+			inset="false"
+			items="{
+				path: '/',
+				sorter: {
+					path: 'empId'
+				}
+			}">
+			<columns>
+				<Column>
+					<Text text="{i18n>empId}" />
+				</Column>
+				<Column>
+					<Text text="{i18n>badgeId}" />
+				</Column>
+				<Column>
+					<Text text="{i18n>empName}" />
+				</Column>
+			</columns>
+			<items>
+				<ColumnListItem vAlign="Middle" type="Navigation">
+					<cells>
+						<ObjectIdentifier text="{empId}" />
+						<Text text="{badgeId}" />
+						<Text text="{empName}" />
+					</cells>
+				</ColumnListItem>
+			</items>
+		</Table>
+
+		<footer>
+			<Bar>
+				<contentRight>
+					<Button class="sapUiSmallMarginEnd" id="getData" text="{i18n>getData}"
+						visible="true" press="handleRefresh" />
+					<Button class="sapUiSmallMarginEnd" id="export" text="{i18n>export}"
+						type="Emphasized" visible="true" press="handlePress" icon="sap-icon://download" />
+				</contentRight>
+			</Bar>
+		</footer>
+	</Page>
+</core:View>

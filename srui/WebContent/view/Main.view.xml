@@ -1,0 +1,66 @@
+<mvc:View
+    controllerName="sap.it.sr.ui.view.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:l="sap.ui.layout"
+    xmlns="sap.m">
+    <Page class="mainpage"
+    	showHeader="false">
+         
+		<l:Grid defaultSpan="L12 M12 S12" class="customContainer">
+			<l:content>
+				<l:HorizontalLayout>
+					<Text text="" class="mainpageSectionHeader" />
+				</l:HorizontalLayout>
+			</l:content>
+		</l:Grid>
+		<l:Grid defaultSpan="L12 M12 S12" class="customContainer">
+			<l:content>
+				<l:HorizontalLayout allowWrapping="true" id="frqTileContainer"/>
+			</l:content>
+		</l:Grid>
+		<l:Grid defaultSpan="L12 M12 S12" class="customContainer">
+			<l:content>
+				<l:HorizontalLayout>
+					<Text text="{i18n>collectdata}" class="mainpageSectionHeader" />
+				</l:HorizontalLayout>
+			</l:content>
+		</l:Grid>
+		<l:Grid defaultSpan="L12 M12 S12" class="customContainer">
+			<l:content>
+				<l:HorizontalLayout allowWrapping="true" id="importTileContainer"/>
+			</l:content>
+		</l:Grid>
+		<l:Grid defaultSpan="L12 M12 S12" class="customContainer">
+			<l:content>
+				<l:HorizontalLayout>
+					<Text text="{i18n>exportdata}" class="mainpageSectionHeader" />
+				</l:HorizontalLayout>
+			</l:content>
+		</l:Grid>
+		<l:Grid defaultSpan="L12 M12 S12" class="customContainer">
+			<l:content>
+				<l:HorizontalLayout allowWrapping="true" id="exportTileContainer"/>
+			</l:content>
+		</l:Grid>
+ 		<!--
+        <TileContainer
+            id="container"
+            tileDelete="handleTileDelete"
+            tiles="{/TileCollection}">
+            <StandardTile
+            	class="srMTile"
+                press="onTilePress"
+                icon="sap-icon://{icon}"
+                title="{title}"
+                />
+        </TileContainer>
+        <footer>
+            <Toolbar>
+                <ToolbarSpacer/>
+                    <Button text="Edit" press="handleEditPress" />
+                    
+                <ToolbarSpacer/>
+            </Toolbar>
+        </footer>-->
+    </Page>
+</mvc:View>

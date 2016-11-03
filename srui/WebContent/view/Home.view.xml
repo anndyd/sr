@@ -1,0 +1,58 @@
+<mvc:View 
+        controllerName="sap.it.sr.ui.view.Home" 
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns="sap.tnt"
+        xmlns:m="sap.m">
+	<m:Page
+            id="page"
+            title="{masterView>/title}"
+            showNavButton="false">
+        <m:customHeader>
+            <m:Bar id="headerBar">
+                <!--m:contentLeft>
+                    <m:Button text="Collapse/Exapand"
+                  icon="sap-icon://menu2"
+                  press="onCollapseExapandPress" />
+                </m:contentLeft-->
+                <m:contentMiddle>
+                    <m:Label text="{i18n>appTitle}" />
+                </m:contentMiddle>
+            </m:Bar>
+        </m:customHeader>
+        <m:content>
+		    <NavigationList id="navigationList" 
+		          itemSelect="onSelectItem">
+	            <NavigationListItem text="{i18n>pickup}" icon="sap-icon://cart-3" key="pickup" class="menu">
+	            </NavigationListItem>
+	            <NavigationListItem text="{i18n>itticket}" icon="sap-icon://request" key="itTicket">
+	            </NavigationListItem>
+	            <NavigationListItem text="{i18n>assetcheck}" icon="sap-icon://multi-select" key="assetCheck">
+	            </NavigationListItem>
+		        <NavigationListItem class="defaultCursor"
+		                text="{i18n>collectdata}"
+		                icon="sap-icon://create-form">
+		            <NavigationListItem text="{i18n>scanbadge}">
+		            </NavigationListItem>
+		            <NavigationListItem text="{i18n>importdata}">
+		            </NavigationListItem>
+		            <NavigationListItem text="{i18n>queryinfo}">
+		            </NavigationListItem>
+		            <NavigationListItem text="{i18n>updatedata}" key="empData">
+		            </NavigationListItem>
+		        </NavigationListItem>
+		        <NavigationListItem class="defaultCursor"
+		                text="{i18n>exportdata}"
+		                icon="sap-icon://action">
+		            <NavigationListItem text="{i18n>empdata}" key="exportEmpData">
+		            </NavigationListItem>
+		            <NavigationListItem text="{i18n>pickupdata}" key="exportPickupData">
+		            </NavigationListItem>
+		        </NavigationListItem>
+	            <NavigationListItem 
+	            		text="{i18n>help}"
+	            		icon="sap-icon://sys-help" key="help">
+	            </NavigationListItem>
+		    </NavigationList>
+		</m:content>
+	</m:Page>
+</mvc:View>

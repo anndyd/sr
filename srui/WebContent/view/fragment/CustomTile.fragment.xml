@@ -1,0 +1,20 @@
+<core:FragmentDefinition xmlns="sap.m"
+	xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout">
+	<CustomTile class="customTile sapUiSmallMarginEnd sapUiSmallMarginBottom" press="onTilePress">
+		<l:Grid class="customTileLayout">
+			<l:content>
+				<VBox class="layout">
+					<VBox class="customTileTitleSection" >
+						<core:Icon src="sap-icon://{/icon}" class="tileIcon"></core:Icon>
+           	            <Text text="{/title}" class="tileTitle"></Text>
+           	            <Text text="{/key}" id="tileKey" class="tileKey"></Text>
+					</VBox>
+					<layoutData>
+						<l:GridData span="L12 M12 S12" />
+					</layoutData>
+				</VBox>
+			</l:content>
+		</l:Grid>
+	</CustomTile>
+</core:FragmentDefinition>
+

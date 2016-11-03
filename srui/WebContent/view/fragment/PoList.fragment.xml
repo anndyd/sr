@@ -1,0 +1,45 @@
+<core:FragmentDefinition xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+		<Table id="idPolist" inset="false"
+			items="{
+			path: '/PoList',
+			sorter: {
+				path: 'poItem'
+			}
+		}">
+			<columns>
+				<Column id="poItem" width="8em">
+					<Text text="{i18n>poItem}" />
+				</Column>
+				<Column id="brand" minScreenWidth="Tablet" demandPopin="true">
+					<Text text="{i18n>brand}" />
+				</Column>
+				<Column id="poDesc" minScreenWidth="Tablet" demandPopin="true">
+					<Text text="{i18n>desc}" />
+				</Column>
+				<Column id="quantity" hAlign="End">
+					<Text text="{i18n>quantity}" />
+				</Column>
+				<Column id="status" minScreenWidth="Tablet" demandPopin="true"
+					hAlign="Center">
+					<Text text="{i18n>status}" />
+				</Column>
+				<Column id="location" width="10em">
+					<Text text="{i18n>location}" />
+				</Column>
+			</columns>
+			<items>
+				<ColumnListItem>
+					<cells>
+						<ObjectIdentifier text="{poItem}" />
+						<Text text="{poDesc}" />
+						<Text text="{brand}" />
+						<ObjectNumber number="{quantity}" />
+						<Text text="{status}" />
+						<Text text="{location}" />
+					</cells>
+				</ColumnListItem>
+			</items>
+		</Table>
+</core:FragmentDefinition>
+

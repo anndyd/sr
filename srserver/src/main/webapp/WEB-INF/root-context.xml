@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/jee 
+        http://www.springframework.org/schema/jee/spring-jee-3.1.xsd">
+	
+	<context:component-scan base-package="com.sap.it.sr" />
+
+	<bean id="objectMapper"
+		class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean"
+		p:indentOutput="true" p:simpleDateFormat="yyyy-MM-dd'T'HH:mm:ssZ">
+	</bean>
+
+	<!--Jackson - registerModule JodaModule -->
+	<bean
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"
+		p:targetObject-ref="objectMapper" p:targetMethod="registerModule">
+		<property name="arguments">
+			<list>
+				<bean class="com.fasterxml.jackson.datatype.joda.JodaModule" />
+			</list>
+		</property>
+	</bean>
+
+
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean
+				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="objectMapper" ref="objectMapper" />
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+    <jee:jndi-lookup id="dataSource"
+		jndi-name="java:comp/env/srDataSourceJNDI"
+        expected-type="javax.sql.DataSource" />
+
+<!-- developer enviroment 
+	<jee:jndi-lookup id="dataSource"
+		jndi-name="java:comp/env/jdbc/srDataSourceJNDI" default-ref="nonJndiDataSource"
+		expected-type="javax.sql.DataSource" />
+
+    <bean id="nonJndiDataSource" class="org.apache.tomcat.jdbc.pool.DataSource">
+        <property name="driverClassName" value="org.mariadb.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/srmreceive" />
+        <property name="username" value="root" />
+        <property name="password" value="Sybase123" />
+    </bean>
+-->
+	<bean id="srEntityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="persistenceUnitName" value="srserver" />
+		
+		 <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter">
+                <property name="databasePlatform" value="MYSQL" />
+                <property name="showSql" value="true" />
+            </bean>
+        </property>
+        <property name="jpaDialect">
+    		<bean class="org.springframework.orm.jpa.vendor.EclipseLinkJpaDialect"/>
+		</property>
+	</bean>
+
+	<bean id="srTxManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="srEntityManagerFactory" />
+	</bean>
+
+	<tx:annotation-driven transaction-manager="srTxManager"/>
+
+    <bean id="executor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="100" />
+        <property name="maxPoolSize" value="200" />
+        <property name="queueCapacity" value="500" />
+    </bean>
+
+	<bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="synchronizeOnSession" value="true" />
+		<property name="messageConverters">
+			<list>
+				<bean
+					class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
+			</list>
+		</property>
+	</bean>
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- setting maximum upload size -->
+		<property name="maxUploadSize" value="1000000" />
+	</bean>
+
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/user/**" />
+			<bean class="com.sap.it.sr.interceptor.LoginRequiredInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+</beans>

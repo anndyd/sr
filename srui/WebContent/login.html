@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+		<link rel="shortcut icon" href="./image/sr.ico" />
+		<link rel="stylesheet/less" type="text/css" href="./css/login.css"/>
+		
+        <script type="text/javascript" src="libs/jquery-1.11.3.min.js"></script>
+		<script type="text/javascript" src="libs/less.min.js"></script>
+		<script type="text/javascript" src="js/util.js"></script>
+        <script type="text/javascript">
+            function readtxt(form){
+              var url = "/srserver/user/active";
+              var param = {
+            		 userName: form.userName.value,
+            		 password: form.password.value
+              };
+              $.ajax({
+                  url: url,
+                  type: 'POST',
+                  contentType: "application/x-www-form-urlencoded",
+                  data: param
+              }).done(function(data){
+                  //window.location.href = "srui";
+                  //window.location.assign("http://localhost:18080/srserver/employee/all");
+              }).fail(function(fail){
+            	  
+                  console.log(fail);
+              }).always(function(){
+            	  window.location.href = "srui";
+              });
+            }
+        </script>
+    </head>
+
+    <body>
+    <div class="wrapper">
+      <div class="container">
+      
+        <div class="content">
+          <div class="column one">
+              <form id="login" action="/srserver/user/active" method="post">
+              <section>
+                <input class="form-element form-field" name="userName" type="text" value="" placeholder="Employee ID"/>
+              </section>
+              <section>
+                <input class="form-element form-field" name="password" type="password" value="" placeholder="Password"/>
+              </section>
+
+              <section>
+                <button class="form-element form-button" type="submit" onClick="readtxt(this.form)">Login</button>
+              </section>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+	</body>
+</html>
+

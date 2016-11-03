@@ -1,0 +1,102 @@
+.login {
+    background-size: 100% 100%;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    >.content {
+        position:absolute;
+        top:0;
+        bottom:0;
+        left:0;
+        right:0;
+        margin:auto;
+        width:426px;
+        height:200px;
+        >.header {
+            background-repeat: no-repeat;
+            width: 426px;
+            height: 71px;
+            margin-bottom:48px;
+        }
+        >button {
+            width: 280px;
+            height:40px;
+        }
+        >.header, >button {
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+}
+
+.loading-anim {
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    width: 0;
+    height: 0;
+}
+
+.cssload-square {
+  width: 19px;
+  height: 19px;
+  transform: translate(0,-50%) rotate(-45deg);
+}
+
+.cssload-square-part {
+  position: absolute;
+  width: 19px;
+  height: 19px;
+  z-index: 1;
+  animation: cssload-part-anim 0.92s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite alternate;
+}
+
+.cssload-square-green {
+  background: #188FFF;
+  right: 0;
+  bottom: 0;
+  animation-direction: alternate-reverse;
+}
+
+.cssload-square-pink {
+  background: #FFC107;
+  left: 0;
+  top: 0;
+}
+
+.cssload-square-blend {
+  background: #3FC6DC;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 2;
+  animation: blend-anim 0.92s ease-in infinite;
+}
+
+@keyframes blend-anim {
+  0% {
+    transform: scale(0.01, 0.01) rotateY(0);
+    animation-timing-function: cubic-bezier(0.47, 0, 0.745, 0.715);
+  }
+  50% {
+    transform: scale(1, 1) rotateY(0);
+    animation-timing-function: cubic-bezier(0.39, 0.575, 0.565, 1);
+  }
+  100% {
+    transform: scale(0.01, 0.01) rotateY(0);
+  }
+}
+
+@keyframes cssload-part-anim {
+  0% {
+    transform: translate3d(-10px, -10px, 0);
+  }
+  100% {
+    transform: translate3d(10px, 10px, 0);
+  }
+}

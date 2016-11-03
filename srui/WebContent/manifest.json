@@ -1,0 +1,166 @@
+{
+	"_version": "1.3.0",
+
+	"sap.app": {
+		"_version": "1.3.0",
+		"id": "sap.it.sr.ui",
+		"type": "application",
+		"i18n": "i18n/i18n.properties",
+		"title": "{{appTitle}}",
+		"description": "{{appDescription}}",
+
+		"applicationVersion": {
+			"version": "1.0.0"
+		}
+	},
+
+	"sap.ui": {
+		"_version": "1.3.0",
+		"technology": "UI5",
+		"icons": {
+			"icon": "sap-icon://detail-view",
+			"favIcon": "",
+			"phone": "",
+			"phone@2": "",
+			"tablet": "",
+			"tablet@2": ""
+		},
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		},
+		"supportedThemes": [
+			"sap_hcb",
+			"sap_bluecrystal"
+		]
+	},
+
+	"sap.ui5": {
+		"_version": "1.2.0",
+		"rootView": {
+			"viewName": "sap.it.sr.ui.view.App",
+			"type": "XML",
+			"id": "app"
+		},
+
+		"dependencies": {
+			"minUI5Version": "1.36.0",
+			"libs": {
+				"sap.ui.core": {
+					"minVersion": "1.36.0"
+				},
+				"sap.m": {
+					"minVersion": "1.36.0"
+				},
+				"sap.ui.layout" : {
+					"minVersion": "1.36.0"
+				}
+			}
+		},
+
+		"contentDensities": {
+			"compact": true,
+			"cozy": true
+		},
+
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "sap.it.sr.ui.i18n.i18n"
+				}
+			}
+		},
+
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"viewPath": "sap.it.sr.ui.view",
+				"controlId": "idAppControl",
+				"controlAggregation": "detailPages",
+				"bypassed": {
+					"target": ["notFound"]
+				},
+				"async": true
+			},
+
+			"routes": [
+				{
+					"pattern": "pickup",
+					"name": "pickup",
+					"target": ["home", "pickup"]
+				},
+				{
+					"pattern": "empData",
+					"name": "empData",
+					"target": ["home", "empData"]
+				},
+				{
+					"pattern": "exportEmpData",
+					"name": "exportEmpData",
+					"target": ["home", "exportEmpData"]
+				},
+				{
+					"pattern": "exportPickupData",
+					"name": "exportPickupData",
+					"target": ["home", "exportPickupData"]
+				},
+                {
+                    "pattern": ["main",""],
+                    "name": "main",
+                    "target": ["home", "main"]
+                }
+			],
+
+			"targets": {
+				"pickup": {
+					"viewName": "Pickup",
+					"viewLevel": 1,
+					
+					"controlAggregation": "detailPages"
+				},
+				"empData": {
+					"viewName": "EmployeeData",
+					"viewLevel": 1,
+					
+					"controlAggregation": "detailPages"
+				},
+				"exportEmpData": {
+					"viewName": "ExportEmployeeData",
+					"viewLevel": 1,
+					
+					"controlAggregation": "detailPages"
+				},
+				"exportPickupData": {
+					"viewName": "ExportPickupData",
+					"viewLevel": 1,
+					
+					"controlAggregation": "detailPages"
+				},
+				"login": {
+					"viewName": "Login",
+					"viewLevel": 1
+				},
+				"home": {
+					"viewName": "Home",
+					"viewLevel": 1,
+					
+					"controlAggregation": "masterPages"
+				},
+				"main": {
+					"viewName": "Main",
+					"viewLevel": 1,
+					
+					"controlAggregation": "detailPages"
+				},
+				"notFound": {
+					"viewPath": "sap.it.sr.ui.view.base",
+					"viewName": "NotFound",
+					"viewId": "notFound"
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,130 @@
+<core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m" 
+	xmlns:l="sap.ui.layout" 
+	xmlns:f="sap.ui.layout.form"
+	xmlns:t="sap.ui.table"
+	controllerName="sap.it.sr.ui.view.ExportPickupData" xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page 
+		title="{i18n>exportPickupData}"
+		id="exportPickupDataPage">
+		<VBox>
+			<f:SimpleForm id="epdForm" minWidth="1024"
+				maxContainerCols="2" editable="true" layout="ResponsiveGridLayout"
+				labelSpanL="4" labelSpanM="4" emptySpanL="1" emptySpanM="1"
+				columnsL="1" columnsM="1" class="editableForm">
+				<f:content>
+					<Label text="{i18n>empId}" />
+					<Input value="{input>empIdFrom}" type="Text" placeholder="{i18n>from}"
+						enabled="true" editable="true" maxLength="8">
+						<layoutData>
+							<l:GridData span="L2 M3 S4" />
+						</layoutData>
+					</Input>
+					<Input value="{input>empIdTo}" type="Text" placeholder="{i18n>to}"
+						enabled="true" editable="true" maxLength="8">
+						<layoutData>
+							<l:GridData span="L2 M3 S4" />
+						</layoutData>
+					</Input>
+					
+					<Label text="{i18n>pickupDate}" />
+					<DatePicker
+						id="DP1"
+						value="{input>dateFrom}"
+						valueFormat="yyyy-MM-dd" displayFormat="long"
+						placeholder="{i18n>from}"
+						change="handleChange"
+						class="sapUiSmallMarginBottom">
+						<layoutData>
+							<l:GridData span="L2 M3 S4" />
+						</layoutData>
+					</DatePicker>	
+					<DatePicker
+						id="DP2"
+						value="{input>dateTo}"
+						valueFormat="yyyy-MM-dd" displayFormat="long"
+						placeholder="{i18n>to}"
+						change="handleChange"
+						class="sapUiSmallMarginBottom">
+						<layoutData>
+							<l:GridData span="L2 M3 S4" />
+						</layoutData>
+					</DatePicker>
+				</f:content>
+			</f:SimpleForm>
+		</VBox>
+
+            <t:TreeTable
+                    id="pkTreeTable"
+                    rows="{path:'/', parameters: {arrayNames:['items']}}"
+                    selectionMode="MultiToggle"
+                    enableSelectAll="true"
+                    ariaLabelledBy="title">
+                <t:toolbar>
+                    <Toolbar>
+                        <ToolbarSpacer/>
+                        <Button text="{i18n>collapseAll}" press="onCollapseAll"/>
+                        <Button text="{i18n>expandFirstLevel}" press="onExpandFirstLevel"/>
+                    </Toolbar>
+                </t:toolbar>
+                <t:columns>
+                    <t:Column>
+                        <Label text="{i18n>empId}"/>
+                        <t:template>
+                            <Text text="{empId}"/>
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <Label text="{i18n>agentId}"/>
+                        <t:template>
+                            <Text text="{agentId}"/>
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <Label text="{i18n>pickupDate}"/>
+                        <t:template>
+                            <Text text="{pickupDate}"/>
+                        </t:template>
+                    </t:Column>
+
+                    <t:Column>
+                        <Label text="{i18n>poNumber}"/>
+                        <t:template>
+                            <Text text="{poNumber}"/>
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <Label text="{i18n>poItem}"/>
+                        <t:template>
+                            <Text text="{poItem}"/>
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <Label text="{i18n>desc}"/>
+                        <t:template>
+                            <Text text="{itemDesc}"/>
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <Label text="{i18n>quantity}"/>
+                        <t:template>
+                            <ObjectNumber number="{quantity}"/>
+                        </t:template>
+                    </t:Column>
+
+                </t:columns>
+            </t:TreeTable>
+
+		<footer>
+			<Bar>
+				<contentRight>
+					<Button class="sapUiSmallMarginEnd" id="getData" text="{i18n>getData}"
+						visible="true" press="handleRefresh" />
+					<Button class="sapUiSmallMarginEnd" id="export" text="{i18n>export}"
+						type="Emphasized" visible="true" press="handlePress" icon="sap-icon://download" />
+				</contentRight>
+			</Bar>
+		</footer>
+	</Page>
+
+</core:View>
