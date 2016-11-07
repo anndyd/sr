@@ -66,12 +66,12 @@ public class UserController {
 
     @RequestMapping(value = "/active", method = RequestMethod.POST)
     @ResponseBody
-    public boolean active(HttpServletRequest request, @RequestParam String userName, @RequestParam String password) {
+    public String active(HttpServletRequest request, @RequestParam String userName, @RequestParam String password) {
 
         request.getSession().setAttribute(SessionHolder.USER_ID, userName);
 
         SessionHolder.setContext(userName);
-        return true;
+        return "index.html";
     }
 
 }

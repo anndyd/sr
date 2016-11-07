@@ -25,6 +25,10 @@ sap.ui.define([
 			that.getView().setModel(oModel);
 			that.getView().setModel(pModel, "input");
 			that.getView().bindElement("/");
+			
+			window.addEventListener("message",function(e){
+                console.log(e);
+            },false);
 		},
 
 		handleRefresh: function (oEvent) {

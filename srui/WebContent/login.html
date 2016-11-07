@@ -9,7 +9,7 @@
 		<script type="text/javascript" src="libs/less.min.js"></script>
 		<script type="text/javascript" src="js/util.js"></script>
         <script type="text/javascript">
-            function readtxt(form){
+        	function readtxt(form){
               var url = "/srserver/user/active";
               var param = {
             		 userName: form.userName.value,
@@ -21,13 +21,11 @@
                   contentType: "application/x-www-form-urlencoded",
                   data: param
               }).done(function(data){
-                  //window.location.href = "srui";
-                  //window.location.assign("http://localhost:18080/srserver/employee/all");
+            	  setTimeout(function(){
+                  window.location.href = "http://localhost:18080/srui/index.html";
+            	  },500);
               }).fail(function(fail){
-            	  
-                  console.log(fail);
-              }).always(function(){
-            	  window.location.href = "srui";
+            	  console.log(fail);
               });
             }
         </script>

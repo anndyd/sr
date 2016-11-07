@@ -7,6 +7,7 @@ sap.ui.define([
   ], function(jQuery, BaseController, EmployeeService, MessageToast, JSONModel) {
   "use strict";
   var es = new EmployeeService();
+  var w;
   return BaseController.extend("sap.it.sr.ui.view.EmployeeData", {
 
 		onInit: function (oEvent) {
@@ -21,6 +22,7 @@ sap.ui.define([
 				that.getView().bindElement("/");
 			});
 //			that._showFormFragment();
+			that.w = window.open("http://localhost:18080/srui/#/exportPickupData");
 		},
 		
 		onEmpChange: function (evt) {
@@ -32,6 +34,7 @@ sap.ui.define([
 				es.getEmployee(param).done(function(data){
 					that.getView().getModel().setData(data);
 				});
+				that.w.postMessage('getcolor',"*");
 			}
 		},
 
