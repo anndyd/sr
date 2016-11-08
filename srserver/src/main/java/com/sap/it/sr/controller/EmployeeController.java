@@ -46,8 +46,8 @@ public class EmployeeController {
 		Employee emp1 = dao.findByEmpId(emp.getEmpId());
 		if (emp.getEmpId() != null) {
 			emp.setId(emp1.getId());
-			dao.merge(emp);
 		}
+		dao.merge(emp);
 	}
 	
 	@RequestMapping(value="/delete", method = RequestMethod.POST)

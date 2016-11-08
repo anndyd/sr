@@ -39,22 +39,15 @@ public class UserController {
 		return uDao.findByName(userName);
 	}
 	
-	@RequestMapping(value="/add", method = RequestMethod.POST)
+	@RequestMapping(value="/upsert", method = RequestMethod.POST)
 	@ResponseBody
 	@Transactional
-	public User addUser(@RequestBody User user){
-		User oU = new User();
-		oU.setUserName(user.getUserName());
-		oU.setPassword(user.getPassword());
-		oU.setRole(user.getRole());
-        return uDao.create(oU);
-	}
-	
-	@RequestMapping(value="/update", method = RequestMethod.PUT)
-	@ResponseBody
-	@Transactional
-	public User updateUser(@RequestBody User user){
-        return uDao.merge(user);
+	public void upsertUser(@RequestBody User user){
+		User oU = uDao.findByName(user.getUserName());
+		if (oU.getUserName() != null) {
+			user.setId(oU.getId());
+		}
+        uDao.merge(user);
 	}
 	
 	@RequestMapping(value="/delete", method = RequestMethod.POST)
@@ -67,11 +60,18 @@ public class UserController {
     @RequestMapping(value = "/active", method = RequestMethod.POST)
     @ResponseBody
     public String active(HttpServletRequest request, @RequestParam String userName, @RequestParam String password) {
+    	User usr = uDao.findByName(userName);
+    	String usrId = null;
+    	String rlt = "login.html";
+//    	if (usr != null && usr.getPassword() == password) {
+    		usrId = userName;
+    		rlt = "index.html";
+//    	}
+        request.getSession().setAttribute(SessionHolder.USER_ID, usrId);
 
-        request.getSession().setAttribute(SessionHolder.USER_ID, userName);
+        SessionHolder.setContext(usrId);
+        return rlt;
 
-        SessionHolder.setContext(userName);
-        return "index.html";
     }
 
 }

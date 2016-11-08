@@ -16,6 +16,8 @@ public class User implements Serializable {
     private Long id;
 
     private String userName;
+
+    private String fullName;
     
     private String password;
     
@@ -41,6 +43,14 @@ public class User implements Serializable {
 
 	public String getPassword() {
 		return password;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 
 	public void setPassword(String password) {

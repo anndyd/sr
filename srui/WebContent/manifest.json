@@ -93,6 +93,11 @@
 					"target": ["home", "pickup"]
 				},
 				{
+					"pattern": "temp",
+					"name": "temp",
+					"target": ["home", "temp"]
+				},
+				{
 					"pattern": "empData",
 					"name": "empData",
 					"target": ["home", "empData"]
@@ -115,6 +120,12 @@
 			],
 
 			"targets": {
+				"temp": {
+					"viewName": "User",
+					"viewLevel": 1,
+					
+					"controlAggregation": "detailPages"
+				},
 				"pickup": {
 					"viewName": "Pickup",
 					"viewLevel": 1,
