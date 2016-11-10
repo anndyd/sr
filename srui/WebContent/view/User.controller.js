@@ -14,19 +14,34 @@ sap.ui.define([
 			var that = this;
 			var oModel = new JSONModel();
 			var pModel = new JSONModel();
+	     pModel.setData({
+	        userName: "sss",
+	        password: "123"
+	      });
+
+			
 			that.getView().setModel(oModel);
-			that.getView().setModel(pModel, "input");
-			that.getView().bindElement("/");
+			that.getView().byId("userForm").setModel(pModel, "input");
+//			that.getView().byId("userForm").bindElement("/");
+//			that.getView().bindElement("/");
 			
 			us.getUsers().done(function(data){
 				oModel.setData(data);
-				oMedel.refresh();
+				oModel.refresh();
 			});
 		},
 
 		onTablePress: function (evt) {
+		  var that = this;
+		  var pModel = that.getView().byId("userForm").getModel("input");
 			var src = evt.getSource;
-			var itm = evt.getParameters.listItem;
+			var itm = evt.getParameters().listItem;
+			pModel.setData({
+			  userName: itm.getBindingContext().getProperty("userName"),
+			  password: itm.getBindingContext().getProperty("password")
+			});
+			pModel.refresh();
+			
 		},
 		
 		onExit : function () {
