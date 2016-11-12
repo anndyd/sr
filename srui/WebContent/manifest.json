@@ -88,6 +88,11 @@
 
 			"routes": [
 				{
+					"pattern": "pickup2",
+					"name": "pickup2",
+					"target": ["home", "pickup2"]
+				},
+				{
 					"pattern": "pickup",
 					"name": "pickup",
 					"target": ["home", "pickup"]
@@ -122,6 +127,12 @@
 			"targets": {
 				"temp": {
 					"viewName": "User",
+					"viewLevel": 1,
+					
+					"controlAggregation": "detailPages"
+				},
+				"pickup2": {
+					"viewName": "Pickup2",
 					"viewLevel": 1,
 					
 					"controlAggregation": "detailPages"

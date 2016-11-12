@@ -35,7 +35,7 @@
 		            </NavigationListItem>
 		            <NavigationListItem text="{i18n>importdata}">
 		            </NavigationListItem>
-		            <NavigationListItem text="{i18n>queryinfo}">
+		            <NavigationListItem text="{i18n>queryinfo}" key="pickup2">
 		            </NavigationListItem>
 		            <NavigationListItem text="{i18n>updatedata}" key="empData">
 		            </NavigationListItem>

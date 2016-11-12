@@ -10,54 +10,60 @@ sap.ui.define([
   var w;
   return BaseController.extend("sap.it.sr.ui.view.EmployeeData", {
 
-		onInit: function (oEvent) {
-			var that = this;
-			var oModel = new JSONModel();
-			var param = {badgeId: "", empId: ""};
-			
-			es.getEmployee(param).done(function(data){
-				oModel.setData(data);
-			}).always(function(){
-				that.getView().setModel(oModel);
-				that.getView().bindElement("/");
-			});
-//			that._showFormFragment();
-			that.w = window.open("http://localhost:18080/srui/#/exportPickupData");
-		},
-		
-		onEmpChange: function (evt) {
-			var that = this;
-			var v = evt.getParameters().value;
-			if (v && v.length > 6) {
-				var param = {badgeId: "", empId: v};
-				
-				es.getEmployee(param).done(function(data){
-					that.getView().getModel().setData(data);
-				});
-				that.w.postMessage('getcolor',"*");
-			}
-		},
+	onInit : function(oEvent) {
+	    var that = this;
+	    var oModel = new JSONModel();
+	    var param = {
+		badgeId : "",
+		empId : ""
+	    };
 
-		onExit : function () {
-			if (this.oFormFragment) {
-				this.oFormFragment.destroy();
-			}
-		},
+	    es.getEmployee(param).done(function(data) {
+		oModel.setData(data);
+	    }).always(function() {
+		that.getView().setModel(oModel);
+		that.getView().bindElement("/");
+	    });
+	    // that._showFormFragment();
+	},
 
-		handleSavePress : function () {
-//			sap.ui.core.BusyIndicator.show();
-			es.upsertEmployee(this.getView().getModel().getData());
-//			sap.ui.core.BusyIndicator.hide();
-			MessageToast.show(this.getResourceBundle().getText("updateEmpS"));
-		},
+	onEmpChange : function(evt) {
+	    var that = this;
+	    var v = evt.getParameters().value;
+	    if (v && v.length > 6) {
+		var param = {
+		    badgeId : "",
+		    empId : v
+		};
 
-		_showFormFragment : function (sFragmentName) {
-			var oPage = this.getView().byId("empDataPage");
-			if (!this.oFormFragment) {
-				this.oFormFragment = sap.ui.xmlfragment(this.getView().getId(), "sap.it.sr.ui.view.fragment.PoList");
-			}
-			oPage.addContent(this.oFormFragment);
-		}
-  });
+		es.getEmployee(param).done(function(data) {
+		    that.getView().getModel().setData(data);
+		});
+		that.w.postMessage('getcolor', "*");
+	    }
+	},
+
+	onExit : function() {
+	    if (this.oFormFragment) {
+		this.oFormFragment.destroy();
+	    }
+	},
+
+	handleSavePress : function() {
+	    // sap.ui.core.BusyIndicator.show();
+	    es.upsertEmployee(this.getView().getModel().getData());
+	    // sap.ui.core.BusyIndicator.hide();
+	    MessageToast.show(this.getResourceBundle().getText("updateEmpS"));
+	},
+
+	_showFormFragment : function(sFragmentName) {
+	    var oPage = this.getView().byId("empDataPage");
+	    if (!this.oFormFragment) {
+		this.oFormFragment = sap.ui.xmlfragment(this.getView().getId(),
+			"sap.it.sr.ui.view.fragment.PoList");
+	    }
+	    oPage.addContent(this.oFormFragment);
+	}
+    });
 
 });

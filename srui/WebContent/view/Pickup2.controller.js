@@ -9,10 +9,11 @@ sap.ui.define([
   "use strict";
   var ps = new PickupService();
   var es = new EmployeeService();
-  var subwin, __empId;
- return BaseController.extend("sap.it.sr.ui.view.Pickup", {
+  var __empId;
+ return BaseController.extend("sap.it.sr.ui.view.Pickup2", {
 
 		onInit: function (oEvent) {
+			sap.ui.getCore().byId("__component0---app--idAppControl").setMode(sap.m.SplitAppMode.HideMode);
 			var that = this;
 			var oModel = new JSONModel();
 			var param = {badgeId: "", empId: ""};
@@ -26,9 +27,6 @@ sap.ui.define([
 			that._showFormFragment();
 			// message listener
 			window.addEventListener("message", that.onMessage.bind(that));
-			// open new window
-			subwin = window.open("/srui/index.html#/pickup2", 'SecondPickup', 'fullscreen=0, toolbar=0, menubar=0, status=0, screenX=' + 
-					window.screen.availWidth + ' , left=' + window.screen.availWidth + '');
 		},
 		
 		onBadgeChange: function (evt) {
@@ -40,7 +38,7 @@ sap.ui.define([
 				ps.getPickupData(param).done(function(data){
 					that.getView().getModel().setData(data);
 //					that.getView().getModel().refresh();
-					// post message to sub window
+					// post message to opener
 					that.postMsg(data.empId);
 				});
 			}
@@ -55,8 +53,9 @@ sap.ui.define([
 				
 				ps.getPickupData(param).done(function(data){
 					oModel.setData(data);
-					// post message to sub window
+					// post message to opener
 					that.postMsg(data.empId);
+
 					if (data && data.empName === null) {
 						es.getEmployee(param).done(function(data){
 							oModel.getData().empName = data.empName;
@@ -111,10 +110,10 @@ sap.ui.define([
 		postMsg : function (param) {
 			if (__empId !== param) {
 				__empId = param;
-				subwin.postMessage(param, "*");
+				window.opener.postMessage(param, "*");
 			}
 		},
-		
+
 		handlePickupPress : function () {
 //			sap.ui.core.BusyIndicator.show();
 			ps.upsertPickupData(this.getView().getModel().getData());
