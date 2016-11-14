@@ -35,20 +35,6 @@
 		        if ($.browser.mozilla) {
 		            isMozilla = true;
 		        }            
-// 		        if(<%= IsLogin %>){
-// 		            util.isLogin = true;
-// 		            util.userName = '<%= UserName%>';
-// 		            util.userMail = '<%= UserMail%>';
-// 		            util.userId = '<%= UserId%>';
-// 		            util.avatar = fnFormatter.userAvatarLinkFormatter(util.userId);
-// 		        }
-// 		        else{
-		            util.isLogin = false;
-		            util.userName = "";
-		            util.userMail = "";
-		            util.userId = "";
-		            util.avatar = IconPool.getIconURI("person-placeholder");
-//		        }
 		
 		        var oMyShell = new Shell('my_shell',{
 		            title: "SRM []",
@@ -58,27 +44,6 @@
 		                name: 'sap.it.sr.ui'
 		            })
 		        });
-// 		        var oActionSheet = new sap.m.ActionSheet({
-// 		            buttons: [
-// 		                new sap.m.Button({
-// 		                    icon: IconPool.getIconURI("less"),
-// 		                    text: "One Click Login",
-// 		                    visible: !isMozilla,
-// 		                    tooltip: 'SSO Login',
-// 		                    press: function () {
-// 		                        window.location.reload();
-// 		                    }
-// 		                }),
-// 		                new sap.m.Button({
-// 		                    icon: IconPool.getIconURI("home"),
-// 		                    text: "Domain Account",
-// 		                    tooltip: 'Login with domain account',
-// 		                    press: function () {
-// 		                        bk.openLoginWindow();
-// 		                    }
-// 		                })
-// 		            ]
-// 		        });
 		        var oHomeShell = new sap.ui.unified.Shell("main_shell", {
 		            icon: "image/sap_logo.png",
 		            headItems: [
@@ -93,7 +58,7 @@
 		            headEndItems: [
 		                new ShellHeadItem("shell_end_logoff", {
 		                    icon: sap.ui.core.IconPool.getIconURI("log"),
-		                    visible: isMozilla && util.isLogin,
+		                    visible: isMozilla,
 		                    press: function() {
 		                    	util.logoff();
 		                    }

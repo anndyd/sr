@@ -23,13 +23,12 @@
 							<l:GridData span="L2 M3 S4" />
 						</layoutData>
 					</Input>						
-					<Label text="{i18n>password}" />
-					<Input value="{input>password}" type="Text"
-						enabled="true" editable="true">
+					<Label text="{i18n>status}" />
+					<CheckBox selected="{input>status}" text="{i18n>active}">
 						<layoutData>
 							<l:GridData span="L2 M2 S4" />
 						</layoutData>
-					</Input>
+					</CheckBox>
 
 				</f:content>
 			</f:SimpleForm>
@@ -50,12 +49,19 @@
 				<Column id="fullName">
 					<Text text="{i18n>userFullName}" />
 				</Column>
+				<Column id="status">
+					<Text text="{i18n>status}" />
+				</Column>
 			</columns>
 			<items>
 				<ColumnListItem type="Active">
 					<cells>
 						<ObjectIdentifier text="{userName}" />
 						<Text text="{fullName}" />
+						<Text text="{
+							path: 'status',
+							formatter: 'sap.it.sr.ui.js.Formatter.userStatus'
+						}" />
 					</cells>
 				</ColumnListItem>
 			</items>

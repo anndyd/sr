@@ -106,6 +106,7 @@ sap.ui.define([
 				this.oFormFragment.destroy();
 			}
 			window.removeEventListener("message", onMessage.bind(this));
+			subwin.close();
 		},
 
 		postMsg : function (param) {

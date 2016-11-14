@@ -24,18 +24,18 @@
 		          itemSelect="onSelectItem">
 	            <NavigationListItem text="{i18n>pickup}" icon="sap-icon://cart-3" key="pickup" class="menu">
 	            </NavigationListItem>
-	            <NavigationListItem text="{i18n>itticket}" icon="sap-icon://request" key="itTicket">
+	            <NavigationListItem text="{i18n>itticket}" icon="sap-icon://request" key="unavailable">
 	            </NavigationListItem>
-	            <NavigationListItem text="{i18n>assetcheck}" icon="sap-icon://multi-select" key="assetCheck">
+	            <NavigationListItem text="{i18n>assetcheck}" icon="sap-icon://multi-select">
 	            </NavigationListItem>
 		        <NavigationListItem class="defaultCursor"
 		                text="{i18n>collectdata}"
 		                icon="sap-icon://create-form">
-		            <NavigationListItem text="{i18n>scanbadge}" key="temp">
+		            <NavigationListItem text="{i18n>scanbadge}">
 		            </NavigationListItem>
 		            <NavigationListItem text="{i18n>importdata}">
 		            </NavigationListItem>
-		            <NavigationListItem text="{i18n>queryinfo}" key="pickup2">
+		            <NavigationListItem text="{i18n>queryinfo}">
 		            </NavigationListItem>
 		            <NavigationListItem text="{i18n>updatedata}" key="empData">
 		            </NavigationListItem>
@@ -48,6 +48,10 @@
 		            <NavigationListItem text="{i18n>pickupdata}" key="exportPickupData">
 		            </NavigationListItem>
 		        </NavigationListItem>
+	            <NavigationListItem 
+	            		text="{i18n>userTitle}"
+	            		icon="sap-icon://user-settings" key="user">
+	            </NavigationListItem>
 	            <NavigationListItem 
 	            		text="{i18n>help}"
 	            		icon="sap-icon://sys-help" key="help">

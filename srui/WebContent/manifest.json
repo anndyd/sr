@@ -98,9 +98,9 @@
 					"target": ["home", "pickup"]
 				},
 				{
-					"pattern": "temp",
-					"name": "temp",
-					"target": ["home", "temp"]
+					"pattern": "user",
+					"name": "user",
+					"target": ["home", "user"]
 				},
 				{
 					"pattern": "empData",
@@ -121,11 +121,16 @@
                     "pattern": ["main",""],
                     "name": "main",
                     "target": ["home", "main"]
+				},
+                {
+                    "pattern": "unavailable",
+                    "name": "unavailable",
+                    "target": ["home", "unavailable"]
                 }
 			],
 
 			"targets": {
-				"temp": {
+				"user": {
 					"viewName": "User",
 					"viewLevel": 1,
 					
@@ -181,6 +186,11 @@
 					"viewPath": "sap.it.sr.ui.view.base",
 					"viewName": "NotFound",
 					"viewId": "notFound"
+				},
+				"unavailable": {
+					"viewPath": "sap.it.sr.ui.view.base",
+					"viewName": "Unavailable",
+					"viewId": "Unavailable"
 				}
 			}
 		}

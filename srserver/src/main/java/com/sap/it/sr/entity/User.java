@@ -19,6 +19,8 @@ public class User implements Serializable {
 
     private String fullName;
     
+    private boolean status;
+    
     private String password;
     
     private String role;
@@ -51,6 +53,14 @@ public class User implements Serializable {
 
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
+	}
+
+	public boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 
 	public void setPassword(String password) {
