@@ -27,9 +27,28 @@ sap.ui.define([
 			// message listener
 			window.addEventListener("message", that.onMessage.bind(that));
 			// open new window
-			subwin = window.open("/srui/index.html#/pickup2", 'SecondPickup', 'fullscreen=0, toolbar=0, menubar=0, status=0, screenX=' + 
-					window.screen.availWidth + ' , left=' + window.screen.availWidth + '');
+//			subwin = window.open("/srui/index.html#/pickup2", 'SecondPickup', 'fullscreen=0, toolbar=0, menubar=0, status=0, screenX=' + 
+//					window.screen.availWidth + ' , left=' + window.screen.availWidth + '');
+//			var page1 = that.getView().byId("pickupPage");
+//			page1.addEventDelegate({
+//				   onBeforeShow: function(evt) {
+//				      // page1 is about to be shown; act accordingly - if required you can read event information from the evt object
+//					   jQuery.sap.log.info("sap.m.Page: demo page is going to be shown");
+//				   },
+//				   onAfterHide: function(evt) {
+//				      // ...
+//					   jQuery.sap.log.info("sap.m.Page: demo page is going to be hidden");
+//				   }
+//				});
 		},
+		
+		onAfterShow: function (evt) {
+			alert("onAfterShow");
+		},
+//
+//		onAfterHide : function (evt) {
+//			alert("onAfterShow");
+//		},
 		
 		onBadgeChange: function (evt) {
 			var that = this;

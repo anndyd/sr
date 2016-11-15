@@ -3,7 +3,7 @@
 	controllerName="sap.it.sr.ui.view.Pickup2" xmlns:html="http://www.w3.org/1999/xhtml">
 	<Page 
 		title="{i18n>pickupTitle}"
-		id="pickupPage">
+		id="pickupPage2">
 		<VBox>
 			<f:SimpleForm id="pdForm" minWidth="1024"
 				maxContainerCols="2" editable="true" layout="ResponsiveGridLayout"

@@ -2,7 +2,7 @@
 	xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form"
 	controllerName="sap.it.sr.ui.view.Pickup" xmlns:html="http://www.w3.org/1999/xhtml">
 	<Page 
-		title="{i18n>pickupTitle}"
+		title="{i18n>pickupTitle}" eventDelegate="[onAfterShow]}"
 		id="pickupPage">
 		<VBox>
 			<f:SimpleForm id="pdForm" minWidth="1024"

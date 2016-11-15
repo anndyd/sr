@@ -31,7 +31,7 @@
 		        <NavigationListItem class="defaultCursor"
 		                text="{i18n>collectdata}"
 		                icon="sap-icon://create-form">
-		            <NavigationListItem text="{i18n>scanbadge}">
+		            <NavigationListItem text="{i18n>scanbadge}" key="temp">
 		            </NavigationListItem>
 		            <NavigationListItem text="{i18n>importdata}">
 		            </NavigationListItem>

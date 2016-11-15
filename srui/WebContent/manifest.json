@@ -88,6 +88,11 @@
 
 			"routes": [
 				{
+					"pattern": "temp",
+					"name": "temp",
+					"target": ["home", "temp"]
+				},
+				{
 					"pattern": "pickup2",
 					"name": "pickup2",
 					"target": ["home", "pickup2"]
@@ -130,6 +135,13 @@
 			],
 
 			"targets": {
+				"temp": {
+					"viewName": "TestDelegate",
+					"viewLevel": 1,
+					"viewType": "JS",
+					
+					"controlAggregation": "detailPages"
+				},
 				"user": {
 					"viewName": "User",
 					"viewLevel": 1,
