@@ -65,8 +65,9 @@ public class PickupDataController {
 			pd.setAgentName(empDao.findByEmpId(pd.getAgentId()).getEmpName());
 		}
 		if (pd.getPickupDate() == null) {
-			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			pd.setPickupDate(dateFormat.format(new Date()));
+//			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//			pd.setPickupDate(dateFormat.format(new Date()));
+			pd.setPickupDate(new Date());
 		}
 		return pd;
 	}

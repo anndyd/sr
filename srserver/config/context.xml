@@ -28,6 +28,18 @@
       password="Sybase123" 
 	  driverClassName="org.mariadb.jdbc.Driver"
       url="jdbc:mysql://localhost:3306/srmreceive" />
+	<Resource 
+	  name="grDataSourceJNDI" 
+	  auth="Container" 
+	  type="javax.sql.DataSource"
+      maxActive="100" 
+	  maxIdle="30" 
+	  maxWait="10"   
+	  username="bgr"
+      password="Sap12345" 
+	  driverClassName="com.sybase.jdbc4.jdbc.SybDriver"
+      url="jdbc:sybase:Tds:10.58.32.248:3001/grcn" />
+      
     <!-- web application will be reloaded.                                   -->
     <WatchedResource>WEB-INF/web.xml</WatchedResource>
     <WatchedResource>${catalina.base}/conf/web.xml</WatchedResource>

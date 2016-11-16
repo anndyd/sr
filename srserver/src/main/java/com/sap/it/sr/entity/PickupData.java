@@ -2,6 +2,7 @@ package com.sap.it.sr.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -30,7 +31,7 @@ public class PickupData implements Serializable {
     private String agentName;
     @OneToMany(mappedBy = "pickupData", cascade = CascadeType.ALL)
     private List<PoInfo> items = new ArrayList<PoInfo>();
-    private String pickupDate;
+    private Date pickupDate;
     
     private String remark;
 
@@ -90,11 +91,11 @@ public class PickupData implements Serializable {
 		this.items = items;
 	}
 
-	public String getPickupDate() {
+	public Date getPickupDate() {
 		return pickupDate;
 	}
 
-	public void setPickupDate(String pickupDate) {
+	public void setPickupDate(Date pickupDate) {
 		this.pickupDate = pickupDate;
 	}
 

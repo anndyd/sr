@@ -16,9 +16,13 @@ import org.springframework.stereotype.Repository;
 public abstract class BaseDao<T> {
 
     @Autowired
-    @PersistenceContext
+    @PersistenceContext(unitName="srserver")
     protected EntityManager em;
 
+    @Autowired
+    @PersistenceContext(unitName="grserver")
+    protected EntityManager grem;
+    
     protected Class<T> clazz;
 
     @SuppressWarnings("unchecked")

@@ -13,13 +13,27 @@ sap.ui.jsview("sap.it.sr.ui.view.TestDelegate", {
 	* @memberOf view.TestDelegate
 	*/ 
 	createContent : function(oController) {
- 		return new sap.m.Page({
-			title: "Title"
-		}).addEventDelegate({
-	        onAfterHide: function(evt) {
-	            sap.m.MessageToast.show("evt.data.foo")
-	          }
-	        });
+// 		return new sap.m.Page({
+//			title: "Title"
+//		}).addEventDelegate({
+//	        onAfterHide: function(evt) {
+//	            sap.m.MessageToast.show("evt.data.foo")
+//	          }
+//	        });
+ 		
+ 		return new sap.m.Page({ 
+ 	        title: "firstDetail",
+ 	        content: new sap.m.Button({ 
+ 	          text: "to page 2",
+ 	          press: function () {
+ 	            splitApp.toDetail(secondDetailPage.getId(),"show",{foo :"bar"});
+ 	          }
+ 	        })
+ 	      }).addEventDelegate({
+ 	        onAfterHide: function(evt) {
+ 	          sap.m.MessageToast.show("page 1 hide")
+ 	        }
+ 	      });
 	}
 
 });

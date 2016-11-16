@@ -1,43 +1,31 @@
 package com.sap.it.sr.entity;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Entity
-public class PoInfo implements Serializable {
-	private static final long serialVersionUID = -7458269368197976414L;
+public class GrPoInfo implements Serializable {
+	private static final long serialVersionUID = -2001687870973611013L;
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PICKUP_DATA_ID", nullable = false)
-    private PickupData pickupData;
-
     private String poNumber;
     private int poItem;
     private String itemDesc;
+    private String location;
+    private String userId;
+    private int status;
     private int quantity;
+    private Date createDate; 
     
     private String remark;
-//    PO_NUMBER       VARCHAR(10)     NOT NULL,
-//    PO_ITEM         INT             NOT NULL,
-//    DESCRIPTION     VARCHAR(200),
-//    LOCATION        VARCHAR(8),
-//    BRAND           VARCHAR(30),
-//    QUANTITY        INT,
-//    USERID          VARCHAR(20),
-//    STATUS          INT,
-//    EQUIPNO_NEEDED  BIT,
-//	  PLANT           VARCHAR(30),
 
     public Long getId() {
         return id;
@@ -77,6 +65,38 @@ public class PoInfo implements Serializable {
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
 
 	public String getRemark() {
