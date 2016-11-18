@@ -1,6 +1,6 @@
 <core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
 	xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form"
-	controllerName="sap.it.sr.ui.view.EmployeeData" xmlns:html="http://www.w3.org/1999/xhtml">
+	controllerName="sap.it.sr.ui.view.EmployeeData2" xmlns:html="http://www.w3.org/1999/xhtml">
 	<Page 
 		title="{i18n>empDataTitle}"
 		id="empDataPage">

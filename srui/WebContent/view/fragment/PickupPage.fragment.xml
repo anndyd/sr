@@ -1,0 +1,48 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core"
+ 	xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
+		<VBox>
+			<f:SimpleForm id="pdForm" minWidth="1024"
+				maxContainerCols="2" editable="true" layout="ResponsiveGridLayout"
+				labelSpanL="4" labelSpanM="4" emptySpanL="1" emptySpanM="1"
+				columnsL="1" columnsM="1" class="editableForm">
+				<f:content>
+					<Label text="{i18n>badgeId}" />
+					<Input value="{badgeId}" type="Text" liveChange="onBadgeChange"
+						enabled="true" editable="true" maxLength="8">
+						<layoutData>
+							<l:GridData span="L2 M2 S4" />
+						</layoutData>
+					</Input>
+					
+					<Label text="{i18n>empId}" />
+					<Input id="empId" value="{empId}" type="Text" liveChange="onEmpChange"
+						enabled="true" editable="true" maxLength="8">
+						<layoutData>
+							<l:GridData span="L2 M2 S4" />
+						</layoutData>
+					</Input>
+					<Input value="{empName}" type="Text" placeholder="{i18n>empName}"
+						enabled="false" editable="false" >
+						<layoutData>
+							<l:GridData span="L2 M3 S4" />
+						</layoutData>
+					</Input>
+						
+					<Label text="{i18n>agentId}" />
+					<Input value="{agentId}" type="Text" liveChange="onAgentChange"
+						enabled="true" editable="true" maxLength="8">
+						<layoutData>
+							<l:GridData span="L2 M2 S4" />
+						</layoutData>
+					</Input>
+					<Input value="{agentName}" type="Text" placeholder="{i18n>empName}"
+						enabled="false" editable="false" >
+						<layoutData>
+							<l:GridData span="L2 M3 S4" />
+						</layoutData>
+					</Input>
+				</f:content>
+			</f:SimpleForm>
+		</VBox>
+
+</core:FragmentDefinition>

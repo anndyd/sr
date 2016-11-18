@@ -61,11 +61,11 @@ sap.ui.define([ 'jquery.sap.global', "sap/it/sr/ui/js/Formatter",
 		handleSavePress : function() {
 			var that = this;
 			us.upsertUser(that.getView().getModel("input").getData()).done(
-					function() {
-						that.refreshTable();
-						MessageToast.show(that.getResourceBundle().getText(
-								"updateUserS"));
-					});
+				function() {
+					that.refreshTable();
+					MessageToast.show(that.getResourceBundle().getText(
+							"updateUserS"));
+				});
 		},
 		
 		userStatus :  function (fValue) {

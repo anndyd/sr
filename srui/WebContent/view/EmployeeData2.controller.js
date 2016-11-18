@@ -7,10 +7,11 @@ sap.ui.define([
   ], function(jQuery, BaseController, EmployeeService, MessageToast, JSONModel) {
 	  "use strict";
 	  var es = new EmployeeService();
-	  var subwin, __empId;
-  return BaseController.extend("sap.it.sr.ui.view.EmployeeData", {
+	  var __empId;
+  return BaseController.extend("sap.it.sr.ui.view.EmployeeData2", {
 
 		onInit : function(oEvent) {
+			this.getOwnerComponent().byId("app").byId("idAppControl").setMode(sap.m.SplitAppMode.HideMode);
 			var that = this;
 			var oModel = new JSONModel();
 			var param = {
@@ -25,15 +26,8 @@ sap.ui.define([
 				that.getView().bindElement("/");
 			});
 			that._showFormFragment();
-			// when matched route
-			that.getRouter().getRoute("empData").attachPatternMatched(that.onRouteMatched, that);
 			// message listener
 			window.addEventListener("message", that.onMessage.bind(that));
-		},
-		
-		onRouteMatched: function (evt) {
-			// open new window
-			subwin = util.openSecondWindow("/srui/index.html#/empData2", 'SecondWindow');
 		},
 	
 	    onMessage : function (evt) {
@@ -50,7 +44,7 @@ sap.ui.define([
 		postMsg : function (param) {
 			if (__empId !== param) {
 				__empId = param;
-				subwin.postMessage(param, "*");
+				window.openerwindow.opener.postMessage(param, "*");
 			}
 		},
 	

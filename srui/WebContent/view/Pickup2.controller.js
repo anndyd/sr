@@ -13,7 +13,7 @@ sap.ui.define([
  return BaseController.extend("sap.it.sr.ui.view.Pickup2", {
 
 		onInit: function (oEvent) {
-			sap.ui.getCore().byId("__component0---app--idAppControl").setMode(sap.m.SplitAppMode.HideMode);
+			this.getOwnerComponent().byId("app").byId("idAppControl").setMode(sap.m.SplitAppMode.HideMode);
 			var that = this;
 			var oModel = new JSONModel();
 			var param = {badgeId: "", empId: ""};
@@ -27,6 +27,24 @@ sap.ui.define([
 			that._showFormFragment();
 			// message listener
 			window.addEventListener("message", that.onMessage.bind(that));
+		},
+
+	    onMessage : function (evt) {
+	    	var that = this;
+	    	__empId = evt.data;
+			var param = {badgeId: "", empId: evt.data};
+			
+			ps.getPickupData(param).done(function(data){
+				that.getView().getModel().setData(data);
+//				that.getView().getModel().refresh();
+			});
+	    },
+
+		postMsg : function (param) {
+			if (__empId !== param) {
+				__empId = param;
+				window.opener.postMessage(param, "*");
+			}
 		},
 		
 		onBadgeChange: function (evt) {
@@ -88,41 +106,31 @@ sap.ui.define([
 				oModel.refresh();
 			}
 		},
-
-	    onMessage : function (evt) {
-	    	var that = this;
-	    	__empId = evt.data;
-			var param = {badgeId: "", empId: evt.data};
-			
-			ps.getPickupData(param).done(function(data){
-				that.getView().getModel().setData(data);
-//				that.getView().getModel().refresh();
-			});
-	    },
 		
 		onExit : function () {
 			if (this.oFormFragment) {
 				this.oFormFragment.destroy();
 			}
-			window.removeEventListener("message", onMessage.bind(this));
-		},
-
-		postMsg : function (param) {
-			if (__empId !== param) {
-				__empId = param;
-				window.opener.postMessage(param, "*");
+			if (this.oPageFragment) {
+				this.oPageFragment.destroy();
 			}
+			window.removeEventListener("message", onMessage.bind(this));
 		},
 
 		handlePickupPress : function () {
 //			sap.ui.core.BusyIndicator.show();
-			ps.upsertPickupData(this.getView().getModel().getData());
+			ps.upsertPickupData(this.getView().getModel().getData()).done(function(){
+				MessageToast.show(this.getResourceBundle().getText("pickupS"));
+			});
 //			sap.ui.core.BusyIndicator.hide();
-			MessageToast.show(this.getResourceBundle().getText("pickupS"));
 		},
 
 		_showFormFragment : function (sFragmentName) {
 			var oPage = this.getView().byId("pickupPage");
+			if (!this.oPageFragment) {
+				this.oPageFragment = sap.ui.xmlfragment(this.getView().getId(), "sap.it.sr.ui.view.fragment.PickupPage");
+			}
+			oPage.addContent(this.oPageFragment);
 			if (!this.oFormFragment) {
 				this.oFormFragment = sap.ui.xmlfragment(this.getView().getId(), "sap.it.sr.ui.view.fragment.PoList");
 			}

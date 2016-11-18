@@ -22,10 +22,6 @@
         </properties>
 	</persistence-unit>
 	<persistence-unit name="grserver">
-		<class>com.sap.it.sr.entity.</class>
-		<class>com.sap.it.sr.entity.</class>
-		<class>com.sap.it.sr.entity.PoInfo</class>
-		<class>com.sap.it.sr.entity.PickupData</class>
         <properties>
             <property name="eclipselink.weaving" value="static"/>
             <property name="eclipselink.jdbc.batch-writing" value="JDBC" />

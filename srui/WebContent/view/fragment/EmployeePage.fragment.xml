@@ -1,0 +1,63 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core"
+ 	xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
+		<VBox>
+			<f:SimpleForm id="empForm" minWidth="1024"
+				maxContainerCols="2" editable="true" layout="ResponsiveGridLayout"
+				labelSpanL="4" labelSpanM="4" emptySpanL="1" emptySpanM="1"
+				columnsL="1" columnsM="1" class="editableForm">
+				<f:content>
+					<Label text="{i18n>empId}" />
+					<Input value="{empId}" type="Text" liveChange="onEmpChange"
+						enabled="true" editable="true" maxLength="8">
+						<layoutData>
+							<l:GridData span="L2 M2 S4" />
+						</layoutData>
+					</Input>
+					<Input value="{empName}" type="Text" placeholder="{i18n>empName}"
+						enabled="true" editable="true" >
+						<layoutData>
+							<l:GridData span="L2 M3 S4" />
+						</layoutData>
+					</Input>						
+					<Label text="{i18n>badgeId}" />
+					<Input value="{badgeId}" type="Text"
+						enabled="true" editable="true" maxLength="8">
+						<layoutData>
+							<l:GridData span="L2 M2 S4" />
+						</layoutData>
+					</Input>
+
+				</f:content>
+			</f:SimpleForm>
+		</VBox>
+		<Table id="idEmployeeDataTable"
+			inset="false"
+			items="{
+				path: '/',
+				sorter: {
+					path: 'empId'
+				}
+			}">
+			<columns>
+				<Column>
+					<Text text="{i18n>empId}" />
+				</Column>
+				<Column>
+					<Text text="{i18n>badgeId}" />
+				</Column>
+				<Column>
+					<Text text="{i18n>empName}" />
+				</Column>
+			</columns>
+			<items>
+				<ColumnListItem vAlign="Middle" type="Navigation">
+					<cells>
+						<ObjectIdentifier text="{empId}" />
+						<Text text="{badgeId}" />
+						<Text text="{empName}" />
+					</cells>
+				</ColumnListItem>
+			</items>
+		</Table>
+
+</core:FragmentDefinition>

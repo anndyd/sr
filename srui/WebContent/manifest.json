@@ -88,11 +88,6 @@
 
 			"routes": [
 				{
-					"pattern": "temp",
-					"name": "temp",
-					"target": ["home", "temp"]
-				},
-				{
 					"pattern": "pickup2",
 					"name": "pickup2",
 					"target": ["home", "pickup2"]
@@ -106,6 +101,11 @@
 					"pattern": "user",
 					"name": "user",
 					"target": ["home", "user"]
+				},
+				{
+					"pattern": "empData2",
+					"name": "empData2",
+					"target": ["home", "empData2"]
 				},
 				{
 					"pattern": "empData",
@@ -135,13 +135,6 @@
 			],
 
 			"targets": {
-				"temp": {
-					"viewName": "TestDelegate",
-					"viewLevel": 1,
-					"viewType": "JS",
-					
-					"controlAggregation": "detailPages"
-				},
 				"user": {
 					"viewName": "User",
 					"viewLevel": 1,
@@ -161,6 +154,12 @@
 					"controlAggregation": "detailPages"
 				},
 				"empData": {
+					"viewName": "EmployeeData",
+					"viewLevel": 1,
+					
+					"controlAggregation": "detailPages"
+				},
+				"empData2": {
 					"viewName": "EmployeeData",
 					"viewLevel": 1,
 					

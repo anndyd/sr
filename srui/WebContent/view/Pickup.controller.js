@@ -24,31 +24,27 @@ sap.ui.define([
 				that.getView().bindElement("/");
 			});
 			that._showFormFragment();
+			// when matched route
+			that.getRouter().getRoute("pickup").attachPatternMatched(that.onRouteMatched, that);
 			// message listener
 			window.addEventListener("message", that.onMessage.bind(that));
-			// open new window
-//			subwin = window.open("/srui/index.html#/pickup2", 'SecondPickup', 'fullscreen=0, toolbar=0, menubar=0, status=0, screenX=' + 
-//					window.screen.availWidth + ' , left=' + window.screen.availWidth + '');
-//			var page1 = that.getView().byId("pickupPage");
-//			page1.addEventDelegate({
-//				   onBeforeShow: function(evt) {
-//				      // page1 is about to be shown; act accordingly - if required you can read event information from the evt object
-//					   jQuery.sap.log.info("sap.m.Page: demo page is going to be shown");
-//				   },
-//				   onAfterHide: function(evt) {
-//				      // ...
-//					   jQuery.sap.log.info("sap.m.Page: demo page is going to be hidden");
-//				   }
-//				});
 		},
 		
-		onAfterShow: function (evt) {
-			alert("onAfterShow");
+		onRouteMatched: function (evt) {
+			// open new window
+			subwin = util.openSecondWindow("/srui/index.html#/pickup2", 'SecondWindow');
 		},
-//
-//		onAfterHide : function (evt) {
-//			alert("onAfterShow");
-//		},
+
+	    onMessage : function (evt) {
+	    	var that = this;
+	    	__empId = evt.data;
+			var param = {badgeId: "", empId: evt.data};
+			
+			ps.getPickupData(param).done(function(data){
+				that.getView().getModel().setData(data);
+//				that.getView().getModel().refresh();
+			});
+	    },
 		
 		onBadgeChange: function (evt) {
 			var that = this;
@@ -62,6 +58,13 @@ sap.ui.define([
 					// post message to sub window
 					that.postMsg(data.empId);
 				});
+			}
+		},
+
+		postMsg : function (param) {
+			if (__empId !== param) {
+				__empId = param;
+				subwin.postMessage(param, "*");
 			}
 		},
 		
@@ -108,42 +111,32 @@ sap.ui.define([
 				oModel.refresh();
 			}
 		},
-
-	    onMessage : function (evt) {
-	    	var that = this;
-	    	__empId = evt.data;
-			var param = {badgeId: "", empId: evt.data};
-			
-			ps.getPickupData(param).done(function(data){
-				that.getView().getModel().setData(data);
-//				that.getView().getModel().refresh();
-			});
-	    },
 		
 		onExit : function () {
 			if (this.oFormFragment) {
 				this.oFormFragment.destroy();
 			}
+			if (this.oPageFragment) {
+				this.oPageFragment.destroy();
+			}
 			window.removeEventListener("message", onMessage.bind(this));
 			subwin.close();
-		},
-
-		postMsg : function (param) {
-			if (__empId !== param) {
-				__empId = param;
-				subwin.postMessage(param, "*");
-			}
 		},
 		
 		handlePickupPress : function () {
 //			sap.ui.core.BusyIndicator.show();
-			ps.upsertPickupData(this.getView().getModel().getData());
+			ps.upsertPickupData(this.getView().getModel().getData()).done(function(){
+				MessageToast.show(this.getResourceBundle().getText("pickupS"));
+			});
 //			sap.ui.core.BusyIndicator.hide();
-			MessageToast.show(this.getResourceBundle().getText("pickupS"));
 		},
 
-		_showFormFragment : function (sFragmentName) {
+		_showFormFragment : function () {
 			var oPage = this.getView().byId("pickupPage");
+			if (!this.oPageFragment) {
+				this.oPageFragment = sap.ui.xmlfragment(this.getView().getId(), "sap.it.sr.ui.view.fragment.PickupPage");
+			}
+			oPage.addContent(this.oPageFragment);
 			if (!this.oFormFragment) {
 				this.oFormFragment = sap.ui.xmlfragment(this.getView().getId(), "sap.it.sr.ui.view.fragment.PoList");
 			}

@@ -4,7 +4,6 @@ sap.ui.define([
 		"sap/ui/core/routing/History"
 	], function (Controller, History) {
 		"use strict";
-
 		return Controller.extend("sap.it.sr.ui.view.base.BaseController", {
 			/**
 			 * Convenience method for accessing the router in every controller of the application.
