@@ -15,14 +15,10 @@ sap.ui.define([
 		onInit: function (oEvent) {
 			var that = this;
 			var oModel = new JSONModel();
-			var param = {badgeId: "", empId: ""};
-			
-			ps.getPickupData(param).done(function(data){
-				oModel.setData(data);
-			}).always(function(){
-				that.getView().setModel(oModel);
-				that.getView().bindElement("/");
-			});
+			var pModel = new JSONModel();
+			that.getView().setModel(oModel);
+			that.getView().setModel(pModel, "input");
+			that.getView().bindElement("input>/");
 			that._showFormFragment();
 			// when matched route
 			that.getRouter().getRoute("pickup").attachPatternMatched(that.onRouteMatched, that);
@@ -32,7 +28,7 @@ sap.ui.define([
 		
 		onRouteMatched: function (evt) {
 			// open new window
-			subwin = util.openSecondWindow("/srui/index.html#/pickup2", 'SecondWindow');
+//			subwin = util.openSecondWindow("/srui/index.html#/pickup2", 'SecondWindow');
 		},
 
 	    onMessage : function (evt) {
@@ -41,7 +37,7 @@ sap.ui.define([
 			var param = {badgeId: "", empId: evt.data};
 			
 			ps.getPickupData(param).done(function(data){
-				that.getView().getModel().setData(data);
+				that.getView().getModel("input").setData(data);
 //				that.getView().getModel().refresh();
 			});
 	    },
@@ -53,7 +49,7 @@ sap.ui.define([
 				var param = {badgeId: v, empId: ""};
 				
 				ps.getPickupData(param).done(function(data){
-					that.getView().getModel().setData(data);
+					that.getView().getModel("input").setData(data);
 //					that.getView().getModel().refresh();
 					// post message to sub window
 					that.postMsg(data.empId);

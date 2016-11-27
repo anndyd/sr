@@ -1,16 +1,18 @@
 package com.sap.it.sr.dao;
 
-import java.util.Date;
+
+import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.TemporalType;
 
 import org.springframework.stereotype.Repository;
 
-import com.sap.it.sr.entity.GrPoInfo;
+import com.sap.it.sr.entity.ItemDetail;
+import com.sap.it.sr.entity.ItemInfo;
 
 @Repository
-public class GrPoInfoDao extends BaseDao<GrPoInfo> {
+public class GrPoInfoDao extends BaseDao<ItemInfo> {
     
 //  CREATE TABLE PO_INFO --
 //      PO_NUMBER       VARCHAR(10)     NOT NULL,
@@ -31,27 +33,32 @@ public class GrPoInfoDao extends BaseDao<GrPoInfo> {
 //  EQUIPNO_NEEDED  BIT,
 //	  PLANT           VARCHAR(30),
 
-// -- GrPoInfo class --
-//    private String poNumber;
-//    private int poItem;
-//    private String itemDesc;
-//    private String location;
-//    private String userId;
-//    private int status;
-//    private int quantity;
-//    private Date createDate; 
-	
 	@SuppressWarnings("unchecked")
-	public List<GrPoInfo> findByEmpId(String empId, Date startDate) {
-    	String sql = "select p.PO_NUMBER as poNumber, i.PO_ITEM as poItem, " + 
+	public List<ItemInfo> findDoneItem(Date startDate) {
+    	String sql = "select p.PO_ITEM_COUNT + i.PO_ITEM as id, p.PO_NUMBER as poNumber, i.PO_ITEM as poItem, " + 
     				 "i.DESCRIPTION as itemDesc, i.LOCATION as location, " +
     			     "i.USERID as userId, i.STATUS as status, " +
     			     "i.QUANTITY as quantity, p.CREATE_TIME as createDate " +
     			     "from PO_INFO p left join ITEM_INFO i on p.PO_NUMBER = i.PO_NUMBER " +
-    			     "where i.USERID = ?1 and p.CREATE_TIME > ?2";
+    			     "where i.STATUS = 2 and p.CREATE_TIME > ?1";
     	
-        List<GrPoInfo> list = grem.createNativeQuery(sql, GrPoInfo.class)
-                .setParameter(1, empId).setParameter(2, startDate, TemporalType.DATE).getResultList();
+        List<ItemInfo> list = grem.createNativeQuery(sql, ItemInfo.class)
+                .setParameter(1, startDate, TemporalType.DATE).getResultList();
+        return list;
+    }
+
+	@SuppressWarnings("unchecked")
+	public List<ItemDetail> findDoneItemDetail(Date startDate) {
+    	String sql = "select p.PO_ITEM_COUNT + i.PO_ITEM + d.PO_ITEM_ID as id, " +
+	                 "p.PO_NUMBER as poNumber, i.PO_ITEM as poItem, " + 
+    				 "d.PO_ITEM_ID as poItemDetail, " +
+    			     "d.SERIALNO as serialno, d.EQUIPNO as equipno " +
+    			     "from PO_INFO p left join ITEM_INFO i on p.PO_NUMBER = i.PO_NUMBER " +
+    			     "left join ITEM_DETAIL_INFO d on p.PO_NUMBER = i.PO_NUMBER and i.PO_ITEM = d.PO_ITEM " +
+    			     "where i.STATUS = 2 and p.CREATE_TIME > ?1";
+    	
+        List<ItemDetail> list = grem.createNativeQuery(sql, ItemDetail.class)
+                .setParameter(1, startDate, TemporalType.DATE).getResultList();
         return list;
     }
 

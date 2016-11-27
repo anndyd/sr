@@ -35,11 +35,62 @@
       maxActive="100" 
 	  maxIdle="30" 
 	  maxWait="10"   
-	  username="bgr"
-      password="Sap12345" 
+	  username="DBA"
+      password="sql"
+      protocol="Tds"
+      USE_METADATA="false"
 	  driverClassName="com.sybase.jdbc4.jdbc.SybDriver"
-      url="jdbc:sybase:Tds:10.58.32.248:3001/grcn" />
+      url="jdbc:sybase:Tds:10.58.32.248:3001/ServiceName=grcn" />
+
+	<!-- 
+	<Resource 
+	  name="grDataSourceJNDI" 
+	  auth="Container" 
+	  type="javax.sql.DataSource"
+      maxActive="100" 
+	  maxIdle="30" 
+	  maxWait="10"   
+	  username="root"
+      password="Sybase123" 
+	  driverClassName="org.mariadb.jdbc.Driver"
+      url="jdbc:mysql://localhost:3306/grcn" />
       
+	<Resource 
+	  name="grDataSourceJNDI" 
+	  auth="Container" 
+	  type="javax.sql.DataSource"
+      maxActive="100" 
+	  maxIdle="30" 
+	  maxWait="10"   
+	  username="DBA"
+      password="sql"
+	  driverClassName="net.sourceforge.jtds.jdbc.Driver"
+      url="jdbc:jtds:sybase://10.58.32.248:3001/grcn" />
+
+
+	<Resource 
+	  name="grDataSourceJNDI" 
+	  auth="Container" 
+	  type="javax.sql.DataSource"
+      maxActive="100" 
+	  maxIdle="30" 
+	  maxWait="10"   
+	  username="DBA"
+      password="sql"
+      protocol="Tds"
+	  driverClassName="com.sybase.jdbc4.jdbc.SybDriver"
+      url="jdbc:sybase:Tds:10.58.32.248:3001?ServiceName=grcn;username=DBA;password=sql;protocol=Tds;USE_METADATA=false" />
+
+		iq.db.driver=com.sybase.jdbc4.jdbc.SybDriver
+		iq.db.url=jdbc:sybase:Tds:10.58.32.248:3001
+		iq.db.username=DBA
+		iq.db.password=sql
+		iq.db.poolsize=10
+		iq.db.servername=10.58.32.248
+		iq.db.databasename=grcn
+		iq.db.protocol=Tds
+		iq.db.port=3001
+		 -->   
     <!-- web application will be reloaded.                                   -->
     <WatchedResource>WEB-INF/web.xml</WatchedResource>
     <WatchedResource>${catalina.base}/conf/web.xml</WatchedResource>

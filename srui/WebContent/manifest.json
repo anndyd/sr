@@ -122,6 +122,11 @@
 					"name": "exportPickupData",
 					"target": ["home", "exportPickupData"]
 				},
+				{
+					"pattern": "syncGrData",
+					"name": "syncGrData",
+					"target": ["home", "syncGrData"]
+				},
                 {
                     "pattern": ["main",""],
                     "name": "main",
@@ -160,7 +165,7 @@
 					"controlAggregation": "detailPages"
 				},
 				"empData2": {
-					"viewName": "EmployeeData",
+					"viewName": "EmployeeData2",
 					"viewLevel": 1,
 					
 					"controlAggregation": "detailPages"
@@ -177,8 +182,8 @@
 					
 					"controlAggregation": "detailPages"
 				},
-				"login": {
-					"viewName": "Login",
+				"syncGrData": {
+					"viewName": "SyncGrData",
 					"viewLevel": 1
 				},
 				"home": {

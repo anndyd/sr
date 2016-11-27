@@ -30,12 +30,21 @@
 				"sap/ui/unified/ShellHeadItem",
 				"sap/ui/unified/ShellHeadUserItem"
 			], function (Shell, ComponentContainer, IconPool, ShellHeadItem, ShellHeadUserItem) {
-		        var isMozilla = false;
-		        
-		        if ($.browser.mozilla) {
-		            isMozilla = true;
-		        }            
-		
+				var userName = "";
+				  var login = function() {
+						var url = "/srserver/user/active";
+						$.ajax({
+						    url: url,
+						    type: 'POST',
+						    async: false
+						}).done(function(data){
+							if (data && data !== "") {
+							    userName = data;
+							} else {
+								alert("You don't have permission to access!", {styleClass: "srMessageBoxStyle srMessageBoxError"});
+							}
+						});
+				  };
 		        var oMyShell = new Shell('my_shell',{
 		            title: "SRM []",
 		            showLogout: false,
@@ -55,36 +64,22 @@
 		                    }
 		                })
 		            ],
-		            headEndItems: [
-		                new ShellHeadItem("shell_end_logoff", {
-		                    icon: sap.ui.core.IconPool.getIconURI("log"),
-		                    visible: isMozilla,
-		                    press: function() {
-		                    	util.logoff();
-		                    }
-		                })
-		            ],
 		            user: [
 		                new sap.ui.unified.ShellHeadUserItem("shell_head_user", {
-		                    image: util.avatar,
-		                    username: util.userName,
-		                    //showPopupIndicator: !util.isLogin,
-		                    showPopupIndicator: false,
-		                    press: function(oEvent){
-		                    	window.location.hash = "login";
-// 		                        if (!util.isLogin) {                          
-// 		                            //oActionSheet.openBy(oEvent.getSource());
-// 		                            util.openLoginWindow();
-// 		                        }
-		                    }
+		                	image: "sap-icon://person-placeholder",
+		                	username: userName,
+		                    showPopupIndicator: false
 		                })
 		            ],
 		            content: [
 		                oMyShell
 		            ]
 		        });
-		        oHomeShell.placeAt('content');
-
+		        login();
+		        if (userName && userName !== "") {
+			        oHomeShell.getUser().mProperties.username = userName;
+			        oHomeShell.placeAt('content');
+		        }
 			});
 		});
 	</script>

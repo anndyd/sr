@@ -119,7 +119,7 @@
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
-			<mvc:exclude-mapping path="/user/**" />
+			<mvc:exclude-mapping path="/user/active" />
 			<bean class="com.sap.it.sr.interceptor.LoginRequiredInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>

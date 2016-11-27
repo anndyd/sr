@@ -12,19 +12,14 @@ sap.ui.define([
 
 		onInit : function(oEvent) {
 			var that = this;
-			var oModel = new JSONModel();
-			var param = {
-				badgeId : "",
-				empId : ""
-			};
-	
-			es.getEmployee(param).done(function(data) {
-				oModel.setData(data);
-			}).always(function() {
-				that.getView().setModel(oModel);
-				that.getView().bindElement("/");
-			});
 			that._showFormFragment();
+			
+			var oModel = new JSONModel();
+			var tModel = new JSONModel();
+			that.getView().setModel(tModel);
+			that.getView().setModel(oModel, "input");
+			that.getView().bindElement("input>/");
+
 			// when matched route
 			that.getRouter().getRoute("empData").attachPatternMatched(that.onRouteMatched, that);
 			// message listener
@@ -42,7 +37,8 @@ sap.ui.define([
 			var param = {badgeId: "", empId: evt.data};
 			
 			es.getEmployee(param).done(function(data) {
-				that.getView().getModel().setData(data);
+				that.getView().getModel().setData([data]);
+				that.getView().getModel("input").setData(data);
 	//			that.getView().getModel().refresh();
 			});
 	    },
@@ -57,14 +53,18 @@ sap.ui.define([
 		onEmpChange : function(evt) {
 		    var that = this;
 		    var v = evt.getParameters().value;
-		    if (v && v.length > 6) {
+		    if (v && v.length > 0) {
 				var param = {
 				    badgeId : "",
 				    empId : v
 				};
 		
 				es.getEmployee(param).done(function(data) {
-				    that.getView().getModel().setData(data);
+				    var tdata = [data];
+				    data.empId = v;
+				    that.getView().getModel("input").setData(data);
+				    that.getView().getModel().setData(tdata);
+				    
 				    // post message to sub window
 					that.postMsg(data.empId);
 				});
@@ -72,27 +72,28 @@ sap.ui.define([
 		},
 	
 		onExit : function() {
-		    if (this.oPageFragment) {
-		    	this.oPageFragment.destroy();
+		    if (this.oTableFragment) {
+		    	this.oTableFragment.destroy();
 		    }
 			window.removeEventListener("message", onMessage.bind(this));
 			subwin.close();
 		},
 	
 		handleSavePress : function() {
+			var that = this;
 		    // sap.ui.core.BusyIndicator.show();
-		    es.upsertEmployee(this.getView().getModel().getData()).done(function(){
-		    	MessageToast.show(this.getResourceBundle().getText("updateEmpS"));
+		    es.upsertEmployee(this.getView().getModel("input").getData()).done(function(){
+		    	MessageToast.show(that.getResourceBundle().getText("updateEmpS"));
 		    });
 		    // sap.ui.core.BusyIndicator.hide();
 		},
 
 		_showFormFragment : function () {
 			var oPage = this.getView().byId("empDataPage");
-			if (!this.oPageFragment) {
-				this.oPageFragment = sap.ui.xmlfragment(this.getView().getId(), "sap.it.sr.ui.view.fragment.EmployeePage");
+			if (!this.oTableFragment) {
+				this.oTableFragment = sap.ui.xmlfragment(this.getView().getId(), "sap.it.sr.ui.view.fragment.EmployeeTable");
 			}
-			oPage.addContent(this.oPageFragment);
+			oPage.addContent(this.oTableFragment);
 		}
     });
 

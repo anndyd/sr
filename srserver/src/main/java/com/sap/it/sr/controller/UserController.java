@@ -1,6 +1,8 @@
 package com.sap.it.sr.controller;
 
 
+import java.security.Principal;
+import java.security.cert.X509Certificate;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,18 +38,20 @@ public class UserController {
 	@RequestMapping(value="/get", method = RequestMethod.GET)
 	@ResponseBody
 	public User getUser(@RequestParam(required = true) String userName){
-		return uDao.findByName(userName);
+		return uDao.findByName(userName.toUpperCase());
 	}
 	
 	@RequestMapping(value="/upsert", method = RequestMethod.POST)
 	@ResponseBody
 	@Transactional
 	public void upsertUser(@RequestBody User user){
-		User oU = uDao.findByName(user.getUserName());
-		if (oU.getUserName() != null) {
-			user.setId(oU.getId());
+		User oU = uDao.findByName(user.getUserName().toUpperCase());
+		if (user.getUserName() != null) {
+			if (oU.getId() != null) {
+				user.setId(oU.getId());
+			}
+			uDao.merge(user);
 		}
-        uDao.merge(user);
 	}
 	
 	@RequestMapping(value="/delete", method = RequestMethod.POST)
@@ -59,19 +63,44 @@ public class UserController {
 
     @RequestMapping(value = "/active", method = RequestMethod.POST)
     @ResponseBody
-    public String active(HttpServletRequest request, @RequestParam String userName, @RequestParam String password) {
-    	User usr = uDao.findByName(userName);
-    	String usrId = null;
-    	String rlt = "login.html";
-//    	if (usr != null && usr.getPassword() == password) {
-    		usrId = userName;
-    		rlt = "index.html";
-//    	}
+    public String active(HttpServletRequest request) {
+    	String rlt = "";
+    	// Get the client SSL certificates associated with the request
+		X509Certificate[] certs = (X509Certificate[]) request.getAttribute("javax.servlet.request.X509Certificate");
+		// Check that a certificate was obtained
+		if (certs.length < 1) {
+			rlt = "SSL not client authenticated";
+		}
+		// The base of the certificate chain contains the client's info
+		X509Certificate principalCert = certs[0];
+
+		// Get the Distinguished Name from the certificate
+		// CN = I063098	O = SAP-AG	C = DE
+		Principal principal = principalCert.getSubjectDN();
+
+		// Extract the common name (CN)
+		int start = principal.getName().indexOf("CN");
+		String tmpName, name = "";
+		if (start > -1) {
+			tmpName = principal.getName().substring(start + 3);
+			int end = tmpName.indexOf(",");
+			if (end > 0) {
+				name = tmpName.substring(0, end);
+			} else {
+				name = tmpName;
+			}
+		}
+		User usr = uDao.findByName(name);
+		String usrId = null;
+		if (usr != null && usr.getStatus()) {
+    		usrId = name;
+    		rlt = usr.getFullName() != null && usr.getFullName().length() > 0 ? 
+    				name + " (" + usr.getFullName() + ")" : name;
+    	}
         request.getSession().setAttribute(SessionHolder.USER_ID, usrId);
 
         SessionHolder.setContext(usrId);
         return rlt;
-
     }
 
 }

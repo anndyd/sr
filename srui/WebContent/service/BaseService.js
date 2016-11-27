@@ -13,7 +13,8 @@ sap.ui.define([
           break;
         case 401:
         case 403:
-          window.location.href = "login.html";
+        	login();
+//          window.location.href = "login.html";
           break;
         case 404:
           MessageBox.alert("404 Not Found", {styleClass: "srMessageBoxStyle srMessageBoxError"});
@@ -22,6 +23,17 @@ sap.ui.define([
           break;
       }
     };
+  var login = function() {
+		var url = "/srserver/user/active";
+		$.ajax({
+		    url: url,
+		    type: 'POST'
+		}).always(function(data){
+			if (!data || data === "") {
+				MessageBox.alert("You don't have permission to access!", {styleClass: "srMessageBoxStyle srMessageBoxError"});
+			}
+		});
+  };
 
   return Object.extend("sap.it.sr.ui.service.BaseService", {
     asyncReq: function(options) {

@@ -45,9 +45,11 @@ public class EmployeeController {
 	public void upsertEmployee(@RequestBody Employee emp){
 		Employee emp1 = dao.findByEmpId(emp.getEmpId());
 		if (emp.getEmpId() != null) {
-			emp.setId(emp1.getId());
+			if (emp1.getId() != null) {
+				emp.setId(emp1.getId());
+			}
+			dao.merge(emp);
 		}
-		dao.merge(emp);
 	}
 	
 	@RequestMapping(value="/delete", method = RequestMethod.POST)

@@ -9,31 +9,31 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class GrPoInfo implements Serializable {
+public class ItemInfo implements Serializable {
 	private static final long serialVersionUID = -2001687870973611013L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    private String poNumber;
-    private int poItem;
-    private String itemDesc;
-    private String location;
-    private String userId;
-    private int status;
-    private int quantity;
-    private Date createDate; 
-    
-    private String remark;
+	private String poNumber;
+	private int poItem;
+	private String itemDesc;
+	private String location;
+	private String userId;
+	private int status;
+	private int quantity;
+	private Date createDate;
 
-    public Long getId() {
-        return id;
-    }
+	private String remark;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getPoNumber() {
 		return poNumber;

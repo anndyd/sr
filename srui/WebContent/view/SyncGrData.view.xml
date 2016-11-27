@@ -1,0 +1,39 @@
+<core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m" xmlns:l="sap.ui.layout"
+	controllerName="sap.it.sr.ui.view.SyncGrData" xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page 
+		title="{i18n>SyncGrData}"
+		id="SyncGrDataPage">
+	
+		<Table id="idSyncGrDataTable"
+			inset="false"
+			items="{
+				path: '/'}">
+			<columns>
+				<Column>
+					<Text text="" />
+				</Column>
+				<Column>
+					<Text text="" />
+				</Column>
+			</columns>
+			<items>
+				<ColumnListItem vAlign="Middle" type="Navigation">
+					<cells>
+						<Text text="{zkey}" />
+						<Text text="{zvalue}" />
+					</cells>
+				</ColumnListItem>
+			</items>
+		</Table>
+
+		<footer>
+			<Bar>
+				<contentRight>
+					<Button class="sapUiSmallMarginEnd" id="sync" text="{i18n>syncGrData}"
+						type="Emphasized" visible="true" press="refreshData" icon="sap-icon://refresh" />
+				</contentRight>
+			</Bar>
+		</footer>
+	</Page>
+</core:View>

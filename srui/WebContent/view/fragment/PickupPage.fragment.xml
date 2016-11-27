@@ -7,7 +7,7 @@
 				columnsL="1" columnsM="1" class="editableForm">
 				<f:content>
 					<Label text="{i18n>badgeId}" />
-					<Input value="{badgeId}" type="Text" liveChange="onBadgeChange"
+					<Input value="{input>badgeId}" type="Text" liveChange="onBadgeChange"
 						enabled="true" editable="true" maxLength="8">
 						<layoutData>
 							<l:GridData span="L2 M2 S4" />
@@ -15,13 +15,13 @@
 					</Input>
 					
 					<Label text="{i18n>empId}" />
-					<Input id="empId" value="{empId}" type="Text" liveChange="onEmpChange"
+					<Input id="empId" value="{input>empId}" type="Text" liveChange="onEmpChange"
 						enabled="true" editable="true" maxLength="8">
 						<layoutData>
 							<l:GridData span="L2 M2 S4" />
 						</layoutData>
 					</Input>
-					<Input value="{empName}" type="Text" placeholder="{i18n>empName}"
+					<Input value="{input>empName}" type="Text" placeholder="{i18n>empName}"
 						enabled="false" editable="false" >
 						<layoutData>
 							<l:GridData span="L2 M3 S4" />
@@ -29,18 +29,32 @@
 					</Input>
 						
 					<Label text="{i18n>agentId}" />
-					<Input value="{agentId}" type="Text" liveChange="onAgentChange"
+					<Input value="{input>agentId}" type="Text" liveChange="onAgentChange"
 						enabled="true" editable="true" maxLength="8">
 						<layoutData>
 							<l:GridData span="L2 M2 S4" />
 						</layoutData>
 					</Input>
-					<Input value="{agentName}" type="Text" placeholder="{i18n>empName}"
+					<Input value="{input>agentName}" type="Text" placeholder="{i18n>empName}"
 						enabled="false" editable="false" >
 						<layoutData>
 							<l:GridData span="L2 M3 S4" />
 						</layoutData>
 					</Input>
+					<Label text="{i18n>cpart}" />
+					<CheckBox selected="{input>cpart}" text="{i18n>yes}" visible="{input>cpart}">
+						<layoutData>
+							<l:GridData span="L2 M2 S4" />
+						</layoutData>
+					</CheckBox>
+					<Label text="{i18n>poNumber}" />
+					<Input value="{input>poNum}" type="Text" visible="{input>cpart}"
+						enabled="true" editable="true" maxLength="8">
+						<layoutData>
+							<l:GridData span="L2 M2 S4" />
+						</layoutData>
+					</Input>
+					
 				</f:content>
 			</f:SimpleForm>
 		</VBox>
