@@ -39,7 +39,7 @@ public class GrPoInfoDao extends BaseDao<ItemInfo> {
     				 "i.DESCRIPTION as itemDesc, i.LOCATION as location, " +
     			     "i.USERID as userId, i.STATUS as status, " +
     			     "i.QUANTITY as quantity, p.CREATE_TIME as createDate " +
-    			     "from PO_INFO p left join ITEM_INFO i on p.PO_NUMBER = i.PO_NUMBER " +
+    			     "from DBA.PO_INFO p left join DBA.ITEM_INFO i on p.PO_NUMBER = i.PO_NUMBER " +
     			     "where i.STATUS = 2 and p.CREATE_TIME > ?1";
     	
         List<ItemInfo> list = grem.createNativeQuery(sql, ItemInfo.class)
@@ -53,8 +53,8 @@ public class GrPoInfoDao extends BaseDao<ItemInfo> {
 	                 "p.PO_NUMBER as poNumber, i.PO_ITEM as poItem, " + 
     				 "d.PO_ITEM_ID as poItemDetail, " +
     			     "d.SERIALNO as serialno, d.EQUIPNO as equipno " +
-    			     "from PO_INFO p left join ITEM_INFO i on p.PO_NUMBER = i.PO_NUMBER " +
-    			     "left join ITEM_DETAIL_INFO d on p.PO_NUMBER = i.PO_NUMBER and i.PO_ITEM = d.PO_ITEM " +
+    			     "from DBA.PO_INFO p left join DBA.ITEM_INFO i on p.PO_NUMBER = i.PO_NUMBER " +
+    			     "left join DBA.ITEM_DETAIL_INFO d on p.PO_NUMBER = i.PO_NUMBER and i.PO_ITEM = d.PO_ITEM " +
     			     "where i.STATUS = 2 and p.CREATE_TIME > ?1";
     	
         List<ItemDetail> list = grem.createNativeQuery(sql, ItemDetail.class)
