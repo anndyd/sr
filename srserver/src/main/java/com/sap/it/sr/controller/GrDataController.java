@@ -1,6 +1,7 @@
 package com.sap.it.sr.controller;
 
-import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,24 +42,36 @@ public class GrDataController {
 	@Transactional
 	public long syncGrData(){
 		long rlt = 0;
-		Date startDate = new Date((new java.util.Date()).getTime());
+		Timestamp currentTime = new Timestamp(Calendar.getInstance().getTimeInMillis());
 		List<CommonSettings> ss = sdao.findAll();
+		CommonSettings cs = new CommonSettings();
+		cs.setPoCreateTime(currentTime);
 		if (ss != null && ss.size() > 0) {
-			startDate = ss.get(0).getPoCreateTime();
+			cs = ss.get(0);
 		}
-		List<ItemInfo> itmi = dao.findDoneItem(startDate);
+		Timestamp startTime = cs.getPoCreateTime();
+		
+		List<ItemInfo> itmi = dao.findDoneItem(startTime);
 		if (itmi != null) {
+			List<Long> ovs1 = idao.findByTime(startTime);
 			for (ItemInfo itm : itmi) {
-				idao.merge(itm);
-			}
-			List<ItemDetail> itmd = dao.findDoneItemDetail(startDate);
-			if (itmd != null) {
-				for (ItemDetail itm : itmd) {
-					ddao.merge(itm);
+				if (!ovs1.contains(itm.getId())) {
+					idao.merge(itm);
+					rlt++;
 				}
 			}
-			rlt = itmi.size();
+			List<ItemDetail> itmd = dao.findDoneItemDetail(startTime);
+			if (itmd != null) {
+				List<Long> ovs2 = idao.findByTime(startTime);
+				for (ItemDetail itm : itmd) {
+					if (!ovs2.contains(itm.getId())) {
+						ddao.merge(itm);
+					}
+				}
+			}
 		}
+		cs.setPoCreateTime(currentTime);
+		sdao.merge(cs);
 		
 		return rlt;
 	}

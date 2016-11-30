@@ -1,7 +1,7 @@
 package com.sap.it.sr.dao;
 
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.TemporalType;
@@ -34,8 +34,8 @@ public class GrPoInfoDao extends BaseDao<ItemInfo> {
 //	  PLANT           VARCHAR(30),
 
 	@SuppressWarnings("unchecked")
-	public List<ItemInfo> findDoneItem(Date startDate) {
-    	String sql = "select p.PO_ITEM_COUNT + i.PO_ITEM as id, p.PO_NUMBER as poNumber, i.PO_ITEM as poItem, " + 
+	public List<ItemInfo> findDoneItem(Timestamp startTime) {
+    	String sql = "select CONVERT(BIGINT,i.PO_NUMBER) + i.PO_ITEM as id, p.PO_NUMBER as poNumber, i.PO_ITEM as poItem, " + 
     				 "i.DESCRIPTION as itemDesc, i.LOCATION as location, " +
     			     "i.USERID as userId, i.STATUS as status, " +
     			     "i.QUANTITY as quantity, p.CREATE_TIME as createDate " +
@@ -43,22 +43,24 @@ public class GrPoInfoDao extends BaseDao<ItemInfo> {
     			     "where i.STATUS = 2 and p.CREATE_TIME > ?1";
     	
         List<ItemInfo> list = grem.createNativeQuery(sql, ItemInfo.class)
-                .setParameter(1, startDate, TemporalType.DATE).getResultList();
+                .setParameter(1, startTime, TemporalType.TIMESTAMP).getResultList();
         return list;
     }
 
 	@SuppressWarnings("unchecked")
-	public List<ItemDetail> findDoneItemDetail(Date startDate) {
-    	String sql = "select p.PO_ITEM_COUNT + i.PO_ITEM + d.PO_ITEM_ID as id, " +
-	                 "p.PO_NUMBER as poNumber, i.PO_ITEM as poItem, " + 
-    				 "d.PO_ITEM_ID as poItemDetail, " +
-    			     "d.SERIALNO as serialno, d.EQUIPNO as equipno " +
-    			     "from DBA.PO_INFO p left join DBA.ITEM_INFO i on p.PO_NUMBER = i.PO_NUMBER " +
-    			     "left join DBA.ITEM_DETAIL_INFO d on p.PO_NUMBER = i.PO_NUMBER and i.PO_ITEM = d.PO_ITEM " +
-    			     "where i.STATUS = 2 and p.CREATE_TIME > ?1";
+	public List<ItemDetail> findDoneItemDetail(Timestamp startTime) {
+    	String sql = "select CONVERT(BIGINT,PO_NUMBER) + PO_ITEM + PO_ITEM_ID as id, " +
+                "PO_NUMBER as poNumber, PO_ITEM as poItem, " +
+                "PO_ITEM_ID as poItemDetail,   " +
+                "SERIALNO as serialno, EQUIPNO as equipno " +
+                "from DBA.ITEM_DETAIL_INFO " +
+                "where string(PO_NUMBER,'-',PO_ITEM) in " +
+                "(select string(PO_NUMBER,'-',PO_ITEM) from DBA.ITEM_INFO  " +
+                "where STATUS = 2 and PO_NUMBER in  " +
+                "(select PO_NUMBER from DBA.PO_INFO where CREATE_TIME > ?1))";
     	
         List<ItemDetail> list = grem.createNativeQuery(sql, ItemDetail.class)
-                .setParameter(1, startDate, TemporalType.DATE).getResultList();
+                .setParameter(1, startTime, TemporalType.TIMESTAMP).getResultList();
         return list;
     }
 

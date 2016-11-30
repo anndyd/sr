@@ -2,6 +2,7 @@ package com.sap.it.sr.entity;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,7 +17,7 @@ public class CommonSettings implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private Date poCreateTime;
+	private Timestamp poCreateTime;
 
 	public Long getId() {
 		return id;
@@ -26,11 +27,11 @@ public class CommonSettings implements Serializable {
 		this.id = id;
 	}
 
-	public Date getPoCreateTime() {
+	public Timestamp getPoCreateTime() {
 		return poCreateTime;
 	}
 
-	public void setPoCreateTime(Date poCreateTime) {
+	public void setPoCreateTime(Timestamp poCreateTime) {
 		this.poCreateTime = poCreateTime;
 	}
 }

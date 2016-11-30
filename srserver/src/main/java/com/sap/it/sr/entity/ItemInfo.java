@@ -1,7 +1,7 @@
 package com.sap.it.sr.entity;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.sql.Timestamp;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,7 +23,7 @@ public class ItemInfo implements Serializable {
 	private String userId;
 	private int status;
 	private int quantity;
-	private Date createDate;
+	private Timestamp createDate;
 
 	private String remark;
 
@@ -91,11 +91,11 @@ public class ItemInfo implements Serializable {
 		this.status = status;
 	}
 
-	public Date getCreateDate() {
+	public Timestamp getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate(Timestamp createDate) {
 		this.createDate = createDate;
 	}
 

@@ -23,6 +23,7 @@ sap.ui.define([
 		
 		refreshData: function () {
 			sap.ui.core.BusyIndicator.show();
+			var i18n = this.getResourceBundle();
 			var that = this;
 			var date1 = new Date();
 			
