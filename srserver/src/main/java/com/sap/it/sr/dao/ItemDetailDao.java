@@ -8,7 +8,6 @@ import javax.persistence.TemporalType;
 import org.springframework.stereotype.Repository;
 
 import com.sap.it.sr.entity.ItemDetail;
-import com.sap.it.sr.entity.ItemInfo;
 
 @Repository
 public class ItemDetailDao extends BaseDao<ItemDetail> {
@@ -28,9 +27,8 @@ public class ItemDetailDao extends BaseDao<ItemDetail> {
     			"on d.poNumber=i.poNumber and d.poItem=i.poItem " +
 			    "where i.createDate > ?1";
 	
-	   List<Long> list = em.createNativeQuery(sql, Long.class)
-	           .setParameter(1, startTime, TemporalType.TIMESTAMP).getResultList();
-	   return list;
+    	List<Long> list = em.createNativeQuery(sql).setParameter(1, startTime, TemporalType.TIMESTAMP).getResultList();
+       return list;
     }
 
 }

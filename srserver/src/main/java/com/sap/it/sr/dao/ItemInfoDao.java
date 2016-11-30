@@ -20,12 +20,10 @@ public class ItemInfoDao extends BaseDao<ItemInfo> {
 
     @SuppressWarnings("unchecked")
 	public List<Long> findByTime(Timestamp startTime) {
-    	String sql = "select CONVERT(d.poNumber,unsigned integer) + poItem as id" + 
-			     "from ItemInfo where createDate > ?1";
-	
-	   List<Long> list = em.createNativeQuery(sql, Long.class)
-	           .setParameter(1, startTime, TemporalType.TIMESTAMP).getResultList();
-	   return list;
+    	String sql = "select CONVERT(poNumber,unsigned integer) + poItem as id " + 
+			     "from ItemInfo where createDate > '2016-11-20'";
+    	List<Long> list = em.createNativeQuery(sql).setParameter(1, startTime, TemporalType.TIMESTAMP).getResultList();
+    	return list;
     }
 
 }
