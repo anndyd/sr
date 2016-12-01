@@ -63,9 +63,12 @@ sap.ui.define([
 		},
 	
 		onExit : function() {
-		    if (this.oTableFragment) {
-		    	this.oTableFragment.destroy();
-		    }
+      if (this.oPageFragment) {
+        this.oPageFragment.destroy();
+      }
+	    if (this.oTableFragment) {
+	    	this.oTableFragment.destroy();
+	    }
 			window.removeEventListener("message", onMessage.bind(this));
 			subwin.close();
 		},
@@ -81,8 +84,11 @@ sap.ui.define([
 
 		_showFormFragment : function () {
 			var oPage = this.getView().byId("empDataPage");
+      if (!this.oPageFragment) {
+        this.oPageFragment = sap.ui.xmlfragment(this.getView().getId(), "sap.it.sr.ui.view.fragment.EmployeePage", this);
+      }
 			if (!this.oTableFragment) {
-				this.oTableFragment = sap.ui.xmlfragment(this.getView().getId(), "sap.it.sr.ui.view.fragment.EmployeeTable");
+				this.oTableFragment = sap.ui.xmlfragment(this.getView().getId(), "sap.it.sr.ui.view.fragment.EmployeeTable", this);
 			}
 			oPage.addContent(this.oTableFragment);
 		}

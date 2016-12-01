@@ -42,7 +42,13 @@ public class GrDataController {
 	@Transactional
 	public long syncGrData(){
 		long rlt = 0;
+//		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+//        String dateInString = "2016-11-20 15:23:01";
+
 		Timestamp currentTime = new Timestamp(Calendar.getInstance().getTimeInMillis());
+//        try {
+//            currentTime = new Timestamp(formatter.parse(dateInString).getTime());
+//        } catch (ParseException e) {}
 		List<CommonSettings> ss = sdao.findAll();
 		CommonSettings cs = new CommonSettings();
 		cs.setPoCreateTime(currentTime);

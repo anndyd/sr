@@ -47,13 +47,7 @@ sap.ui.define([
 			var v = evt.getParameters().value;
 			if (v && v.length === 8) {
 				var param = {badgeId: v, empId: ""};
-				
-				ps.getPickupData(param).done(function(data){
-					that.getView().getModel("input").setData(data);
-//					that.getView().getModel().refresh();
-					// post message to sub window
-					that.postMsg(data.empId);
-				});
+				that._getEmployeeAndPickupData(param);
 			}
 		},
 
@@ -70,18 +64,7 @@ sap.ui.define([
 			var oModel = that.getView().getModel();
 			if (v && v.length > 6) {
 				var param = {badgeId: "", empId: v};
-				
-				ps.getPickupData(param).done(function(data){
-					oModel.setData(data);
-					// post message to sub window
-					that.postMsg(data.empId);
-					if (data && data.empName === null) {
-						es.getEmployee(param).done(function(data){
-							oModel.getData().empName = data.empName;
-							oModel.refresh();
-						});
-					}
-				});
+				that._getEmployeeAndPickupData(param);
 			} else {
 				oModel.getData().empName = null;
 				oModel.refresh();
@@ -127,14 +110,29 @@ sap.ui.define([
 //			sap.ui.core.BusyIndicator.hide();
 		},
 
+		_getEmployeeAndPickupData : function (param) {
+		  var that = this;
+		  // get employee data
+      es.getEmployee(param).done(function(data) {
+        that.getView().getModel("input").setData(data);
+      });
+      // get pickup data
+      param = {empId: that.getView().getModel("input").getData().empId};
+      ps.findPickupData(param).done(function(data){
+        oModel.setData(data);
+        // post message to sub window
+        //that.postMsg(data.empId);
+      });
+		},
+		
 		_showFormFragment : function () {
 			var oPage = this.getView().byId("pickupPage");
 			if (!this.oPageFragment) {
-				this.oPageFragment = sap.ui.xmlfragment(this.getView().getId(), "sap.it.sr.ui.view.fragment.PickupPage");
+				this.oPageFragment = sap.ui.xmlfragment(this.getView().getId(), "sap.it.sr.ui.view.fragment.PickupPage", this);
 			}
 			oPage.addContent(this.oPageFragment);
 			if (!this.oFormFragment) {
-				this.oFormFragment = sap.ui.xmlfragment(this.getView().getId(), "sap.it.sr.ui.view.fragment.PoList");
+				this.oFormFragment = sap.ui.xmlfragment(this.getView().getId(), "sap.it.sr.ui.view.fragment.PoList", this);
 			}
 			oPage.addContent(this.oFormFragment);
 		}

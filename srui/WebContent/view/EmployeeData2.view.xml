@@ -4,36 +4,6 @@
 	<Page 
 		title="{i18n>empDataTitle}"
 		id="empDataPage">
-		<VBox>
-			<f:SimpleForm id="empForm" minWidth="1024"
-				maxContainerCols="2" editable="true" layout="ResponsiveGridLayout"
-				labelSpanL="4" labelSpanM="4" emptySpanL="1" emptySpanM="1"
-				columnsL="1" columnsM="1" class="editableForm">
-				<f:content>
-					<Label text="{i18n>empId}" />
-					<Input value="{input>empId}" type="Text" submit="onEmpChange"
-						enabled="true" editable="true" maxLength="8">
-						<layoutData>
-							<l:GridData span="L2 M2 S4" />
-						</layoutData>
-					</Input>
-					<Input value="{input>empName}" type="Text" placeholder="{i18n>empName}"
-						enabled="true" editable="true" >
-						<layoutData>
-							<l:GridData span="L2 M3 S4" />
-						</layoutData>
-					</Input>						
-					<Label text="{i18n>badgeId}" />
-					<Input value="{input>badgeId}" type="Text"
-						enabled="true" editable="true" maxLength="8">
-						<layoutData>
-							<l:GridData span="L2 M2 S4" />
-						</layoutData>
-					</Input>
-
-				</f:content>
-			</f:SimpleForm>
-		</VBox>
 
 		<footer>
 			<Bar>

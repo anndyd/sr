@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sap.it.sr.dao.EmployeeDao;
-import com.sap.it.sr.dao.ItemDetailDao;
-import com.sap.it.sr.dao.ItemInfoDao;
 import com.sap.it.sr.dao.PickupDataDao;
 import com.sap.it.sr.dao.SyncItemDetailDao;
 import com.sap.it.sr.dao.SyncItemInfoDao;
@@ -41,12 +39,12 @@ public class PickupDataController {
     
     @Autowired
     private SyncItemDetailDao sddao;
-    
-    @Autowired
-    private ItemInfoDao idao;
-    
-    @Autowired
-    private ItemDetailDao ddao;
+//    
+//    @Autowired
+//    private ItemInfoDao idao;
+//    
+//    @Autowired
+//    private ItemDetailDao ddao;
     
 	@RequestMapping(value="/allwithparam", method = RequestMethod.GET)
 	@ResponseBody
@@ -89,15 +87,31 @@ public class PickupDataController {
 		}
 		return pd;
 	}
+
+	@RequestMapping(value="/find", method = RequestMethod.GET)
+	@ResponseBody
+	public PickupData findPickupData(@RequestParam(required = true) String empId){
+		return findItemByEmpId(empId);
+	}
+
+	@RequestMapping(value="/findbypo", method = RequestMethod.GET)
+	@ResponseBody
+	public PickupData findPickupDataByPo(@RequestParam(required = true) String poNum){
+		return findItemByPoNumber(poNum);
+	}
 	
 	@RequestMapping(value="/upsert", method = RequestMethod.POST)
 	@ResponseBody
 	@Transactional
 	public void upsertPickupData(@RequestBody PickupData pd){
-		PickupData pd1 = dao.findByEmpId(pd.getEmpId());
-		if (pd.getEmpId() != null) {
-			pd.setId(pd1.getId());
-			dao.merge(pd);
+		if (pd != null) {
+    	    dao.merge(pd);
+    	    pd.getItems().forEach(itm->{
+    	        SyncItemInfo si = sidao.findByPK(itm.getPoNumber(), itm.getPoItem());
+    	        si.setStatus(4); // 4 - picked
+    	        si.setQuantity(si.getQuantity()-itm.getQuantity());
+    	        sidao.merge(si);
+    	    });
 		}
 	}
 	

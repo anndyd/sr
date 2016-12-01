@@ -8,10 +8,10 @@ sap.ui.define([
     getPickupDatas: function(oData) {
       var dtd = $.Deferred();
       bs.asyncReq({
-        url: "/srserver/pickupData/allwithparam",
+        url: "/srserver/pickup/allwithparam",
         type: "GET",
-		contentType: "application/json",
-		data: oData
+        contentType: "application/json",
+        data: oData
       }).done(function(data) {
         dtd.resolve(data);
       }).fail(function(err) {
@@ -22,10 +22,24 @@ sap.ui.define([
     getPickupData: function(oData) {
       var dtd = $.Deferred();
       bs.asyncReq({
-        url: "/srserver/pickupData/get",
+        url: "/srserver/pickup/get",
         type: "GET",
-		contentType: "application/json",
-		data: oData
+        contentType: "application/json",
+        data: oData
+      }).done(function(data) {
+        dtd.resolve(data);
+      }).fail(function(err) {
+        dtd.reject(err);
+      });
+      return dtd.promise();
+    },
+    findPickupData: function(oData) {
+      var dtd = $.Deferred();
+      bs.asyncReq({
+        url: "/srserver/pickup/find",
+        type: "GET",
+        contentType: "application/json",
+        data: oData
       }).done(function(data) {
         dtd.resolve(data);
       }).fail(function(err) {
@@ -36,7 +50,7 @@ sap.ui.define([
     upsertPickupData: function(oData) {
         var dtd = $.Deferred();
         bs.asyncReq({
-          url: "/srserver/pickupData/upsert",
+          url: "/srserver/pickup/upsert",
           type: "POST",
           contentType: "application/json",
           data: JSON.stringify(oData)
