@@ -6,37 +6,30 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Entity
-public class ItemDetail implements Serializable {
-	private static final long serialVersionUID = -3273329222309149185L;
+public class SyncItemDetail implements Serializable {
+	private static final long serialVersionUID = -3517360767968072506L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ITEM_INFO_ID", nullable = false)
-    private ItemInfo itemInfo;
-
-    private String poNumber;
-    private int poItem;
-    private int poItemDetail;
-    private String serailNo;
+	private String poNumber;
+	private int poItem;
+	private int poItemDetail;
+	private String serailNo;
 	private String equipNo;
-    
-    private String remark;
 
-    public Long getId() {
-        return id;
-    }
+	private String remark;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getPoNumber() {
 		return poNumber;

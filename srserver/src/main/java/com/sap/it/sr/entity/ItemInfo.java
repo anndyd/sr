@@ -1,38 +1,56 @@
 package com.sap.it.sr.entity;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class ItemInfo implements Serializable {
-	private static final long serialVersionUID = -2001687870973611013L;
+	private static final long serialVersionUID = -7458269368197976414L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	private String poNumber;
-	private int poItem;
-	private String itemDesc;
-	private String location;
-	private String userId;
-	private int status;
-	private int quantity;
-	private Timestamp createDate;
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PICKUP_DATA_ID", nullable = false)
+    private PickupData pickupData;
 
-	private String remark;
+    @OneToMany(mappedBy = "itemInfo", cascade = CascadeType.ALL)
+    private List<ItemDetail> itemDetails = new ArrayList<ItemDetail>();
 
-	public Long getId() {
-		return id;
+    private String poNumber;
+    private int poItem;
+    private String itemDesc;
+    private String location;
+    private int quantity;
+    
+    private String remark;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+	public List<ItemDetail> getItemDetails() {
+		return itemDetails;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setItemDetails(List<ItemDetail> itemDetails) {
+		this.itemDetails = itemDetails;
 	}
 
 	public String getPoNumber() {
@@ -59,14 +77,6 @@ public class ItemInfo implements Serializable {
 		this.itemDesc = itemDesc;
 	}
 
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-
 	public String getLocation() {
 		return location;
 	}
@@ -75,28 +85,12 @@ public class ItemInfo implements Serializable {
 		this.location = location;
 	}
 
-	public String getUserId() {
-		return userId;
+	public int getQuantity() {
+		return quantity;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	public int getStatus() {
-		return status;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
-	public Timestamp getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Timestamp createDate) {
-		this.createDate = createDate;
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
 
 	public String getRemark() {

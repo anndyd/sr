@@ -8,11 +8,11 @@ import javax.persistence.TemporalType;
 
 import org.springframework.stereotype.Repository;
 
-import com.sap.it.sr.entity.ItemDetail;
-import com.sap.it.sr.entity.ItemInfo;
+import com.sap.it.sr.entity.SyncItemDetail;
+import com.sap.it.sr.entity.SyncItemInfo;
 
 @Repository
-public class GrPoInfoDao extends BaseDao<ItemInfo> {
+public class GrPoInfoDao extends BaseDao<SyncItemInfo> {
     
 //  CREATE TABLE PO_INFO --
 //      PO_NUMBER       VARCHAR(10)     NOT NULL,
@@ -34,7 +34,7 @@ public class GrPoInfoDao extends BaseDao<ItemInfo> {
 //	  PLANT           VARCHAR(30),
 
 	@SuppressWarnings("unchecked")
-	public List<ItemInfo> findDoneItem(Timestamp startTime) {
+	public List<SyncItemInfo> findDoneItem(Timestamp startTime) {
     	String sql = "select CONVERT(BIGINT,i.PO_NUMBER) + i.PO_ITEM as id, p.PO_NUMBER as poNumber, i.PO_ITEM as poItem, " + 
     				 "i.DESCRIPTION as itemDesc, i.LOCATION as location, " +
     			     "i.USERID as userId, i.STATUS as status, " +
@@ -42,13 +42,13 @@ public class GrPoInfoDao extends BaseDao<ItemInfo> {
     			     "from DBA.PO_INFO p left join DBA.ITEM_INFO i on p.PO_NUMBER = i.PO_NUMBER " +
     			     "where i.STATUS = 2 and p.CREATE_TIME > ?1";
     	
-        List<ItemInfo> list = grem.createNativeQuery(sql, ItemInfo.class)
+        List<SyncItemInfo> list = grem.createNativeQuery(sql, SyncItemInfo.class)
                 .setParameter(1, startTime, TemporalType.TIMESTAMP).getResultList();
         return list;
     }
 
 	@SuppressWarnings("unchecked")
-	public List<ItemDetail> findDoneItemDetail(Timestamp startTime) {
+	public List<SyncItemDetail> findDoneItemDetail(Timestamp startTime) {
     	String sql = "select CONVERT(BIGINT,PO_NUMBER) + PO_ITEM + PO_ITEM_ID as id, " +
                 "PO_NUMBER as poNumber, PO_ITEM as poItem, " +
                 "PO_ITEM_ID as poItemDetail,   " +
@@ -59,7 +59,7 @@ public class GrPoInfoDao extends BaseDao<ItemInfo> {
                 "where STATUS = 2 and PO_NUMBER in  " +
                 "(select PO_NUMBER from DBA.PO_INFO where CREATE_TIME > ?1))";
     	
-        List<ItemDetail> list = grem.createNativeQuery(sql, ItemDetail.class)
+        List<SyncItemDetail> list = grem.createNativeQuery(sql, SyncItemDetail.class)
                 .setParameter(1, startTime, TemporalType.TIMESTAMP).getResultList();
         return list;
     }

@@ -30,7 +30,7 @@ public class PickupData implements Serializable {
     @Transient
     private String agentName;
     @OneToMany(mappedBy = "pickupData", cascade = CascadeType.ALL)
-    private List<PoInfo> items = new ArrayList<PoInfo>();
+    private List<ItemInfo> items = new ArrayList<ItemInfo>();
     private Date pickupDate;
     
     private String remark;
@@ -83,11 +83,11 @@ public class PickupData implements Serializable {
 		this.agentName = agentName;
 	}
 
-	public List<PoInfo> getItems() {
+	public List<ItemInfo> getItems() {
 		return items;
 	}
 
-	public void setItems(List<PoInfo> items) {
+	public void setItems(List<ItemInfo> items) {
 		this.items = items;
 	}
 

@@ -3,7 +3,8 @@
 	<persistence-unit name="srserver">
 		<class>com.sap.it.sr.entity.User</class>
 		<class>com.sap.it.sr.entity.Employee</class>
-		<class>com.sap.it.sr.entity.PoInfo</class>
+		<class>com.sap.it.sr.entity.ItemInfo</class>
+		<class>com.sap.it.sr.entity.ItemDetail</class>
 		<class>com.sap.it.sr.entity.PickupData</class>
         <properties>
             <property name="eclipselink.weaving" value="static"/>

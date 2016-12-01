@@ -1,7 +1,5 @@
 package com.sap.it.sr.controller;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -16,11 +14,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sap.it.sr.dao.EmployeeDao;
+import com.sap.it.sr.dao.ItemDetailDao;
+import com.sap.it.sr.dao.ItemInfoDao;
 import com.sap.it.sr.dao.PickupDataDao;
+import com.sap.it.sr.dao.SyncItemDetailDao;
+import com.sap.it.sr.dao.SyncItemInfoDao;
+import com.sap.it.sr.entity.ItemDetail;
+import com.sap.it.sr.entity.ItemInfo;
 import com.sap.it.sr.entity.PickupData;
+import com.sap.it.sr.entity.SyncItemDetail;
+import com.sap.it.sr.entity.SyncItemInfo;
 
 @Controller
-@RequestMapping("pickupData")
+@RequestMapping("pickup")
 @Scope("request")
 public class PickupDataController {
 
@@ -29,7 +35,19 @@ public class PickupDataController {
 
     @Autowired
     private EmployeeDao empDao;
-
+    
+    @Autowired
+    private SyncItemInfoDao sidao;
+    
+    @Autowired
+    private SyncItemDetailDao sddao;
+    
+    @Autowired
+    private ItemInfoDao idao;
+    
+    @Autowired
+    private ItemDetailDao ddao;
+    
 	@RequestMapping(value="/allwithparam", method = RequestMethod.GET)
 	@ResponseBody
 	public List<PickupData> getPickupDatas(
@@ -90,4 +108,53 @@ public class PickupDataController {
 		dao.remove(id);
 	}
 
+	private PickupData findItemByEmpId(String empId) {
+		PickupData pd = new PickupData();
+		List<SyncItemInfo> sis = sidao.findByEmpId(empId);
+		if (sis != null) {
+			sis.forEach(sitm->{
+				ItemInfo itm = new ItemInfo();
+				itm.setPoNumber(sitm.getPoNumber());
+				itm.setPoItem(sitm.getPoItem());
+				itm.setItemDesc(sitm.getItemDesc());
+				itm.setLocation(sitm.getLocation());
+				itm.setQuantity(sitm.getQuantity());
+				
+				List<SyncItemDetail> sids = sddao.findByPoItem(sitm.getPoNumber(), sitm.getPoItem());
+				if (sids != null) {
+					sids.forEach(sid->{
+						ItemDetail itd = new ItemDetail();
+						itd.setPoNumber(sid.getPoNumber());
+						itd.setPoItem(sid.getPoItem());
+						itd.setPoItemDetail(sid.getPoItemDetail());
+						itd.setSerailNo(sid.getSerailNo());
+						itd.setEquipNo(sid.getEquipNo());
+						itm.getItemDetails().add(itd);
+					});
+				}
+				pd.getItems().add(itm);
+			});
+		}
+		
+		return pd;
+	}
+
+	private PickupData findItemByPoNumber(String poNum) {
+		PickupData pd = new PickupData();
+		List<SyncItemInfo> sis = sidao.findByPoNum(poNum);
+		if (sis != null) {
+			sis.forEach(sitm->{
+				ItemInfo itm = new ItemInfo();
+				itm.setPoNumber(sitm.getPoNumber());
+				itm.setPoItem(sitm.getPoItem());
+				itm.setItemDesc(sitm.getItemDesc());
+				itm.setLocation(sitm.getLocation());
+				itm.setQuantity(sitm.getQuantity());
+				pd.getItems().add(itm);
+			});
+		}
+		
+		return pd;
+		
+	}
 }

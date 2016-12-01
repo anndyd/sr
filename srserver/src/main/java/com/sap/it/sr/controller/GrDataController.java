@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sap.it.sr.dao.CommonSettingsDao;
 import com.sap.it.sr.dao.GrPoInfoDao;
-import com.sap.it.sr.dao.ItemDetailDao;
-import com.sap.it.sr.dao.ItemInfoDao;
+import com.sap.it.sr.dao.SyncItemDetailDao;
+import com.sap.it.sr.dao.SyncItemInfoDao;
 import com.sap.it.sr.entity.CommonSettings;
-import com.sap.it.sr.entity.ItemDetail;
-import com.sap.it.sr.entity.ItemInfo;
+import com.sap.it.sr.entity.SyncItemDetail;
+import com.sap.it.sr.entity.SyncItemInfo;
 
 @Controller
 @RequestMapping("grData")
@@ -32,10 +32,10 @@ public class GrDataController {
     private CommonSettingsDao sdao;
     
     @Autowired
-    private ItemInfoDao idao;
+    private SyncItemInfoDao idao;
 
     @Autowired
-    private ItemDetailDao ddao;
+    private SyncItemDetailDao ddao;
 
 	@RequestMapping(value="/sync", method = RequestMethod.GET)
 	@ResponseBody
@@ -51,19 +51,19 @@ public class GrDataController {
 		}
 		Timestamp startTime = cs.getPoCreateTime();
 		
-		List<ItemInfo> itmi = dao.findDoneItem(startTime);
+		List<SyncItemInfo> itmi = dao.findDoneItem(startTime);
 		if (itmi != null) {
 			List<Long> ovs1 = idao.findByTime(startTime);
-			for (ItemInfo itm : itmi) {
+			for (SyncItemInfo itm : itmi) {
 				if (!ovs1.contains(itm.getId())) {
 					idao.merge(itm);
 					rlt++;
 				}
 			}
-			List<ItemDetail> itmd = dao.findDoneItemDetail(startTime);
+			List<SyncItemDetail> itmd = dao.findDoneItemDetail(startTime);
 			if (itmd != null) {
 				List<Long> ovs2 = idao.findByTime(startTime);
-				for (ItemDetail itm : itmd) {
+				for (SyncItemDetail itm : itmd) {
 					if (!ovs2.contains(itm.getId())) {
 						ddao.merge(itm);
 					}
