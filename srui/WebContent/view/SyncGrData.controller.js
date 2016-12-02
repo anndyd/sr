@@ -22,9 +22,10 @@ sap.ui.define([
 		},
 		
 		refreshData: function () {
+			var that = this;
+		  that.getView().byId("sync").setEnabled(false);
 			sap.ui.core.BusyIndicator.show();
 			var i18n = this.getResourceBundle();
-			var that = this;
 			var date1 = new Date();
 			
 			ss.syncGrData().done(function(data){
@@ -35,9 +36,9 @@ sap.ui.define([
 				           {zkey: i18n.getText("effectLines"), zvalue: data}];
 				that.getView().getModel().setData(rlt);
 				
+			}).always(function(){
+			  that.getView().byId("sync").setEnabled(true);
 			});
-
-			sap.ui.core.BusyIndicator.hide();
 		},
 
 		onExit : function () {

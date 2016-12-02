@@ -38,15 +38,18 @@ public class UserController {
 	@RequestMapping(value="/get", method = RequestMethod.GET)
 	@ResponseBody
 	public User getUser(@RequestParam(required = true) String userName){
-		return uDao.findByName(userName.toUpperCase());
+	    if (userName != null) {
+	        userName = userName.toUpperCase();
+	    }
+	    return uDao.findByName(userName);
 	}
 	
 	@RequestMapping(value="/upsert", method = RequestMethod.POST)
 	@ResponseBody
 	@Transactional
 	public void upsertUser(@RequestBody User user){
-		User oU = uDao.findByName(user.getUserName().toUpperCase());
 		if (user.getUserName() != null) {
+		    User oU = uDao.findByName(user.getUserName().toUpperCase());
 			if (oU.getId() != null) {
 				user.setId(oU.getId());
 			}

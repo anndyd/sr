@@ -17,6 +17,9 @@ public class EmployeeDao extends BaseDao<Employee> {
 
     public Employee findByEmpId(String empId) {
     	Employee emp = new Employee();
+    	if (empId != null) {
+    	    empId = empId.toUpperCase();
+    	}
         List<Employee> list = em.createQuery("select t from Employee t where t.empId=?1", Employee.class)
                 .setParameter(1, empId).setMaxResults(1).getResultList();
         return list.isEmpty() ? emp : list.get(0);

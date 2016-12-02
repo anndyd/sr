@@ -12,7 +12,7 @@ import com.sap.it.sr.entity.SyncItemInfo;
 @Repository
 public class SyncItemInfoDao extends BaseDao<SyncItemInfo> {
     public List<SyncItemInfo> findByPoNum(String poNum) {
-        return em.createQuery("select t from SyncItemInfo t where t.status=2 and t.poNumber=?1", SyncItemInfo.class)
+        return em.createQuery("select t from SyncItemInfo t where t.quantity>0 and t.poNumber=?1", SyncItemInfo.class)
                 .setParameter(1, poNum).getResultList();
     }
 
@@ -31,6 +31,9 @@ public class SyncItemInfoDao extends BaseDao<SyncItemInfo> {
     }
 
     public List<SyncItemInfo> findByEmpId(String empId) {
+        if (empId != null) {
+            empId = empId.toUpperCase();
+        }
         return em.createQuery("select t from SyncItemInfo t where t.status=2 and t.userId=?1", SyncItemInfo.class)
                 .setParameter(1, empId).getResultList();
     }

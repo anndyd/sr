@@ -1,11 +1,12 @@
 sap.ui.define([
     'jquery.sap.global',
     "sap/it/sr/ui/view/base/BaseController",
+    "sap/it/sr/ui/service/BaseService",
     "sap/it/sr/ui/service/PickupService",
     "sap/it/sr/ui/service/EmployeeService",
     "sap/m/MessageToast",
     'sap/ui/model/json/JSONModel'
-  ], function(jQuery, BaseController, PickupService, EmployeeService, MessageToast, JSONModel) {
+  ], function(jQuery, BaseController, BaseService, PickupService, EmployeeService, MessageToast, JSONModel) {
   "use strict";
   var ps = new PickupService();
   var es = new EmployeeService();
@@ -16,11 +17,7 @@ sap.ui.define([
 			var that = this;
 			var oModel = new JSONModel();
 			var pModel = new JSONModel({
-				badgeId: "",
-				empId: "",
-				empName: "",
-				agentId: "",
-				agentName: ""
+			  cpart: false
 			});
 			that.getView().setModel(oModel);
 			that.getView().setModel(pModel, "input");
@@ -68,13 +65,13 @@ sap.ui.define([
 			var that = this;
 			var v = evt.getParameters().value;
 			var oModel = that.getView().getModel();
-			if (v && v.length > 6) {
+//			if (v && v.length > 6) {
 				var param = {badgeId: "", empId: v};
 				that._getEmployeeAndPickupData(param);
-			} else {
-				oModel.getData().empName = null;
-				oModel.refresh();
-			}
+//			} else {
+//				oModel.getData().empName = null;
+//				oModel.refresh();
+//			}
 			
 		},
 		
@@ -82,7 +79,7 @@ sap.ui.define([
 			var that = this;
 			var v = evt.getParameters().value;
 			var oModel = that.getView().getModel("input");
-			if (v && v.length > 6) {
+//			if (v && v.length > 6) {
 				var param = {badgeId: "", empId: v};
 				
 				if (oModel.getData().agentName === null) {
@@ -91,10 +88,22 @@ sap.ui.define([
 						oModel.refresh();
 					});
 				}
-			} else {
-				oModel.getData().agentName = null;
-				oModel.refresh();
-			}
+//			} else {
+//				oModel.getData().agentName = null;
+//				oModel.refresh();
+//			}
+		},
+		
+		onPoNumChange: function (evt) {
+      var that = this;
+      var param = {
+          poNum : evt.getParameters().value
+      };
+      ps.findPickupDataByPo(param).done(function(pickData) {
+        that.getView().getModel().setData(pickData);
+        // post message to sub window
+        // that.postMsg(data.empId);
+      });
 		},
 
 		onCollapseAll : function () {
@@ -120,19 +129,18 @@ sap.ui.define([
 		
 		handlePickupPress : function () {
 			var that = this;
-//			sap.ui.core.BusyIndicator.show();
+			sap.ui.core.BusyIndicator.show();
 			var pData = that.getView().getModel("input").getData();
 			var param = that.getView().getModel().getData();
 			// for updating pickup data
 			param.empId = pData.empId;
 			param.badgeId = pData.badgeId;
 			param.agentId = pData.agentId;
-			param.pickupTime = new Date();
+//			param.pickupTime = new Date();
 			
 			ps.upsertPickupData(param).done(function(){
 				MessageToast.show(that.getResourceBundle().getText("pickupS"));
 			});
-//			sap.ui.core.BusyIndicator.hide();
 		},
 
 		_getEmployeeAndPickupData : function (param) {
@@ -140,17 +148,21 @@ sap.ui.define([
 			// get employee data
 			var pModel = that.getView().getModel("input");
 			es.getEmployee(param).done(function(empData) {
-				pModel.getData().empName = empData.empName;
-			});
-			// get pickup data
-			var pData = pModel.getData();
-			var paramP = {
-				empId : param.empId
-			};
-			ps.findPickupData(paramP).done(function(pickData) {
-				that.getView().getModel().setData(pickData);
-				// post message to sub window
-				// that.postMsg(data.empId);
+			  if (empData && empData.empId !== null) {
+			    pModel.getData().empName = empData.empName;
+			    pModel.refresh();
+		      var paramP = {
+		          empId : param.empId
+		        };
+		        ps.findPickupData(paramP).done(function(pickData) {
+		          that.getView().getModel().setData(pickData);
+		          // that.getView().byId("chkCpart").setVisible(pickData.items.length === 0);
+		          // post message to sub window
+		          // that.postMsg(data.empId);
+		        });
+			  } else {
+			    MessageToast.show(that.getResourceBundle().getText("employeeNotFound"));
+			  }
 			});
 		},
 		

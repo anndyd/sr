@@ -40,7 +40,10 @@ public class User implements Serializable {
 	}
 
 	public void setUserName(String userName) {
-		this.userName = userName.toUpperCase();
+	    if (userName != null) {
+	        userName = userName.toUpperCase();
+        }
+		this.userName = userName;
 	}
 
 	public String getPassword() {

@@ -11,6 +11,7 @@ import com.sap.it.sr.entity.PickupData;
 
 @Repository
 public class PickupDataDao extends BaseDao<PickupData> {
+    @SuppressWarnings("unchecked")
     public List<PickupData> findAll(String empIdFrom, String empIdTo, String dateFrom, String dateTo) {
         String sql = "select t from PickupData t";
         
@@ -18,21 +19,21 @@ public class PickupDataDao extends BaseDao<PickupData> {
         String w = "";
         List<String> p = new ArrayList<String>();
         
-        if (!empIdFrom.equals("")) {
+        if (empIdFrom != null && !empIdFrom.equals("")) {
         	i++;
         	w = w + " t.empId>=?" + i;
-        	p.add(empIdFrom);
+        	p.add(empIdFrom.toUpperCase());
         }
-        if (!empIdTo.equals("")) {
+        if (empIdTo != null && !empIdTo.equals("")) {
         	i++;
         	if (i>0) {
         		w = w + " and t.empId<=?" + i;
         	} else {
         		w = w + " t.empId<=?" + i;
         	}
-        	p.add(empIdTo);
+        	p.add(empIdTo.toUpperCase());
         }
-        if (!dateFrom.equals("")) {
+        if (dateFrom != null && !dateFrom.equals("")) {
         	i++;
         	if (i>0) {
         		w = w + " and t.pickupDate>=?" + i;
@@ -41,7 +42,7 @@ public class PickupDataDao extends BaseDao<PickupData> {
         	}
         	p.add(dateFrom);
         }
-        if (!dateTo.equals("")) {
+        if (dateTo != null && !dateTo.equals("")) {
         	i++;
         	if (i>0) {
         		w = w + " and t.pickupDate<=?" + i;
@@ -65,6 +66,9 @@ public class PickupDataDao extends BaseDao<PickupData> {
 
     public PickupData findByEmpId(String empId) {
     	PickupData pd = new PickupData();
+    	if (empId != null) {
+            empId = empId.toUpperCase();
+        }
         List<PickupData> list = em.createQuery("select t from PickupData t where t.empId=?1", PickupData.class)
                 .setParameter(1, empId).setMaxResults(1).getResultList();
         return list.isEmpty() ? pd : list.get(0);
@@ -72,8 +76,11 @@ public class PickupDataDao extends BaseDao<PickupData> {
 
     public PickupData findByAgentId(String agentId) {
     	PickupData pd = new PickupData();
+    	if (agentId != null) {
+    	    agentId = agentId.toUpperCase();
+        }
         List<PickupData> list = em.createQuery("select t from PickupData t where t.agentId=?1", PickupData.class)
-                .setParameter(1, agentId).setMaxResults(1).getResultList();
+                .setParameter(1, agentId.toUpperCase()).setMaxResults(1).getResultList();
         return list.isEmpty() ? pd : list.get(0);
     }
 }

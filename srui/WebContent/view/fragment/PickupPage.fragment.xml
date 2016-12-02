@@ -15,7 +15,7 @@
 					</Input>
 					
 					<Label text="{i18n>empId}" />
-					<Input id="empId" value="{input>empId}" type="Text" liveChange="onEmpChange"
+					<Input id="empId" value="{input>empId}" type="Text" submit="onEmpChange"
 						enabled="true" editable="true" maxLength="8">
 						<layoutData>
 							<l:GridData span="L2 M2 S4" />
@@ -29,7 +29,7 @@
 					</Input>
 						
 					<Label text="{i18n>agentId}" />
-					<Input value="{input>agentId}" type="Text" liveChange="onAgentChange"
+					<Input value="{input>agentId}" type="Text" submit="onAgentChange"
 						enabled="true" editable="true" maxLength="8">
 						<layoutData>
 							<l:GridData span="L2 M2 S4" />
@@ -41,20 +41,21 @@
 							<l:GridData span="L2 M3 S4" />
 						</layoutData>
 					</Input>
+					<!--
 					<Label text="{i18n>cpart}" />
-					<CheckBox selected="{input>cpart}" text="{i18n>yes}" visible="{input>cpart}">
+					<CheckBox id="chkCpart" selected="{input>cpart}" text="{i18n>yes}" visible="false">
 						<layoutData>
 							<l:GridData span="L2 M2 S4" />
 						</layoutData>
 					</CheckBox>
 					<Label text="{i18n>poNumber}" />
-					<Input value="{input>poNum}" type="Text" visible="{input>cpart}"
-						enabled="true" editable="true" maxLength="8">
+					<Input value="{input>poNum}" type="Text" visible="{input>cpart}" submit="onPoNumChange"
+						enabled="true" editable="true" maxLength="10">
 						<layoutData>
 							<l:GridData span="L2 M2 S4" />
 						</layoutData>
 					</Input>
-					
+					-->
 				</f:content>
 			</f:SimpleForm>
 		</VBox>

@@ -48,6 +48,7 @@ public class EmployeeController {
 			if (emp1.getId() != null) {
 				emp.setId(emp1.getId());
 			}
+			emp.setEmpId(emp.getEmpId().toUpperCase());
 			dao.merge(emp);
 		}
 	}

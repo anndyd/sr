@@ -54,6 +54,8 @@ sap.ui.define([
       }).fail(function(err) {
         processStatus(err);
         dtd.reject(err);
+      }).always(function(){
+        sap.ui.core.BusyIndicator.hide();
       });
       return dtd.promise();
     }

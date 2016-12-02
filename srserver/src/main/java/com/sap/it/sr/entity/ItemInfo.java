@@ -23,10 +23,10 @@ public class ItemInfo implements Serializable {
     private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PICKUP_DATA_ID", nullable = false)
+    @JoinColumn(name = "PICKUP_DATA_ID")
     private PickupData pickupData;
 
-    @OneToMany(mappedBy = "itemInfo", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "itemInfo", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<ItemDetail> itemDetails = new ArrayList<ItemDetail>();
 
     private String poNumber;
@@ -45,7 +45,15 @@ public class ItemInfo implements Serializable {
         this.id = id;
     }
 
-	public List<ItemDetail> getItemDetails() {
+    public PickupData getPickupData() {
+        return pickupData;
+    }
+
+    public void setPickupData(PickupData pickupData) {
+        this.pickupData = pickupData;
+    }
+
+    public List<ItemDetail> getItemDetails() {
 		return itemDetails;
 	}
 

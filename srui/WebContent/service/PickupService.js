@@ -47,6 +47,20 @@ sap.ui.define([
       });
       return dtd.promise();
     },
+    findPickupDataByPo: function(oData) {
+      var dtd = $.Deferred();
+      bs.asyncReq({
+        url: "/srserver/pickup/findbypo",
+        type: "GET",
+        contentType: "application/json",
+        data: oData
+      }).done(function(data) {
+        dtd.resolve(data);
+      }).fail(function(err) {
+        dtd.reject(err);
+      });
+      return dtd.promise();
+    },
     upsertPickupData: function(oData) {
         var dtd = $.Deferred();
         bs.asyncReq({

@@ -3,10 +3,10 @@ package com.sap.it.sr.entity;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
@@ -19,7 +19,7 @@ public class ItemDetail implements Serializable {
     private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ITEM_INFO_ID", nullable = false)
+    @JoinColumn(name = "ITEM_INFO_ID")
     private ItemInfo itemInfo;
 
     private String poNumber;
@@ -38,7 +38,15 @@ public class ItemDetail implements Serializable {
         this.id = id;
     }
 
-	public String getPoNumber() {
+	public ItemInfo getItemInfo() {
+        return itemInfo;
+    }
+
+    public void setItemInfo(ItemInfo itemInfo) {
+        this.itemInfo = itemInfo;
+    }
+
+    public String getPoNumber() {
 		return poNumber;
 	}
 

@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,31 +30,14 @@ public class PickupData implements Serializable {
     private String empName;
     @Transient
     private String agentName;
-    @OneToMany(mappedBy = "pickupData", cascade = CascadeType.ALL)
+    
+    @OneToMany(mappedBy = "pickupData", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<ItemInfo> items = new ArrayList<ItemInfo>();
     private Timestamp pickupTime;
     
     private String remark;
 
-    public PickupData() {
-    }
-    
-    //@JsonProperty("dependentId") String dependentId
-    public PickupData(Long id, String badgeId, String empId, String agentId, String empName, String agentName,
-			List<ItemInfo> items, Timestamp pickupTime, String remark) {
-		super();
-		this.id = id;
-		this.badgeId = badgeId;
-		this.empId = empId;
-		this.agentId = agentId;
-		this.empName = empName;
-		this.agentName = agentName;
-		this.items = items;
-		this.pickupTime = pickupTime;
-		this.remark = remark;
-	}
-
-	public Long getId() {
+    public Long getId() {
         return id;
     }
 

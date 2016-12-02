@@ -1,6 +1,6 @@
 package com.sap.it.sr.controller;
 
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,7 +105,23 @@ public class PickupDataController {
 	@Transactional
 	public void upsertPickupData(@RequestBody PickupData pd){
 		if (pd != null) {
+		    // upper case for employee id
+		    if (pd.getAgentId() != null){
+		        pd.setAgentId(pd.getAgentId().toUpperCase());
+		    }
+		    if (pd.getEmpId() != null) {
+		        pd.setEmpId(pd.getEmpId().toUpperCase());
+		    }
+		    // set pickup time to now
+		    pd.setPickupTime(new Timestamp(System.currentTimeMillis()));
+		    pd.getItems().forEach(itm->{
+		        itm.setPickupData(pd);
+		        itm.getItemDetails().forEach(itd->{
+		            itd.setItemInfo(itm);
+		        });
+		    });
     	    dao.merge(pd);
+//    	    dao.create(pd);
     	    pd.getItems().forEach(itm->{
     	        SyncItemInfo si = sidao.findByPK(itm.getPoNumber(), itm.getPoItem());
     	        si.setStatus(4); // 4 - picked
