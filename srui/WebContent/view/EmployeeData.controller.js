@@ -28,7 +28,7 @@ sap.ui.define([
 		
 		onRouteMatched: function (evt) {
 			// open new window
-			subwin = util.openSecondWindow("/srui/index.html#/empData2", 'SecondWindow');
+//			subwin = util.openSecondWindow("/srui/index.html#/empData2", 'SecondWindow');
 		},
 	
 	    onMessage : function (evt) {
@@ -96,6 +96,7 @@ sap.ui.define([
 			if (!this.oPageFragment) {
 			  this.oPageFragment = sap.ui.xmlfragment(this.getView().getId(), "sap.it.sr.ui.view.fragment.EmployeePage", this);
 			}
+			oPage.addContent(this.oPageFragment);
 			if (!this.oTableFragment) {
 				this.oTableFragment = sap.ui.xmlfragment(this.getView().getId(), "sap.it.sr.ui.view.fragment.EmployeeTable", this);
 			}

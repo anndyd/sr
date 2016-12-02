@@ -15,7 +15,13 @@ sap.ui.define([
 		onInit: function (oEvent) {
 			var that = this;
 			var oModel = new JSONModel();
-			var pModel = new JSONModel();
+			var pModel = new JSONModel({
+				badgeId: "",
+				empId: "",
+				empName: "",
+				agentId: "",
+				agentName: ""
+			});
 			that.getView().setModel(oModel);
 			that.getView().setModel(pModel, "input");
 			that.getView().bindElement("input>/");
@@ -75,7 +81,7 @@ sap.ui.define([
 		onAgentChange: function (evt) {
 			var that = this;
 			var v = evt.getParameters().value;
-			var oModel = that.getView().getModel();
+			var oModel = that.getView().getModel("input");
 			if (v && v.length > 6) {
 				var param = {badgeId: "", empId: v};
 				
@@ -90,6 +96,16 @@ sap.ui.define([
 				oModel.refresh();
 			}
 		},
+
+		onCollapseAll : function () {
+			var oTreeTable = this.getView().byId("pkTreeTable");
+			oTreeTable.collapseAll();
+		},
+
+		onExpandFirstLevel : function () {
+			var oTreeTable = this.getView().byId("pkTreeTable");
+			oTreeTable.expandToLevel(1);
+		},
 		
 		onExit : function () {
 			if (this.oFormFragment) {
@@ -103,26 +119,39 @@ sap.ui.define([
 		},
 		
 		handlePickupPress : function () {
+			var that = this;
 //			sap.ui.core.BusyIndicator.show();
-			ps.upsertPickupData(this.getView().getModel().getData()).done(function(){
-				MessageToast.show(this.getResourceBundle().getText("pickupS"));
+			var pData = that.getView().getModel("input").getData();
+			var param = that.getView().getModel().getData();
+			// for updating pickup data
+			param.empId = pData.empId;
+			param.badgeId = pData.badgeId;
+			param.agentId = pData.agentId;
+			param.pickupTime = new Date();
+			
+			ps.upsertPickupData(param).done(function(){
+				MessageToast.show(that.getResourceBundle().getText("pickupS"));
 			});
 //			sap.ui.core.BusyIndicator.hide();
 		},
 
 		_getEmployeeAndPickupData : function (param) {
-		  var that = this;
-		  // get employee data
-      es.getEmployee(param).done(function(data) {
-        that.getView().getModel("input").setData(data);
-      });
-      // get pickup data
-      param = {empId: that.getView().getModel("input").getData().empId};
-      ps.findPickupData(param).done(function(data){
-        oModel.setData(data);
-        // post message to sub window
-        //that.postMsg(data.empId);
-      });
+			var that = this;
+			// get employee data
+			var pModel = that.getView().getModel("input");
+			es.getEmployee(param).done(function(empData) {
+				pModel.getData().empName = empData.empName;
+			});
+			// get pickup data
+			var pData = pModel.getData();
+			var paramP = {
+				empId : param.empId
+			};
+			ps.findPickupData(paramP).done(function(pickData) {
+				that.getView().getModel().setData(pickData);
+				// post message to sub window
+				// that.postMsg(data.empId);
+			});
 		},
 		
 		_showFormFragment : function () {

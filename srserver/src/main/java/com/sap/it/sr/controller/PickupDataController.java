@@ -80,10 +80,10 @@ public class PickupDataController {
 		if (pd.getAgentId() != null && pd.getAgentId() != "") {
 			pd.setAgentName(empDao.findByEmpId(pd.getAgentId()).getEmpName());
 		}
-		if (pd.getPickupDate() == null) {
+		if (pd.getPickupTime() == null) {
 //			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 //			pd.setPickupDate(dateFormat.format(new Date()));
-			pd.setPickupDate(new Date());
+//			pd.setPickupTime();
 		}
 		return pd;
 	}

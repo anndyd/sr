@@ -1,8 +1,8 @@
 package com.sap.it.sr.entity;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -31,11 +31,29 @@ public class PickupData implements Serializable {
     private String agentName;
     @OneToMany(mappedBy = "pickupData", cascade = CascadeType.ALL)
     private List<ItemInfo> items = new ArrayList<ItemInfo>();
-    private Date pickupDate;
+    private Timestamp pickupTime;
     
     private String remark;
 
-    public Long getId() {
+    public PickupData() {
+    }
+    
+    //@JsonProperty("dependentId") String dependentId
+    public PickupData(Long id, String badgeId, String empId, String agentId, String empName, String agentName,
+			List<ItemInfo> items, Timestamp pickupTime, String remark) {
+		super();
+		this.id = id;
+		this.badgeId = badgeId;
+		this.empId = empId;
+		this.agentId = agentId;
+		this.empName = empName;
+		this.agentName = agentName;
+		this.items = items;
+		this.pickupTime = pickupTime;
+		this.remark = remark;
+	}
+
+	public Long getId() {
         return id;
     }
 
@@ -91,12 +109,12 @@ public class PickupData implements Serializable {
 		this.items = items;
 	}
 
-	public Date getPickupDate() {
-		return pickupDate;
+	public Timestamp getPickupTime() {
+		return pickupTime;
 	}
 
-	public void setPickupDate(Date pickupDate) {
-		this.pickupDate = pickupDate;
+	public void setPickupTime(Timestamp pickupDate) {
+		this.pickupTime = pickupDate;
 	}
 
 	public String getRemark() {

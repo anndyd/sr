@@ -1,45 +1,65 @@
 <core:FragmentDefinition xmlns="sap.m"
+	xmlns:t="sap.ui.table"
 	xmlns:core="sap.ui.core">
-		<Table id="idPolist" inset="false"
-			items="{
-			path: '/PoList',
-			sorter: {
-				path: 'poItem'
-			}
-		}">
-			<columns>
-				<Column id="poItem" width="8em">
-					<Text text="{i18n>poItem}" />
-				</Column>
-				<Column id="brand" minScreenWidth="Tablet" demandPopin="true">
-					<Text text="{i18n>brand}" />
-				</Column>
-				<Column id="poDesc" minScreenWidth="Tablet" demandPopin="true">
-					<Text text="{i18n>desc}" />
-				</Column>
-				<Column id="quantity" hAlign="End">
-					<Text text="{i18n>quantity}" />
-				</Column>
-				<Column id="status" minScreenWidth="Tablet" demandPopin="true"
-					hAlign="Center">
-					<Text text="{i18n>status}" />
-				</Column>
-				<Column id="location" width="10em">
-					<Text text="{i18n>location}" />
-				</Column>
-			</columns>
-			<items>
-				<ColumnListItem>
-					<cells>
-						<ObjectIdentifier text="{poItem}" />
-						<Text text="{poDesc}" />
-						<Text text="{brand}" />
-						<ObjectNumber number="{quantity}" />
-						<Text text="{status}" />
-						<Text text="{location}" />
-					</cells>
-				</ColumnListItem>
-			</items>
-		</Table>
+            <t:TreeTable
+                    id="pkTreeTable"
+                    rows="{path:'/items', parameters: {arrayNames:['itemDetails']}}"
+                    selectionMode="MultiToggle"
+                    enableSelectAll="true"
+                    ariaLabelledBy="title">
+                <t:toolbar>
+                    <Toolbar>
+                        <ToolbarSpacer/>
+                        <Button text="{i18n>collapseAll}" press="onCollapseAll"/>
+                        <Button text="{i18n>expandFirstLevel}" press="onExpandFirstLevel"/>
+                    </Toolbar>
+                </t:toolbar>
+                <t:columns>
+                    <t:Column>
+                        <Label text="{i18n>poNumber}"/>
+                        <t:template>
+                            <Text text="{poNumber}"/>
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <Label text="{i18n>poItem}"/>
+                        <t:template>
+                            <Text text="{poItem}"/>
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <Label text="{i18n>desc}"/>
+                        <t:template>
+                            <Text text="{itemDesc}"/>
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <Label text="{i18n>quantity}"/>
+                        <t:template>
+                            <ObjectNumber number="{quantity}"/>
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <Label text="{i18n>location}"/>
+                        <t:template>
+                            <Text text="{location}"/>
+                        </t:template>
+                    </t:Column>
+
+                    <t:Column>
+                        <Label text="{i18n>serialNo}"/>
+                        <t:template>
+                            <Text text="{serialNo}"/>
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <Label text="{i18n>equipNo}"/>
+                        <t:template>
+                            <Text text="{equipNo}"/>
+                        </t:template>
+                    </t:Column>
+
+                </t:columns>
+            </t:TreeTable>
 </core:FragmentDefinition>
 

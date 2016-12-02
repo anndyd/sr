@@ -84,9 +84,10 @@ sap.ui.define([
 
 		_showFormFragment : function () {
 			var oPage = this.getView().byId("empDataPage");
-      if (!this.oPageFragment) {
-        this.oPageFragment = sap.ui.xmlfragment(this.getView().getId(), "sap.it.sr.ui.view.fragment.EmployeePage", this);
-      }
+			if (!this.oPageFragment) {
+			  this.oPageFragment = sap.ui.xmlfragment(this.getView().getId(), "sap.it.sr.ui.view.fragment.EmployeePage", this);
+			}
+			oPage.addContent(this.oPageFragment);
 			if (!this.oTableFragment) {
 				this.oTableFragment = sap.ui.xmlfragment(this.getView().getId(), "sap.it.sr.ui.view.fragment.EmployeeTable", this);
 			}
