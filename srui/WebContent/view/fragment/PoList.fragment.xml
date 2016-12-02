@@ -15,7 +15,7 @@
                     </Toolbar>
                 </t:toolbar>
                 <t:columns>
-                    <t:Column>
+                    <t:Column width="12em">
                         <Label text="{i18n>poNumber}"/>
                         <t:template>
                             <Text text="{poNumber}"/>
@@ -27,7 +27,7 @@
                             <Text text="{poItem}"/>
                         </t:template>
                     </t:Column>
-                    <t:Column>
+                    <t:Column width="14em">
                         <Label text="{i18n>desc}"/>
                         <t:template>
                             <Text text="{itemDesc}"/>
@@ -46,7 +46,8 @@
                         </t:template>
                     </t:Column>
 
-                    <t:Column>
+                    <t:Column minScreenWidth="Tablet"
+															demandPopin="true">
                         <Label text="{i18n>serialNo}"/>
                         <t:template>
                             <Text text="{serialNo}"/>
