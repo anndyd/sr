@@ -2,10 +2,11 @@
 	xmlns="sap.m" xmlns:l="sap.ui.layout"
 	controllerName="sap.it.sr.ui.view.SyncGrData" xmlns:html="http://www.w3.org/1999/xhtml">
 	<Page 
-		title="{i18n>SyncGrData}"
+		title="{i18n>syncGrDataTitle}"
 		id="SyncGrDataPage">
 	
 		<Table id="idSyncGrDataTable"
+			backgroundDesign="Solid"
 			inset="false"
 			items="{
 				path: '/'}">

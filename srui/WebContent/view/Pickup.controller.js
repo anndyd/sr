@@ -10,10 +10,12 @@ sap.ui.define([
   "use strict";
   var ps = new PickupService();
   var es = new EmployeeService();
-  var subwin, __empId;
+  var subwin, __empId = "";
  return BaseController.extend("sap.it.sr.ui.view.Pickup", {
 
 		onInit: function (oEvent) {
+			// only enable on secondary screen
+			//this.getOwnerComponent().byId("app").byId("idAppControl").setMode(sap.m.SplitAppMode.HideMode);
 			var that = this;
 			var oModel = new JSONModel();
 			var pModel = new JSONModel({
@@ -23,26 +25,36 @@ sap.ui.define([
 			that.getView().setModel(pModel, "input");
 			that.getView().bindElement("input>/");
 			that._showFormFragment();
-			// when matched route
+			// when matched route, only enable on primary screen
 			that.getRouter().getRoute("pickup").attachPatternMatched(that.onRouteMatched, that);
 			// message listener
 			window.addEventListener("message", that.onMessage.bind(that));
 		},
-		
+		// only enable on primary screen
 		onRouteMatched: function (evt) {
 			// open new window
-//			subwin = util.openSecondWindow("/srui/index.html#/pickup2", 'SecondWindow');
+			subwin = util.openSecondWindow("/srui/index.html#/pickup2", 'SecondWindow');
+		},
+
+		postMsg : function (param) {
+			if (__empId !== param.empId) {
+				__empId = param.empId;
+				// only enable on primary screen
+				subwin.postMessage(param, "*");
+				// only enable on secondary screen
+				//window.opener.postMessage(param, "*");
+			}
 		},
 
 	    onMessage : function (evt) {
 	    	var that = this;
-	    	__empId = evt.data;
-			var param = {badgeId: "", empId: evt.data};
-			
-			ps.getPickupData(param).done(function(data){
-				that.getView().getModel("input").setData(data);
-//				that.getView().getModel().refresh();
-			});
+	    	__empId = evt.data.empId;
+	    	// refresh page input value
+			that.getView().getModel("input").setData(evt.data);
+			that.getView().getModel("input").refresh();
+	    	// find pickup data
+			var param = {badgeId: "", empId: __empId};
+			that._getEmployeeAndPickupData(param);
 	    },
 		
 		onBadgeChange: function (evt) {
@@ -53,58 +65,46 @@ sap.ui.define([
 				that._getEmployeeAndPickupData(param);
 			}
 		},
-
-		postMsg : function (param) {
-			if (__empId !== param) {
-				__empId = param;
-				subwin.postMessage(param, "*");
-			}
-		},
 		
 		onEmpChange: function (evt) {
 			var that = this;
 			var v = evt.getParameters().value;
-			var oModel = that.getView().getModel();
-//			if (v && v.length > 6) {
+			var oModel = that.getView().getModel("input");
+			oModel.getData().empName = "";
+			oModel.refresh();
+			if (v && v.length > 6) {
 				var param = {badgeId: "", empId: v};
 				that._getEmployeeAndPickupData(param);
-//			} else {
-//				oModel.getData().empName = null;
-//				oModel.refresh();
-//			}
-			
+			}
 		},
 		
 		onAgentChange: function (evt) {
 			var that = this;
 			var v = evt.getParameters().value;
 			var oModel = that.getView().getModel("input");
-//			if (v && v.length > 6) {
+			oModel.getData().agentName = "";
+			oModel.refresh();
+			if (v && v.length > 6) {
 				var param = {badgeId: "", empId: v};
-				
-				if (oModel.getData().agentName === null) {
-					es.getEmployee(param).done(function(data){
-						oModel.getData().agentName = data.empName;
-						oModel.refresh();
-					});
-				}
-//			} else {
-//				oModel.getData().agentName = null;
-//				oModel.refresh();
-//			}
+				es.getEmployee(param).done(function(data){
+					oModel.getData().agentName = data.empName;
+					oModel.refresh();
+				});
+			}
 		},
-		
+		// for cpart pickup, not use now
+		/*
 		onPoNumChange: function (evt) {
-      var that = this;
-      var param = {
-          poNum : evt.getParameters().value
-      };
-      ps.findPickupDataByPo(param).done(function(pickData) {
-        that.getView().getModel().setData(pickData);
-        // post message to sub window
-        // that.postMsg(data.empId);
-      });
-		},
+	      var that = this;
+	      var param = {
+	          poNum : evt.getParameters().value
+	      };
+	      ps.findPickupDataByPo(param).done(function(pickData) {
+	        that.getView().getModel().setData(pickData);
+	        // post message to sub window
+	        // that.postMsg(data.empId);
+	      });
+		},*/
 
 		onCollapseAll : function () {
 			var oTreeTable = this.getView().byId("pkTreeTable");
@@ -136,7 +136,7 @@ sap.ui.define([
 			param.empId = pData.empId;
 			param.badgeId = pData.badgeId;
 			param.agentId = pData.agentId;
-//			param.pickupTime = new Date();
+			param.pickupTime = (new Date()).getTime();
 			
 			ps.upsertPickupData(param).done(function(){
 				MessageToast.show(that.getResourceBundle().getText("pickupS"));
@@ -148,19 +148,24 @@ sap.ui.define([
 			// get employee data
 			var pModel = that.getView().getModel("input");
 			es.getEmployee(param).done(function(empData) {
+			  pModel.getData().badgeId = param.badgeId.length > 0 ? param.badgeId: empData.badgeId;
+			  pModel.getData().empName = empData.empName;
+			  pModel.getData().empId = param.empId.length > 0 ? param.empId: empData.empId;
+			  pModel.refresh();
+	          // post message to another window
+	          that.postMsg(pModel.getData());
 			  if (empData && empData.empId !== null) {
-			    pModel.getData().empName = empData.empName;
-			    pModel.refresh();
-		      var paramP = {
-		          empId : param.empId
+			    var paramP = {
+		          empId : empData.empId
 		        };
 		        ps.findPickupData(paramP).done(function(pickData) {
 		          that.getView().getModel().setData(pickData);
+		          // for cpart pickup, not use now
 		          // that.getView().byId("chkCpart").setVisible(pickData.items.length === 0);
-		          // post message to sub window
-		          // that.postMsg(data.empId);
+		          
 		        });
 			  } else {
+				that.getView().getModel().setData(null);
 			    MessageToast.show(that.getResourceBundle().getText("employeeNotFound"));
 			  }
 			});

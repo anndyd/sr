@@ -24,7 +24,7 @@ sap.ui.define([
 
 			that.getView().setModel(oModel);
 			that.getView().setModel(pModel, "input");
-			that.getView().bindElement("/");
+			that.getView().bindElement("input>/");
 		},
 
 		handleRefresh : function (oEvent) {
@@ -37,8 +37,6 @@ sap.ui.define([
 				oModel.setData(data);
 				oModel.refresh();
 			});
-
-			sap.ui.core.BusyIndicator.hide();
 		},
 
 		onCollapseAll : function () {
@@ -99,9 +97,9 @@ sap.ui.define([
 							content : "{agentId}"
 						}
 					}, {
-						name : i18n.getText("pickupDate"),
+						name : i18n.getText("pickupTime"),
 						template : {
-							content : "{pickupDate}"
+							content : "{pickupTime}"
 						}
 					}, {
 						name : i18n.getText("poNumber"),
@@ -119,14 +117,24 @@ sap.ui.define([
 							content : "{itemDesc}"
 						}
 					}, {
-						name : i18n.getText("quantity"),
+						name : i18n.getText("location"),
 						template : {
-							content : "{quantity}"
+							content : "{location}"
 						}
 					}, {
 						name : i18n.getText("quantity"),
 						template : {
 							content : "{quantity}"
+						}
+					}, {
+						name : i18n.getText("serialNo"),
+						template : {
+							content : "{serialNo}"
+						}
+					}, {
+						name : i18n.getText("equipNo"),
+						template : {
+							content : "{equipNo}"
 						}
 					}
 				]

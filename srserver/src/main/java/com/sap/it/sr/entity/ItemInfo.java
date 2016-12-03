@@ -14,6 +14,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 public class ItemInfo implements Serializable {
 	private static final long serialVersionUID = -7458269368197976414L;
@@ -24,9 +27,11 @@ public class ItemInfo implements Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PICKUP_DATA_ID")
+	@JsonBackReference
     private PickupData pickupData;
 
     @OneToMany(mappedBy = "itemInfo", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonManagedReference
     private List<ItemDetail> itemDetails = new ArrayList<ItemDetail>();
 
     private String poNumber;

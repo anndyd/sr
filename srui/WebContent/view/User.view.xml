@@ -5,7 +5,7 @@
 		title="{i18n>userTitle}"
 		id="userPage">
 		<VBox>
-			<f:SimpleForm id="userForm" minWidth="1024"
+			<f:SimpleForm id="userForm" minWidth="1024" backgroundDesign="Solid"
 				maxContainerCols="2" editable="true" layout="ResponsiveGridLayout"
 				labelSpanL="4" labelSpanM="4" emptySpanL="1" emptySpanM="1"
 				columnsL="1" columnsM="1" class="editableForm">
@@ -34,6 +34,7 @@
 			</f:SimpleForm>
 		</VBox>
 		<Table id="idUserlist" inset="false"
+			backgroundDesign="Solid"
 			items="{
 				path: '/',
 				sorter: {
@@ -71,7 +72,7 @@
 			<Bar>
 				<contentRight>
 					<Button class="sapUiSmallMarginEnd" id="add" text="{i18n>add}"
-						visible="true" press="handleAddPress" />
+						type="Accept" visible="true" press="handleAddPress" />
 					<Button class="sapUiSmallMarginEnd" id="save" text="{i18n>save}"
 						type="Emphasized" visible="true" press="handleSavePress" />
 				</contentRight>

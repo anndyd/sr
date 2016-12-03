@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 public class PickupData implements Serializable {
 	private static final long serialVersionUID = -7403478285620985471L;
@@ -32,7 +34,9 @@ public class PickupData implements Serializable {
     private String agentName;
     
     @OneToMany(mappedBy = "pickupData", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonManagedReference
     private List<ItemInfo> items = new ArrayList<ItemInfo>();
+    
     private Timestamp pickupTime;
     
     private String remark;

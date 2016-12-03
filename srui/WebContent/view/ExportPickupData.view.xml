@@ -8,55 +8,55 @@
 		title="{i18n>exportPickupData}"
 		id="exportPickupDataPage">
 		<VBox>
-			<f:SimpleForm id="epdForm" minWidth="1024"
+			<f:SimpleForm id="epdForm" minWidth="1024" backgroundDesign="Solid"
 				maxContainerCols="2" editable="true" layout="ResponsiveGridLayout"
 				labelSpanL="4" labelSpanM="4" emptySpanL="1" emptySpanM="1"
 				columnsL="1" columnsM="1" class="editableForm">
 				<f:content>
 					<Label text="{i18n>empId}" />
 					<Input value="{input>empIdFrom}" type="Text" placeholder="{i18n>from}"
-						enabled="true" editable="true" maxLength="8">
+						enabled="true" editable="true" maxLength="8" submit="handleRefresh">
 						<layoutData>
 							<l:GridData span="L2 M3 S4" />
 						</layoutData>
 					</Input>
 					<Input value="{input>empIdTo}" type="Text" placeholder="{i18n>to}"
-						enabled="true" editable="true" maxLength="8">
+						enabled="true" editable="true" maxLength="8" submit="handleRefresh">
 						<layoutData>
 							<l:GridData span="L2 M3 S4" />
 						</layoutData>
 					</Input>
 					
-					<Label text="{i18n>pickupDate}" />
-					<DatePicker
+					<Label text="{i18n>pickupTime}" />
+					<DateTimePicker
 						id="DP1"
 						value="{input>dateFrom}"
-						valueFormat="yyyy-MM-dd" displayFormat="long"
+						valueFormat="yyyy-MM-dd HH:mm:ss" displayFormat="short"
 						placeholder="{i18n>from}"
-						change="handleChange"
+						change="handleChange" submit="handleRefresh"
 						class="sapUiSmallMarginBottom">
 						<layoutData>
 							<l:GridData span="L2 M3 S4" />
 						</layoutData>
-					</DatePicker>	
-					<DatePicker
+					</DateTimePicker>	
+					<DateTimePicker
 						id="DP2"
 						value="{input>dateTo}"
-						valueFormat="yyyy-MM-dd" displayFormat="long"
+						valueFormat="yyyy-MM-dd HH:mm:ss" displayFormat="short"
 						placeholder="{i18n>to}"
-						change="handleChange"
+						change="handleChange" submit="handleRefresh"
 						class="sapUiSmallMarginBottom">
 						<layoutData>
 							<l:GridData span="L2 M3 S4" />
 						</layoutData>
-					</DatePicker>
+					</DateTimePicker>
 				</f:content>
 			</f:SimpleForm>
 		</VBox>
 
             <t:TreeTable
                     id="pkTreeTable"
-                    rows="{path:'/', parameters: {arrayNames:['items']}}"
+                    rows="{path:'/', parameters: {arrayNames:['items','itemDetails']}}"
                     selectionMode="MultiToggle"
                     enableSelectAll="true"
                     ariaLabelledBy="title">
@@ -68,7 +68,7 @@
                     </Toolbar>
                 </t:toolbar>
                 <t:columns>
-                    <t:Column>
+                    <t:Column width="8em">
                         <Label text="{i18n>empId}"/>
                         <t:template>
                             <Text text="{empId}"/>
@@ -81,34 +81,53 @@
                         </t:template>
                     </t:Column>
                     <t:Column>
-                        <Label text="{i18n>pickupDate}"/>
+                        <Label text="{i18n>pickupTime}"/>
                         <t:template>
-                            <Text text="{pickupDate}"/>
+                            <Text text="{path:'pickupTime', 
+										 formatOptions: {style: 'short'}}"/>
                         </t:template>
                     </t:Column>
-
-                    <t:Column>
+                    <t:Column width="8em">
                         <Label text="{i18n>poNumber}"/>
                         <t:template>
                             <Text text="{poNumber}"/>
                         </t:template>
                     </t:Column>
-                    <t:Column>
+                    <t:Column width="5em">
                         <Label text="{i18n>poItem}"/>
                         <t:template>
                             <Text text="{poItem}"/>
                         </t:template>
                     </t:Column>
-                    <t:Column>
+                    <t:Column width="18em">
                         <Label text="{i18n>desc}"/>
                         <t:template>
                             <Text text="{itemDesc}"/>
                         </t:template>
                     </t:Column>
-                    <t:Column>
+                    <t:Column width="5em">
+                        <Label text="{i18n>location}"/>
+                        <t:template>
+                            <Text text="{location}"/>
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="5em">
                         <Label text="{i18n>quantity}"/>
                         <t:template>
                             <ObjectNumber number="{quantity}"/>
+                        </t:template>
+                    </t:Column>
+
+                    <t:Column minScreenWidth="Tablet">
+                        <Label text="{i18n>serialNo}"/>
+                        <t:template>
+                            <Text text="{serialNo}"/>
+                        </t:template>
+                    </t:Column>
+                    <t:Column>
+                        <Label text="{i18n>equipNo}"/>
+                        <t:template>
+                            <Text text="{equipNo}"/>
                         </t:template>
                     </t:Column>
 
@@ -119,7 +138,7 @@
 			<Bar>
 				<contentRight>
 					<Button class="sapUiSmallMarginEnd" id="getData" text="{i18n>getData}"
-						visible="true" press="handleRefresh" />
+						type="Accept" visible="true" press="handleRefresh" />
 					<Button class="sapUiSmallMarginEnd" id="export" text="{i18n>export}"
 						type="Emphasized" visible="true" press="handlePress" icon="sap-icon://download" />
 				</contentRight>

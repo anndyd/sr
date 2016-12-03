@@ -7,79 +7,114 @@ sap.ui.define([
   ], function(jQuery, BaseController, EmployeeService, MessageToast, JSONModel) {
 	  "use strict";
 	  var es = new EmployeeService();
-	  var __empId;
+	  var __empId = "";
   return BaseController.extend("sap.it.sr.ui.view.EmployeeData2", {
 
 		onInit : function(oEvent) {
+			// only enable on secondary screen
 			this.getOwnerComponent().byId("app").byId("idAppControl").setMode(sap.m.SplitAppMode.HideMode);
 			var that = this;
+			that._showFormFragment();
+			
 			var oModel = new JSONModel();
 			var tModel = new JSONModel();
 			that.getView().setModel(tModel);
 			that.getView().setModel(oModel, "input");
 			that.getView().bindElement("input>/");
-	
-			that._showFormFragment();
+
+			// when matched route, only enable on primary screen
+			//that.getRouter().getRoute("empData").attachPatternMatched(that.onRouteMatched, that);
 			// message listener
 			window.addEventListener("message", that.onMessage.bind(that));
+		},
+		
+		onRouteMatched: function (evt) {
+			// open new window, only enable on primary screen
+			//subwin = util.openSecondWindow("/srui/index.html#/empData2", 'SecondWindow');
+		},
+	
+		postMsg : function (param) {
+			if (__empId !== param.empId) {
+				__empId = param.empId;
+				// only enable on primary screen
+				//subwin.postMessage(param, "*");
+				// only enable on secondary screen
+				window.opener.postMessage(param, "*");
+			}
 		},
 	
 	    onMessage : function (evt) {
 	    	var that = this;
-	    	__empId = evt.data;
-			var param = {badgeId: "", empId: evt.data};
-			
-			es.getEmployee(param).done(function(data) {
-				that.getView().getModel().setData([data]);
-				that.getView().getModel("input").setData(data);
-			});
-	    },
-	
-		postMsg : function (param) {
-			if (__empId !== param) {
-				__empId = param;
-				window.opener.postMessage(param, "*");
-			}
+	    	__empId = evt.data.empId;
+	    	that.getView().getModel("input").setData(evt.data);
+	    	that.getView().getModel("input").refresh();
+	    	
+	    	if (evt.data.save && evt.data.save === "save") {
+				var param = {badgeId: "", empId: __empId};
+				that._getEmpData(param);
+	    	}
 		},
 	
 		onEmpChange : function(evt) {
 		    var that = this;
 		    var v = evt.getParameters().value;
-		    if (v && v.length > 0) {
+		    if (v && v.length > 6) {
+			    // post message to another window
+		    	var data = that.getView().getModel("input").getData();
+		    	data.save = "";
+		    	data.empId = v;
+				that.postMsg(data);
 				var param = {
 				    badgeId : "",
 				    empId : v
 				};
-		
-				es.getEmployee(param).done(function(data) {
-				    var tdata = [data];
-				    data.empId = v;
-				    that.getView().getModel("input").setData(data);
-				    that.getView().getModel().setData(tdata);
-				    // post message to sub window
-					that.postMsg(data.empId);
-				});
+				that._getEmpData(param);
 		    }
+		},
+		
+		onBadgeChange: function (evt) {
+			var that = this;
+			var v = evt.getParameters().value;
+			if (v && v.length === 8) {
+			    // post message to another window
+		    	var data = that.getView().getModel("input").getData();
+		    	data.save = "";
+		    	data.badgeId = v;
+				that.postMsg(data);
+			}
 		},
 	
 		onExit : function() {
-      if (this.oPageFragment) {
-        this.oPageFragment.destroy();
-      }
-	    if (this.oTableFragment) {
-	    	this.oTableFragment.destroy();
-	    }
+		  if (this.oPageFragment) {
+		    this.oPageFragment.destroy();
+		  }
+		    if (this.oTableFragment) {
+		    	this.oTableFragment.destroy();
+		    }
 			window.removeEventListener("message", onMessage.bind(this));
 			subwin.close();
 		},
 	
 		handleSavePress : function() {
 			var that = this;
-		    // sap.ui.core.BusyIndicator.show();
+		    sap.ui.core.BusyIndicator.show();
 		    es.upsertEmployee(this.getView().getModel("input").getData()).done(function(){
 		    	MessageToast.show(that.getResourceBundle().getText("updateEmpS"));
+		    	var data = that.getView().getModel("input").getData();
+		    	that.getView().getModel().setData([data]);
+			    // post message to another window
+		    	data.save = "save";
+				that.postMsg(data);
 		    });
-		    // sap.ui.core.BusyIndicator.hide();
+		},
+		
+		_getEmpData: function(param) {
+			var that = this;
+			es.getEmployee(param).done(function(data) {
+			    var tdata = [data];
+			    that.getView().getModel("input").setData(data);
+			    that.getView().getModel().setData(tdata);
+			});
 		},
 
 		_showFormFragment : function () {

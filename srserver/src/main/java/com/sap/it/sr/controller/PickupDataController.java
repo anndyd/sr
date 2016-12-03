@@ -109,25 +109,30 @@ public class PickupDataController {
 		    if (pd.getAgentId() != null){
 		        pd.setAgentId(pd.getAgentId().toUpperCase());
 		    }
-		    if (pd.getEmpId() != null) {
+		    if (pd.getEmpId() == null || pd.getItems().isEmpty()) {
+		    	// do nothing
+		    } else {
 		        pd.setEmpId(pd.getEmpId().toUpperCase());
+		        PickupData opd = dao.findByEmpIdItemInfo(pd.getEmpId(), pd.getItems().get(0).getPoNumber());
+		        if (opd.getId() != null) {
+		        	// for avoiding idempotent problem
+		        	pd.setId(opd.getId());
+		        }
+		        
+		        pd.getItems().forEach(itm->{
+			        itm.setPickupData(pd);
+			        itm.getItemDetails().forEach(itd->{
+			            itd.setItemInfo(itm);
+			        });
+			    });
+	    	    dao.merge(pd);
+	//    	    dao.create(pd);
+	    	    pd.getItems().forEach(itm->{
+	    	        SyncItemInfo si = sidao.findByPK(itm.getPoNumber(), itm.getPoItem());
+	    	        si.setStatus(4); // 4 - picked
+	    	        sidao.merge(si);
+	    	    });
 		    }
-		    // set pickup time to now
-		    pd.setPickupTime(new Timestamp(System.currentTimeMillis()));
-		    pd.getItems().forEach(itm->{
-		        itm.setPickupData(pd);
-		        itm.getItemDetails().forEach(itd->{
-		            itd.setItemInfo(itm);
-		        });
-		    });
-    	    dao.merge(pd);
-//    	    dao.create(pd);
-    	    pd.getItems().forEach(itm->{
-    	        SyncItemInfo si = sidao.findByPK(itm.getPoNumber(), itm.getPoItem());
-    	        si.setStatus(4); // 4 - picked
-    	        si.setQuantity(si.getQuantity()-itm.getQuantity());
-    	        sidao.merge(si);
-    	    });
 		}
 	}
 	

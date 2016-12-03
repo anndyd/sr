@@ -1,7 +1,7 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core"
  	xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
-		<VBox>
-			<f:SimpleForm id="pdForm" minWidth="1024"
+		<VBox><!-- Solid,Translucent,Transparent -->
+			<f:SimpleForm id="pdForm" minWidth="1024" backgroundDesign="Solid" 
 				maxContainerCols="2" editable="true" layout="ResponsiveGridLayout"
 				labelSpanL="4" labelSpanM="4" emptySpanL="1" emptySpanM="1"
 				columnsL="1" columnsM="1" class="editableForm">

@@ -6,6 +6,7 @@
 		id="exportEmployeeDataPage">
 	
 		<Table id="idEmployeeDataTable"
+			backgroundDesign="Solid"
 			mode="MultiSelect"
 			inset="false"
 			items="{
@@ -40,7 +41,7 @@
 			<Bar>
 				<contentRight>
 					<Button class="sapUiSmallMarginEnd" id="getData" text="{i18n>getData}"
-						visible="true" press="handleRefresh" />
+						type="Accept" visible="true" press="handleRefresh" />
 					<Button class="sapUiSmallMarginEnd" id="export" text="{i18n>export}"
 						type="Emphasized" visible="true" press="handlePress" icon="sap-icon://download" />
 				</contentRight>

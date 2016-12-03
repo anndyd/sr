@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class ItemDetail implements Serializable {
 	private static final long serialVersionUID = -3273329222309149185L;
@@ -20,6 +22,7 @@ public class ItemDetail implements Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ITEM_INFO_ID")
+	@JsonBackReference
     private ItemInfo itemInfo;
 
     private String poNumber;

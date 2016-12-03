@@ -3,7 +3,7 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:l="sap.ui.layout"
     xmlns="sap.m">
-    <Page class="mainpage"
+    <Page class="mainpage" backgroundDesign="Transparent"
     	showHeader="false">
          
 		<l:Grid defaultSpan="L12 M12 S12" class="customContainer">

@@ -4,24 +4,23 @@
             <t:TreeTable
                     id="pkTreeTable"
                     rows="{path:'/items', parameters: {arrayNames:['itemDetails']}}"
-                    selectionMode="MultiToggle"
-                    enableSelectAll="true"
+                    selectionMode="None"
                     ariaLabelledBy="title">
                 <t:toolbar>
-                    <Toolbar>
+                    <Toolbar design="Auto">
                         <ToolbarSpacer/>
                         <Button text="{i18n>collapseAll}" press="onCollapseAll"/>
                         <Button text="{i18n>expandFirstLevel}" press="onExpandFirstLevel"/>
                     </Toolbar>
                 </t:toolbar>
                 <t:columns>
-                    <t:Column width="12em">
+                    <t:Column width="10em">
                         <Label text="{i18n>poNumber}"/>
                         <t:template>
                             <Text text="{poNumber}"/>
                         </t:template>
                     </t:Column>
-                    <t:Column>
+                    <t:Column minScreenWidth="Tablet">
                         <Label text="{i18n>poItem}"/>
                         <t:template>
                             <Text text="{poItem}"/>
@@ -46,8 +45,7 @@
                         </t:template>
                     </t:Column>
 
-                    <t:Column minScreenWidth="Tablet"
-															demandPopin="true">
+                    <t:Column minScreenWidth="Tablet">
                         <Label text="{i18n>serialNo}"/>
                         <t:template>
                             <Text text="{serialNo}"/>

@@ -23,30 +23,30 @@ sap.ui.define([
 			{
 				"icon" : "request",
 				"title" : this.getResourceBundle().getText("itticket"),
-				"key" : "itticket"
-			}, 
-			{
-				"icon" : "multi-select",
-				"title" : this.getResourceBundle().getText("assetcheck"),
-				"key" : "assetcheck"
+				"key" : "unavailable"
+//			}, 
+//			{
+//				"icon" : "multi-select",
+//				"title" : this.getResourceBundle().getText("assetcheck"),
+//				"key" : "assetcheck"
 			}
       ];
       var tileData2 =[ 
-         		    {
-         				"icon" : "bar-code",
-         				"title" : this.getResourceBundle().getText("scanbadge"),
-         				"key" : "scanBadge"
-         			}, 
-         			{
-         				"icon" : "cause",
-         				"title" : this.getResourceBundle().getText("importdata"),
-         				"key" : "importdata"
-         			}, 
-         			{
-         				"icon" : "detail-view",
-         				"title" : this.getResourceBundle().getText("queryinfo"),
-         				"key" : "queryinfo"
-         			}, 
+//         		    {
+//         				"icon" : "bar-code",
+//         				"title" : this.getResourceBundle().getText("scanbadge"),
+//         				"key" : "scanBadge"
+//         			}, 
+//         			{
+//         				"icon" : "cause",
+//         				"title" : this.getResourceBundle().getText("importdata"),
+//         				"key" : "importdata"
+//         			}, 
+//         			{
+//         				"icon" : "detail-view",
+//         				"title" : this.getResourceBundle().getText("queryinfo"),
+//         				"key" : "queryinfo"
+//         			}, 
          			{
          				"icon" : "kpi-managing-my-area",
          				"title" : this.getResourceBundle().getText("updatedata"),

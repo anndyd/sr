@@ -3,7 +3,7 @@
         xmlns:mvc="sap.ui.core.mvc"
         xmlns="sap.tnt"
         xmlns:m="sap.m">
-	<m:Page
+	<m:Page backgroundDesign="List"
             id="page"
             title="{masterView>/title}"
             showNavButton="false">

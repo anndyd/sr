@@ -1,7 +1,7 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core"
  	xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
 		<VBox>
-			<f:SimpleForm id="empForm" minWidth="1024"
+			<f:SimpleForm id="empForm" minWidth="1024" backgroundDesign="Solid"
 				maxContainerCols="2" editable="true" layout="ResponsiveGridLayout"
 				labelSpanL="4" labelSpanM="4" emptySpanL="1" emptySpanM="1"
 				columnsL="1" columnsM="1" class="editableForm">
@@ -20,7 +20,7 @@
 						</layoutData>
 					</Input>						
 					<Label text="{i18n>badgeId}" />
-					<Input value="{input>badgeId}" type="Text"
+					<Input value="{input>badgeId}" type="Text" liveChange="onBadgeChange"
 						enabled="true" editable="true" maxLength="8">
 						<layoutData>
 							<l:GridData span="L2 M2 S4" />
