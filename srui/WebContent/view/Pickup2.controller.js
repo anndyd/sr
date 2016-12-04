@@ -139,6 +139,8 @@ sap.ui.define([
 			
 			ps.upsertPickupData(param).done(function(){
 				MessageToast.show(that.getResourceBundle().getText("pickupS"));
+				that.getView().getModel("input").setData(null);
+				that.getView().getModel().setData(null);
 			});
 		},
 

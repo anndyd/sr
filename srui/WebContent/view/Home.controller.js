@@ -26,7 +26,11 @@ sap.ui.define([
     onSelectItem : function(event) {
         var txt = event.getParameters().item.getKey();
         if (txt) {
-        	this.getRouter().navTo(txt);
+        	if (txt !== "help") {
+        		this.getRouter().navTo(txt);
+        	} else {
+        		window.open("/srui/doc/html/SAP%20IT%20Asset%20Dispatch.html", "_blank");
+        	}
         }
     }
   });

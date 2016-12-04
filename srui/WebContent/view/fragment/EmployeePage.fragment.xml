@@ -13,7 +13,8 @@
 							<l:GridData span="L2 M2 S4" />
 						</layoutData>
 					</Input>
-					<Input value="{input>empName}" type="Text" placeholder="{i18n>empName}"
+					<Input value="{input>empName}" type="Text" 
+						placeholder="{i18n>empName}" submit="onEmpNameChange"
 						enabled="true" editable="true" >
 						<layoutData>
 							<l:GridData span="L2 M3 S4" />

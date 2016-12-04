@@ -62,7 +62,7 @@
 	            </NavigationListItem>
 	            <NavigationListItem 
 	            		text="{i18n>help}"
-	            		icon="sap-icon://sys-help">
+	            		icon="sap-icon://sys-help" key="help">
 	            </NavigationListItem>
 		    </NavigationList>
 		</m:content>

@@ -7,7 +7,7 @@ sap.ui.define([
   ], function(jQuery, BaseController, EmployeeService, MessageToast, JSONModel) {
 	  "use strict";
 	  var es = new EmployeeService();
-	  var __empId = "";
+	  var __badgeId = "";
   return BaseController.extend("sap.it.sr.ui.view.EmployeeData2", {
 
 		onInit : function(oEvent) {
@@ -32,25 +32,23 @@ sap.ui.define([
 			// open new window, only enable on primary screen
 			//subwin = util.openSecondWindow("/srui/index.html#/empData2", 'SecondWindow');
 		},
-	
+		
 		postMsg : function (param) {
-			if (__empId !== param.empId) {
-				__empId = param.empId;
-				// only enable on primary screen
-				//subwin.postMessage(param, "*");
-				// only enable on secondary screen
-				window.opener.postMessage(param, "*");
-			}
+			__badgeId = param.badgeId;
+			// only enable on primary screen
+			//subwin.postMessage(param, "*");
+			// only enable on secondary screen
+			window.opener.postMessage(param, "*");
 		},
 	
 	    onMessage : function (evt) {
 	    	var that = this;
-	    	__empId = evt.data.empId;
+	    	__badgeId = evt.data.badgeId;
 	    	that.getView().getModel("input").setData(evt.data);
 	    	that.getView().getModel("input").refresh();
 	    	
 	    	if (evt.data.save && evt.data.save === "save") {
-				var param = {badgeId: "", empId: __empId};
+				var param = {badgeId: "", empId: evt.data.empId};
 				that._getEmpData(param);
 	    	}
 		},
@@ -72,6 +70,16 @@ sap.ui.define([
 		    }
 		},
 		
+		onEmpNameChange : function(evt) {
+		    var that = this;
+		    var v = evt.getParameters().value;
+		    // post message to another window
+	    	var data = that.getView().getModel("input").getData();
+	    	data.save = "";
+	    	data.empName = v;
+			that.postMsg(data);
+		},
+		
 		onBadgeChange: function (evt) {
 			var that = this;
 			var v = evt.getParameters().value;
@@ -80,7 +88,9 @@ sap.ui.define([
 		    	var data = that.getView().getModel("input").getData();
 		    	data.save = "";
 		    	data.badgeId = v;
-				that.postMsg(data);
+		    	if (__badgeId !== v) {
+		    		that.postMsg(data);
+		    	}
 			}
 		},
 	
@@ -112,7 +122,9 @@ sap.ui.define([
 			var that = this;
 			es.getEmployee(param).done(function(data) {
 			    var tdata = [data];
-			    that.getView().getModel("input").setData(data);
+			    if (data.empId) {
+			    	that.getView().getModel("input").setData(data);
+			    }
 			    that.getView().getModel().setData(tdata);
 			});
 		},
