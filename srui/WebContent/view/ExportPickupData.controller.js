@@ -19,7 +19,10 @@ sap.ui.define([
 				empIdFrom : "",
 				empIdTo : "",
 				dateFrom : "",
-				dateTo : ""
+				dateTo : "",
+				poNumber : "",
+				location : "",
+				equipNo : ""
 			});
 
 			that.getView().setModel(oModel);
@@ -66,6 +69,37 @@ sap.ui.define([
 
 		handlePress : sap.m.Table.prototype.exportData || function () {
 			sap.ui.core.BusyIndicator.show();
+			var oModel = new JSONModel();
+			var tdata = [], pd = {};
+			var data = this.getView().getModel().getData();
+			if (data) {
+				for (var i = 0, len = data.length; i < len; i++) {
+					pd = {};
+					pd.empId = data[i].empId;
+					pd.agentId = data[i].agentId;
+					pd.pickupTime = data[i].pickupTime;
+					tdata.push(pd);
+					var itms = data[i].items
+					for (var j = 0, lenj = itms.length; j < lenj; j++) {
+						pd = {};
+						pd.poNumber = itms[j].poNumber;
+						pd.poItem = itms[j].poItem;
+						pd.itemDesc = itms[j].itemDesc;
+						pd.location = itms[j].location;
+						pd.quantity = itms[j].quantity;
+						tdata.push(pd);
+						var itds = itms[j].itemDetails
+						for (var k = 0, lenk = itds.length; k < lenk; k++) {
+							pd = {};
+							pd.serialNo = itds[k].serialNo;
+							pd.equipNo = itds[k].equipNo;
+							tdata.push(pd);
+						}						
+					}
+				}
+			}
+			oModel.setData(tdata);
+			
 			var i18n = this.getResourceBundle();
 			var oExport = new Export({
 
@@ -77,11 +111,12 @@ sap.ui.define([
 				}),
 
 				// Pass in the model created above
-				models : this.getView().getModel(),
+				models : oModel,
 
 				// binding information for the rows aggregation
 				rows : {
-					path : "/"
+					path:'/',
+					isTreeBinding:true
 				},
 
 				// column definitions with column name and

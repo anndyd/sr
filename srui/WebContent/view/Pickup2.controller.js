@@ -59,7 +59,7 @@ sap.ui.define([
 		onBadgeChange: function (evt) {
 			var that = this;
 			var v = evt.getParameters().value;
-			if (v && v.length === 8) {
+			if (v && v.length === util.badgeIdLength) {
 				var param = {badgeId: v, empId: ""};
 				that._getEmployeeAndPickupData(param);
 			}

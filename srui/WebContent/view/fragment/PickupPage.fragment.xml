@@ -8,7 +8,7 @@
 				<f:content>
 					<Label text="{i18n>badgeId}" />
 					<Input value="{input>badgeId}" type="Text" liveChange="onBadgeChange"
-						enabled="true" editable="true" maxLength="8">
+						enabled="true" editable="true" maxLength="10">
 						<layoutData>
 							<l:GridData span="L2 M2 S4" />
 						</layoutData>

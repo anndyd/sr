@@ -15,10 +15,12 @@ import com.sap.it.sr.entity.PickupData;
 @Repository
 public class PickupDataDao extends BaseDao<PickupData> {
     @SuppressWarnings("unchecked")
-    public List<PickupData> findAll(String empIdFrom, String empIdTo, String dateFrom, String dateTo) {
+    public List<PickupData> findAll(String empIdFrom, String empIdTo, String dateFrom, String dateTo, 
+    		String poNumber, String location, String equipNo) {
         String sql = "select t from PickupData t";
         
         int i = 0;
+        String jn = "";
         String w = "";
         List<String> p = new ArrayList<String>();
         
@@ -54,11 +56,49 @@ public class PickupDataDao extends BaseDao<PickupData> {
         	}
         	p.add(dateTo);
         }
+        if (poNumber != null && !poNumber.equals("")) {
+       		jn = " join t.items i";
+       		
+        	i++;
+        	if (i>1) {
+        		w = w + " and i.poNumber=?" + i;
+        	} else {
+        	   	w = w + " i.poNumber=?" + i;
+        	}
+        	p.add(poNumber);
+        }
+        if (location != null && !location.equals("")) {
+        	if (jn.equals("")) {
+        		jn = " join t.items i";
+        	}
+        	i++;
+        	if (i>1) {
+        		w = w + " and i.location=?" + i;
+        	} else {
+        	   	w = w + " i.location=?" + i;
+        	}
+        	p.add(location);
+        }
+        if (equipNo != null && !equipNo.equals("")) {
+        	if (jn.equals("")) {
+        		jn = " join t.items i";
+        	}
+       		jn = jn + " join i.itemDetails d";
+       		
+        	i++;
+        	if (i>1) {
+        		w = w + " and d.equipNo=?" + i;
+        	} else {
+        	   	w = w + " d.equipNo=?" + i;
+        	}
+        	p.add(equipNo);
+        }
+       
         if (!w.equals("")) {
         	w = " where " + w;
         }
         
-        Query query = em.createQuery(sql + w, PickupData.class);
+        Query query = em.createQuery(sql + jn + w, PickupData.class);
         if (p.size() > 0) {
         	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	        for (int j = 0; j < p.size(); j++) {

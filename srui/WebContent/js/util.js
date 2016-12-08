@@ -2,6 +2,7 @@ var util = {
     isLogin: false,
     userName: "",
     role: "",
+    badgeIdLength: 10,
     openSecondWindow: function (url, winName) {
 		var orgwin = window.open('', winName);
 		if (orgwin) {

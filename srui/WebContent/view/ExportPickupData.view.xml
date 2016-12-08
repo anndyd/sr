@@ -26,6 +26,30 @@
 							<l:GridData span="L2 M3 S4" />
 						</layoutData>
 					</Input>
+
+					<Label text="{i18n>poNumber}" />
+					<Input value="{input>poNumber}" type="Text"
+						enabled="true" editable="true" submit="handleRefresh">
+						<layoutData>
+							<l:GridData span="L2 M3 S4" />
+						</layoutData>
+					</Input>
+
+					<Label text="{i18n>location}" />
+					<Input value="{input>location}" type="Text"
+						enabled="true" editable="true" submit="handleRefresh">
+						<layoutData>
+							<l:GridData span="L2 M3 S4" />
+						</layoutData>
+					</Input>
+
+					<Label text="{i18n>equipNo}" />
+					<Input value="{input>equipNo}" type="Text"
+						enabled="true" editable="true" submit="handleRefresh">
+						<layoutData>
+							<l:GridData span="L2 M3 S4" />
+						</layoutData>
+					</Input>
 					
 					<Label text="{i18n>pickupTime}" />
 					<DateTimePicker

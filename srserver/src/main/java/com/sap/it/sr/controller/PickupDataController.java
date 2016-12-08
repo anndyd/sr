@@ -1,6 +1,5 @@
 package com.sap.it.sr.controller;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,9 +51,12 @@ public class PickupDataController {
 			@RequestParam(required = true) String empIdFrom,
 			@RequestParam(required = true) String empIdTo,
 			@RequestParam(required = true) String dateFrom,
-			@RequestParam(required = true) String dateTo
+			@RequestParam(required = true) String dateTo,
+			@RequestParam String poNumber,
+			@RequestParam String location,
+			@RequestParam String equipNo
 			){
-		return dao.findAll(empIdFrom, empIdTo, dateFrom, dateTo);
+		return dao.findAll(empIdFrom, empIdTo, dateFrom, dateTo, poNumber, location, equipNo);
 	}
 
 	@RequestMapping(value="/all", method = RequestMethod.GET)

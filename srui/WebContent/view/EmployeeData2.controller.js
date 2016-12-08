@@ -83,7 +83,7 @@ sap.ui.define([
 		onBadgeChange: function (evt) {
 			var that = this;
 			var v = evt.getParameters().value;
-			if (v && v.length === 8) {
+			if (v && v.length === util.badgeIdLength) {
 			    // post message to another window
 		    	var data = that.getView().getModel("input").getData();
 		    	data.save = "";
@@ -91,6 +91,11 @@ sap.ui.define([
 		    	if (__badgeId !== v) {
 		    		that.postMsg(data);
 		    	}
+				var param = {
+				    badgeId : v,
+				    empId : ""
+				};
+				that._getEmpData(param);
 			}
 		},
 	
