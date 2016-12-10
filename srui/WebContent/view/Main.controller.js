@@ -79,6 +79,10 @@ sap.ui.define([
       if (jQuery.isArray(data)) {
         for (var i = 0; i < data.length; i++) {
           var targetTile = oTile.clone();
+          if (data[i].key === "unavailable") {
+        	  targetTile.addStyleClass("notavaTile");
+          }
+          
           var oModel = new JSONModel(data[i]);
           targetTile.setModel(oModel);
           //targetTile.addStyleClass(cls);
