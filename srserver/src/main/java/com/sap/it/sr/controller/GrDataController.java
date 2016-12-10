@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,9 +22,10 @@ import com.sap.it.sr.entity.SyncItemInfo;
 
 @Controller
 @RequestMapping("grData")
-@Scope("request")
+//@Scope("request")
 public class GrDataController {
-
+//	private static final Logger LOGGER = Logger.getLogger(GrDataController.class);
+	
     @Autowired
     private GrPoInfoDao dao;
 
@@ -41,7 +41,6 @@ public class GrDataController {
 	@RequestMapping(value="/sync", method = RequestMethod.GET)
 	@ResponseBody
 	@Transactional
-	@Scheduled(cron="0 0/5 * * * ?")
 	public long syncGrData(){
 		long rlt = 0;
 //		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
@@ -60,7 +59,7 @@ public class GrDataController {
 		Timestamp startTime = cs.getPoCreateTime();
 		
 		List<SyncItemInfo> itmi = dao.findDoneItem(startTime);
-		if (itmi != null) {
+		if (itmi != null && itmi.size() > 0) {
 			List<Long> ovs1 = idao.findByTime(startTime);
 			for (SyncItemInfo itm : itmi) {
 				if (!ovs1.contains(itm.getId())) {
@@ -69,7 +68,7 @@ public class GrDataController {
 				}
 			}
 			List<SyncItemDetail> itmd = dao.findDoneItemDetail(startTime);
-			if (itmd != null) {
+			if (itmd != null && itmd.size() > 0) {
 				List<Long> ovs2 = ddao.findByTime(startTime);
 				for (SyncItemDetail itm : itmd) {
 					if (!ovs2.contains(itm.getId())) {
