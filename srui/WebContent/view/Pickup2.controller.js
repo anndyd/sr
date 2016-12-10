@@ -69,8 +69,10 @@ sap.ui.define([
 			var that = this;
 			var v = evt.getParameters().value;
 			var oModel = that.getView().getModel("input");
-			oModel.getData().empName = "";
-			oModel.refresh();
+			if (oModel.getData()) {
+				oModel.getData().empName = "";
+				oModel.refresh();
+			}
 			if (v && v.length > 6) {
 				var param = {badgeId: "", empId: v};
 				that._getEmployeeAndPickupData(param);
@@ -139,8 +141,13 @@ sap.ui.define([
 			
 			ps.upsertPickupData(param).done(function(){
 				MessageToast.show(that.getResourceBundle().getText("pickupS"));
-				that.getView().getModel("input").setData(null);
-				that.getView().getModel().setData(null);
+				that.getView().getModel("input").setData({});
+				that.getView().getModel().setData({});
+				var pm = {
+					empId : ""
+				}
+				// post message to another window
+		        that.postMsg(pm);
 			});
 		},
 
@@ -163,11 +170,21 @@ sap.ui.define([
 		          that.getView().getModel().setData(pickData);
 		          // for cpart pickup, not use now
 		          // that.getView().byId("chkCpart").setVisible(pickData.items.length === 0);
-		          
+		          if (!pickData || pickData.items.length === 0) {
+		        	MessageToast.show(that.getResourceBundle().getText("pickupDataNotFound"));
+					setTimeout(function () {
+						that.getView().getModel("input").setData({});
+						that.getView().getModel().setData({});
+					}, 3000);
+		          }
 		        });
 			  } else {
-				that.getView().getModel().setData(null);
+				that.getView().getModel().setData({});
 			    MessageToast.show(that.getResourceBundle().getText("employeeNotFound"));
+				setTimeout(function () {
+					that.getView().getModel("input").setData({});
+					that.getView().getModel().setData({});
+				}, 3000);
 			  }
 			});
 		},

@@ -16,16 +16,14 @@ public class SyncItemInfoDao extends BaseDao<SyncItemInfo> {
                 .setParameter(1, poNum).getResultList();
     }
 
-    public SyncItemInfo findByPK(String poNum, int poItem) {
-    	SyncItemInfo itm = new SyncItemInfo();
-        List<SyncItemInfo> list = em.createQuery("select t from SyncItemInfo t where t.poNumber=?1 and t.poItem=?2", SyncItemInfo.class)
-                .setParameter(1, poNum).setParameter(2, poItem).setMaxResults(1).getResultList();
-        return list.isEmpty() ? itm : list.get(0);
+    public List<SyncItemInfo> findByPK(String poNum, int poItem) {
+        return em.createQuery("select t from SyncItemInfo t where t.poNumber=?1 and t.poItem=?2", SyncItemInfo.class)
+                .setParameter(1, poNum).setParameter(2, poItem).getResultList();
     }
 
     @SuppressWarnings("unchecked")
 	public List<Long> findByTime(Timestamp startTime) {
-    	String sql = "select CONVERT(poNumber,unsigned integer) + poItem as id " + 
+    	String sql = "select CONVERT(poNumber,unsigned integer) + poItem as idd " + 
 			     "from SyncItemInfo where createDate > ?1";
     	return em.createNativeQuery(sql).setParameter(1, startTime, TemporalType.TIMESTAMP).getResultList();
     }

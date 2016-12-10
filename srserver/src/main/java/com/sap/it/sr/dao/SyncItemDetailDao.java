@@ -28,7 +28,7 @@ public class SyncItemDetailDao extends BaseDao<SyncItemDetail> {
 
     @SuppressWarnings("unchecked")
 	public List<Long> findByTime(Timestamp startTime) {
-    	String sql = "select CONVERT(d.poNumber,unsigned integer) + d.poItem + d.poItemDetail as id" + 
+    	String sql = "select CONVERT(d.poNumber,unsigned integer) + d.poItem + d.poItemDetail as idd " + 
 			    "from SyncItemDetail d left join SyncItemInfo i " +
     			"on d.poNumber=i.poNumber and d.poItem=i.poItem " +
 			    "where i.createDate > ?1";

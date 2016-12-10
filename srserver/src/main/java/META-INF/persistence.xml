@@ -18,8 +18,9 @@
             <property name="eclipselink.ddl-generation.output-mode" value="database" />
             
             <property name="eclipselink.logging.logger" value="org.eclipse.persistence.logging.CommonsLoggingSessionLog" />
-            <property name="eclipselink.logging.level.sql" value="FINE"/>
+            <property name="eclipselink.logging.level.sql" value="INFO"/>
             <property name="eclipselink.logging.parameters" value="true"/>
+            <property name="eclipselink.logging.level" value="INFO" />
         </properties>
 	</persistence-unit>
 	<persistence-unit name="grserver">
@@ -34,8 +35,9 @@
             <!-- EclipseLink should create the database schema automatically -->
             
             <property name="eclipselink.logging.logger" value="org.eclipse.persistence.logging.CommonsLoggingSessionLog" />
-            <property name="eclipselink.logging.level.sql" value="FINE"/>
+            <property name="eclipselink.logging.level.sql" value="INFO"/>
             <property name="eclipselink.logging.parameters" value="true"/>
+            <property name="eclipselink.logging.level" value="INFO" />
         </properties>
 	</persistence-unit>
 </persistence>

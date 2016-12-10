@@ -128,11 +128,14 @@ public class PickupDataController {
 			        });
 			    });
 	    	    dao.merge(pd);
-	//    	    dao.create(pd);
 	    	    pd.getItems().forEach(itm->{
-	    	        SyncItemInfo si = sidao.findByPK(itm.getPoNumber(), itm.getPoItem());
-	    	        si.setStatus(4); // 4 - picked
-	    	        sidao.merge(si);
+	    	        List<SyncItemInfo> sis = sidao.findByPK(itm.getPoNumber(), itm.getPoItem());
+	    	        if (sis != null) {
+		    	        sis.forEach(si->{
+		    	        	si.setStatus(4); // 4 - picked
+			    	        sidao.merge(si);
+		    	        });
+	    	        }
 	    	    });
 		    }
 		}

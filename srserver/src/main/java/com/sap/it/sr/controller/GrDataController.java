@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +41,7 @@ public class GrDataController {
 	@RequestMapping(value="/sync", method = RequestMethod.GET)
 	@ResponseBody
 	@Transactional
+	@Scheduled(cron="0 0/5 * * * ?")
 	public long syncGrData(){
 		long rlt = 0;
 //		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
@@ -68,7 +70,7 @@ public class GrDataController {
 			}
 			List<SyncItemDetail> itmd = dao.findDoneItemDetail(startTime);
 			if (itmd != null) {
-				List<Long> ovs2 = idao.findByTime(startTime);
+				List<Long> ovs2 = ddao.findByTime(startTime);
 				for (SyncItemDetail itm : itmd) {
 					if (!ovs2.contains(itm.getId())) {
 						ddao.merge(itm);
