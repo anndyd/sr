@@ -26,22 +26,26 @@
 	  name="srDataSourceJNDI" 
 	  auth="Container" 
 	  type="javax.sql.DataSource"
-    maxTotal="100" 
-	  maxIdle="30" 
+	  factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+      maxActive="100"
+      minIdle="10"
+      maxWait="10000"
 	  username="root"
-    password="Sybase123" 
+      password="Sybase123" 
 	  driverClassName="org.mariadb.jdbc.Driver"
-    url="jdbc:mysql://localhost:3306/srmreceive" />
+      url="jdbc:mysql://localhost:3306/srmreceive" />
 	<Resource 
 	  name="grDataSourceJNDI" 
 	  auth="Container" 
 	  type="javax.sql.DataSource"
-    maxTotal="100" 
-	  maxIdle="30" 
+	  factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+      maxActive="100"
+      minIdle="10"
+      maxWait="10000"
 	  username="bgr"
-    password="Sap12345"
+      password="Sap12345"
 	  driverClassName="com.sybase.jdbc4.jdbc.SybDriver"
-    url="jdbc:sybase:Tds:10.58.32.248:3001/ServiceName=grcn" />
+      url="jdbc:sybase:Tds:10.58.32.248:3001/ServiceName=grcn" />
     <!-- web application will be reloaded.                                   -->
     <WatchedResource>WEB-INF/web.xml</WatchedResource>
     <WatchedResource>${catalina.base}/conf/web.xml</WatchedResource>
