@@ -198,7 +198,7 @@ sap.ui.define([
 			if (!this.oFormFragment) {
 				this.oFormFragment = sap.ui.xmlfragment(this.getView().getId(), "sap.it.sr.ui.view.fragment.PoList", this);
 			}
-			oPage.addContent(this.oFormFragment);
+			oPage.addContent(this.oFormFragment.addStyleClass("srpagesection"));
 		}
  	});
 

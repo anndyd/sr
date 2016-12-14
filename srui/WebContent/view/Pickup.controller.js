@@ -30,6 +30,12 @@ sap.ui.define([
 			// message listener
 			window.addEventListener("message", that.onMessage.bind(that));
 		},
+	    onAfterRendering: function() {
+//	      var navigationList = this.getView().byId('navigationList');
+//	      navigationList.itemSelect(oControlEvent); 
+//			this.getView().byId("pickupPage-cont").addStyleClass("srpagesection");
+	      
+	    },
 		// only enable on primary screen
 		onRouteMatched: function (evt) {
 			// open new window
@@ -199,7 +205,7 @@ sap.ui.define([
 			if (!this.oFormFragment) {
 				this.oFormFragment = sap.ui.xmlfragment(this.getView().getId(), "sap.it.sr.ui.view.fragment.PoList", this);
 			}
-			oPage.addContent(this.oFormFragment);
+			oPage.addContent(this.oFormFragment.addStyleClass("srpagesection"));
 		}
   });
 

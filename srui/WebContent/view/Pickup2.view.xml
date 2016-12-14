@@ -8,7 +8,7 @@
 		<footer>
 			<Bar>
 				<contentRight>
-					<Button class="srBtn sapUiTinyMarginTop sapUiSmallMarginEnd" id="pickup" text="{i18n>pkCaption}"
+					<Button class="srBtn sapUiSmallMarginEnd" id="pickup" text="{i18n>pkCaption}"
 						width="10rem" type="Emphasized" visible="true" press="handlePickupPress" />
 				</contentRight>
 			</Bar>
