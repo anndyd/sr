@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +21,7 @@ import com.sap.it.sr.entity.SyncItemInfo;
 
 @Lazy(false)
 @Component
-@Scope("singleton")
+//@Scope("request")
 public class SyncData {
 	private static final Logger LOGGER = Logger.getLogger(SyncData.class);
     
@@ -39,6 +38,7 @@ public class SyncData {
     private SyncItemDetailDao ddao;
 	
 	@Scheduled(cron="0 0/5 * * * ?")
+    @Transactional
 	public void autoSyncGrData() {
 		LOGGER.info("Start synchronize gr data, ...");
 		syncGrData();
