@@ -22,9 +22,12 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
+import org.apache.log4j.Logger;
+
 import com.sap.it.sr.entity.PickupData;
 
 public class SendMail {
+	private static final Logger LOGGER = Logger.getLogger(SendMail.class);
 	
     public void sendPickedEmail(PickupData info, List<String> cc, List<String> admins) {
         String sender = "SAP_IT_CHINA_BO@exchange.sap.corp";
@@ -55,7 +58,7 @@ public class SendMail {
             message.setRecipients(Message.RecipientType.TO, toAddr.toArray(new Address[toAddr.size()]));
             
             List<InternetAddress> ccAddr = new ArrayList<>();
-            if (info.getAgentId() == null && "".equals(info.getAgentId())) {
+            if (info.getAgentId() == null || "".equals(info.getAgentId())) {
             } else {
                 recId = info.getAgentId();
                 ccAddr.add(new InternetAddress(String.format(Locale.ENGLISH, receiver, info.getAgentId())));
@@ -74,7 +77,7 @@ public class SendMail {
             if (ccAddr.size() > 0) {
                 message.setRecipients(Message.RecipientType.CC, ccAddr.toArray(new Address[ccAddr.size()]));
             }
-            message.setSubject("Global IT - Equipment Ready Notification");
+            message.setSubject("Global IT - Equipment Received Notification");
 //            String logopath = this.getClass().getResource("/").getFile() + "logo.jpg";
 //            logopath = logopath.replaceAll("%20", " ");
 //            logopath = logopath.substring(1);
@@ -130,6 +133,7 @@ public class SendMail {
             parts.addBodyPart(part);
             message.setContent(parts);
             Transport.send(message);
+            LOGGER.info("----Mail sent.----");
         } catch (Exception e) {
             e.printStackTrace();
         }
