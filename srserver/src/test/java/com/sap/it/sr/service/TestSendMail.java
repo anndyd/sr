@@ -11,7 +11,7 @@ import com.sap.it.sr.entity.ItemInfo;
 import com.sap.it.sr.entity.PickupData;
 
 public class TestSendMail {
-	private SendMail sm = new SendMail();
+	private final SendMail sm = new SendMail();
 	@Test
 	public void TestSendEquipmentReadyNotificationEmail() {
 		PickupData pd = new PickupData();
@@ -30,8 +30,16 @@ public class TestSendMail {
 						itd.setEquipNo("500xxx");
 						itm.getItemDetails().add(itd);
 				pd.getItems().add(itm);
+
+				ItemInfo itm1 = new ItemInfo();
+                itm1.setPoNumber("testpo2");
+                itm1.setPoItem(10);
+                itm1.setItemDesc("test asset 2");
+                itm1.setLocation("BJ");
+                itm1.setQuantity(1);
+                pd.getItems().add(itm1);
 		pd.setEmpId("I063098");
-		pd.setAgentId("_I063098");
+		pd.setAgentId("I063098");
 		
 //		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //		  String dateInString = "2016-12-20 15:23:01";
@@ -42,6 +50,6 @@ public class TestSendMail {
 //		  } catch (ParseException e) {}
 
 		pd.setPickupTime(currentTime);
-		sm.sendEquipmentReadyNotificationEmail(pd, Arrays.asList(""), Arrays.asList("I063098"));
+		sm.sendPickedEmail(pd, Arrays.asList(""), Arrays.asList("I063098"));
 	}
 }
