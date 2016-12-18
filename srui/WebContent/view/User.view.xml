@@ -29,6 +29,13 @@
 							<l:GridData span="L2 M2 S4" />
 						</layoutData>
 					</CheckBox>
+					<Label text="{i18n>pickLocation}" />
+					<Input value="{input>pickLocation}" type="Text"
+						enabled="true" editable="true">
+						<layoutData>
+							<l:GridData span="L2 M2 S4" />
+						</layoutData>
+					</Input>
 
 				</f:content>
 			</f:SimpleForm>
@@ -53,6 +60,9 @@
 				<Column id="status">
 					<Text text="{i18n>status}" />
 				</Column>
+				<Column id="pickLocation">
+					<Text text="{i18n>pickLocation}" />
+				</Column>
 			</columns>
 			<items>
 				<ColumnListItem type="Active">
@@ -63,6 +73,7 @@
 							path: 'status',
 							formatter: 'sap.it.sr.ui.js.Formatter.userStatus'
 						}" />
+						<Text text="{pickLocation}" />
 					</cells>
 				</ColumnListItem>
 			</items>

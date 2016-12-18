@@ -38,7 +38,7 @@ public class GrPoInfoDao extends BaseDao<SyncItemInfo> {
     	String sql = "select CONVERT(BIGINT,i.PO_NUMBER) + i.PO_ITEM as id, p.PO_NUMBER as poNumber, i.PO_ITEM as poItem, " + 
     				 "i.DESCRIPTION as itemDesc, i.LOCATION as location, " +
     			     "i.USERID as userId, i.STATUS as status, " +
-    			     "i.QUANTITY as quantity, p.CREATE_TIME as createDate " +
+    			     "i.QUANTITY as quantity, i.PLANT as plant, p.CREATE_TIME as createDate " +
     			     "from DBA.PO_INFO p left join DBA.ITEM_INFO i on p.PO_NUMBER = i.PO_NUMBER " +
     			     "where i.STATUS = 2 and p.CREATE_TIME > ?1";
     	

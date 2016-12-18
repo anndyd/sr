@@ -25,6 +25,8 @@ public class User implements Serializable {
     
     private String role;
     
+    private String pickLocation;
+    
     private String remark;
 
     public Long getId() {
@@ -76,6 +78,14 @@ public class User implements Serializable {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public String getPickLocation() {
+		return pickLocation;
+	}
+
+	public void setPickLocation(String pickLocation) {
+		this.pickLocation = pickLocation;
 	}
 
 	public String getRemark() {

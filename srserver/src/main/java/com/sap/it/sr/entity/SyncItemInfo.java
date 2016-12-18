@@ -24,7 +24,8 @@ public class SyncItemInfo implements Serializable {
 	private int status;
 	private int quantity;
 	private Timestamp createDate;
-
+	private String plant;
+	
 	private String remark;
 
 	public Long getId() {
@@ -97,6 +98,14 @@ public class SyncItemInfo implements Serializable {
 
 	public void setCreateDate(Timestamp createDate) {
 		this.createDate = createDate;
+	}
+
+	public String getPlant() {
+		return plant;
+	}
+
+	public void setPlant(String plant) {
+		this.plant = plant;
 	}
 
 	public String getRemark() {

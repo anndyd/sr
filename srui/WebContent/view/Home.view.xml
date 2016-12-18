@@ -24,9 +24,9 @@
 		          itemSelect="onSelectItem">
 	            <NavigationListItem text="{i18n>pickup}" icon="sap-icon://cart-3" key="pickup" class="menu">
 	            </NavigationListItem>
+	            <!--
 	            <NavigationListItem text="{i18n>itticket}" icon="sap-icon://request" key="unavailable">
 	            </NavigationListItem>
-	            <!--
 	            <NavigationListItem text="{i18n>assetcheck}" icon="sap-icon://multi-select">
 	            </NavigationListItem>
 	            -->

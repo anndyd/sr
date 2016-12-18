@@ -19,11 +19,11 @@ sap.ui.define([
 				"icon" : "cart-3",
 				"title" : this.getResourceBundle().getText("pickup"),
 				"key" : "pickup"
-			}, 
-			{
-				"icon" : "request",
-				"title" : this.getResourceBundle().getText("itticket"),
-				"key" : "unavailable"
+//			}, 
+//			{
+//				"icon" : "request",
+//				"title" : this.getResourceBundle().getText("itticket"),
+//				"key" : "unavailable"
 //			}, 
 //			{
 //				"icon" : "multi-select",

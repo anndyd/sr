@@ -25,7 +25,8 @@ sap.ui.define([ 'jquery.sap.global', "sap/it/sr/ui/js/Formatter",
 			pModel.setData({
 				userName : itmCxt.getProperty("userName"),
 				fullName : itmCxt.getProperty("fullName"),
-				status : itmCxt.getProperty("status")
+				status : itmCxt.getProperty("status"),
+				pickLocation : itmCxt.getProperty("pickLocation")
 			});
 			pModel.refresh();
 

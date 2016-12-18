@@ -5,8 +5,8 @@
 			<l:content>
 				<VBox class="layout">
 					<VBox class="customTileTitleSection" >
-						<core:Icon src="sap-icon://{/icon}" class="tileIcon"></core:Icon>
            	            <Text text="{/title}" class="tileTitle"></Text>
+						<core:Icon src="sap-icon://{/icon}" class="tileIcon" size="30px"></core:Icon>
            	            <Text text="{/key}" id="tileKey" class="tileKey"></Text>
 					</VBox>
 					<layoutData>
