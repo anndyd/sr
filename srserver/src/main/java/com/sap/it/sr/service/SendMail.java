@@ -22,6 +22,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.sap.it.sr.entity.PickupData;
@@ -90,7 +91,7 @@ public class SendMail {
             emailPath = emailPath.replaceAll("%20", " ");
             BufferedReader reader = null;
 //            reader = new BufferedReader(new InputStreamReader(new FileInputStream(emailPath), "UTF-8"));
-            reader = new BufferedReader(new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("META-INF/confirm-template.html"), "UTF-8"));
+            reader = new BufferedReader(new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("META-INF/confirm-template.html"), "CP-1252"));
             StringBuilder builder = new StringBuilder();
             String line = reader.readLine();
             while (line != null) {
@@ -98,33 +99,22 @@ public class SendMail {
                 line = reader.readLine();
             }
             reader.close();
-            StringBuilder pos = new StringBuilder();
-            StringBuilder desc = new StringBuilder();
+            List<String> pos = new ArrayList<>();
+            List<String> desc = new ArrayList<>();
             info.getItems().forEach(itm->{
-                pos.append("["+ itm.getPoNumber() + "]");
-                desc.append("(" + itm.getItemDesc() + ")");
+                pos.add(itm.getPoNumber());
+                desc.add(itm.getItemDesc());
             });
             String content = builder.toString();
             content = content.replace("@logopath", "cid:sap-logo");
-            content = content.replaceAll("@poNumber", pos.toString());
-            content = content.replaceAll("@empId", recId).
-                    replaceAll("@pickupTime", info.getPickupTime().toString()).
-                    replaceAll("@description", desc.toString());
+            content = content.replaceAll("@empName", pos.toString());
+            content = content.replaceAll("@poNumber", StringUtils.join(pos, ", "));
+            content = content.replaceAll("@description", StringUtils.join(desc, ", "));
+            content = content.replaceAll("@ITAA", pos.toString());
+//            content = content.replaceAll("@empId", recId).
+//                    replaceAll("@pickupTime", info.getPickupTime().toString()).
+//                    replaceAll("@description", desc.toString());
 //            content = content.replaceAll("@location", info.getItems().get(0).getLocation());
-//            StringBuffer serials = new StringBuffer();
-//            List<ItemDetail> view = info.getItems().get(0).getItemDetails();
-//            if (view.size() >= 1) {
-//                serials.append("<table class=\"tdt\"><tbody>");
-//                if (view.get(0).getSerailNo().equals("")) {
-//                    serials.append("<tr><td class=\"tds\"><p><span>" + view.size() + " piece(s)</span></p></td></tr>");
-//                } else {
-//                    for (int i = 0; i < view.size(); i++) {
-//                        serials.append("<tr><td class=\"tds\"><p><span>" + view.get(i).getSerailNo() + "</span></p></td><td class=\"tds\"><p><span>" + view.get(i).getEquipNo() + "</span></p></td></tr>");
-//                    }
-//                }
-//                serials.append("</tbody></table>");
-//            }
-//            content = content.replaceAll("@serialist", serials.toString());
             MimeBodyPart part = new MimeBodyPart();
             part.setText(content, "GBK");
             part.setContent(content, "text/html;charset=GBK");
