@@ -29,4 +29,11 @@
 		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
 		<nature>com.sap.ide.ui5.app.plugin.webappnature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>WebContent/favicon.ico</name>
+			<type>1</type>
+			<locationURI>PROJECT_LOC/WebContent/image/favicon.ico</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>

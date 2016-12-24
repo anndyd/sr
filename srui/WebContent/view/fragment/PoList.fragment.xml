@@ -5,6 +5,7 @@
                     id="pkTreeTable"
                     rows="{path:'/items', parameters: {arrayNames:['itemDetails']}}"
                     selectionMode="None"
+                    enableSelectAll="true"
                     ariaLabelledBy="title">
                 <t:toolbar>
                     <Toolbar design="Auto">

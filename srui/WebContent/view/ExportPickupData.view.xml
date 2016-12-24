@@ -14,14 +14,14 @@
 				columnsL="1" columnsM="1" class="editableForm">
 				<f:content>
 					<Label text="{i18n>empId}" />
-					<Input value="{input>empIdFrom}" type="Text" placeholder="{i18n>from}"
+					<Input id="empIdInput" value="{input>empIdFrom}" type="Text"
 						enabled="true" editable="true" maxLength="8" submit="handleRefresh">
-						<layoutData>
-							<l:GridData span="L2 M3 S4" />
-						</layoutData>
-					</Input>
-					<Input value="{input>empIdTo}" type="Text" placeholder="{i18n>to}"
-						enabled="true" editable="true" maxLength="8" submit="handleRefresh">
+						
+						<!--suggestionItems>
+						showSuggestion="true" suggestionItems="{assist>employees}" 
+							<core:Item text="{/}" />
+						</suggestionItems-->
+						
 						<layoutData>
 							<l:GridData span="L2 M3 S4" />
 						</layoutData>
@@ -36,13 +36,20 @@
 					</Input>
 
 					<Label text="{i18n>location}" />
-					<Input value="{input>location}" type="Text"
+					<!--Input value="{input>location}" type="Text"
 						enabled="true" editable="true" submit="handleRefresh">
 						<layoutData>
 							<l:GridData span="L2 M3 S4" />
 						</layoutData>
-					</Input>
-
+					</Input-->
+					<MultiComboBox id="cb01" selectionFinish="handleSelectionFinish"
+						items="{assist>locations}">
+						<core:Item key="{assist>Name}" text="{assist>Name}" />
+						<layoutData>
+							<l:GridData span="L2 M3 S4" />
+						</layoutData>
+					</MultiComboBox>
+	
 					<Label text="{i18n>equipNo}" />
 					<Input value="{input>equipNo}" type="Text"
 						enabled="true" editable="true" submit="handleRefresh">
@@ -74,6 +81,9 @@
 							<l:GridData span="L2 M3 S4" />
 						</layoutData>
 					</DateTimePicker>
+					<Button class="sapUiSmallMarginEnd" icon="sap-icon://refresh"
+						visible="true" press="handleRefresh" width="20px">
+					</Button>
 				</f:content>
 			</f:SimpleForm>
 		</VBox>
@@ -161,8 +171,6 @@
 		<footer>
 			<Bar>
 				<contentRight>
-					<Button class="sapUiSmallMarginEnd" id="getData" text="{i18n>getData}"
-						type="Accept" visible="true" press="handleRefresh" />
 					<Button class="sapUiSmallMarginEnd" id="export" text="{i18n>export}"
 						type="Emphasized" visible="true" press="handlePress" icon="sap-icon://download" />
 				</contentRight>

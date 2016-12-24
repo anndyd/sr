@@ -32,7 +32,7 @@
 			<Bar>
 				<contentRight>
 					<Button class="sapUiSmallMarginEnd" id="sync" text="{i18n>syncGrData}"
-						type="Emphasized" visible="true" press="refreshData" icon="sap-icon://refresh" />
+						type="Emphasized" visible="true" press="refreshData" icon="sap-icon://synchronize" />
 				</contentRight>
 			</Bar>
 		</footer>

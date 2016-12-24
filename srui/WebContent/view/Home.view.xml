@@ -58,7 +58,7 @@
 	            </NavigationListItem>
 	            <NavigationListItem 
 	            		text="{i18n>syncGrData}"
-	            		icon="sap-icon://refresh" key="syncGrData">
+	            		icon="sap-icon://synchronize" key="syncGrData">
 	            </NavigationListItem>
 	            <NavigationListItem 
 	            		text="{i18n>help}"

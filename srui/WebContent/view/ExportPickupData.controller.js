@@ -15,6 +15,7 @@ sap.ui.define([
 			var that = this;
 			var oModel = new JSONModel();
 			var pModel = new JSONModel();
+			var aModel = new JSONModel();
 			pModel.setData({
 				empIdFrom : "",
 				empIdTo : "",
@@ -24,12 +25,35 @@ sap.ui.define([
 				location : "",
 				equipNo : ""
 			});
-
+			aModel.setData({
+				locations : [{"Name": "BJ"}, {"Name": "CTU"}, {"Name": "DL"}, {"Name": "GZ"}, {"Name": "NKG"}, {"Name": "PVG"}, {"Name": "SH"}, {"Name": "SZ"}]
+			});
+			
 			that.getView().setModel(oModel);
 			that.getView().setModel(pModel, "input");
+			that.getView().setModel(aModel, "assist");
 			that.getView().bindElement("input>/");
+			that.getView().bindElement("assist>/");
+			
+//			this.byId("empIdInput").setFilterFunction(function(sTerm, oItem) {
+//				// A case-insensitive 'string contains' style filter
+//				return oItem.getText().match(new RegExp(sTerm, "i"));
+//			});
 		},
-
+		
+		handleSelectionFinish: function(oEvent) {
+			var selectedItems = oEvent.getParameter("selectedItems");
+			var locations = "";
+			for (var i = 0; i < selectedItems.length; i++) {
+				locations += "'" + selectedItems[i].getText() + "'";
+				if (i != selectedItems.length-1) {
+					locations += ",";
+				}
+			}
+			this.getView().getModel("input").getData().location = locations;
+			this.handleRefresh();
+		},
+		
 		handleRefresh : function (oEvent) {
 			sap.ui.core.BusyIndicator.show();
 			var that = this;

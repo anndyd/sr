@@ -1,6 +1,5 @@
 package com.sap.it.sr.controller;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,6 @@ import com.sap.it.sr.entity.PickupData;
 import com.sap.it.sr.entity.SyncItemDetail;
 import com.sap.it.sr.entity.SyncItemInfo;
 import com.sap.it.sr.service.SendMail;
-import com.sap.it.sr.util.SessionHolder;
 
 @Controller
 @RequestMapping("pickup")
@@ -142,9 +140,9 @@ public class PickupDataController {
 	    	    });
 		    }
 		    // send mail
-		    String usr = SessionHolder.getUserId();
 		    SendMail sm = new SendMail();
-		    sm.sendPickedEmail(pd, Arrays.asList(usr), null);
+		    pd.setEmpName(empDao.findByEmpId(pd.getEmpId()).getEmpName());
+		    sm.sendPickedEmail(pd, null, null);
 		}
 	}
 	

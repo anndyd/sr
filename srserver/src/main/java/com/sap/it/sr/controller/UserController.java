@@ -95,14 +95,17 @@ public class UserController {
 		}
 		User usr = uDao.findByName(name);
 		String usrId = null;
+		String usrFullName = "";
 		if (usr != null && usr.getStatus()) {
     		usrId = name;
-    		rlt = usr.getFullName() != null && usr.getFullName().length() > 0 ? 
-    				name + " (" + usr.getFullName() + ")" : name;
+    		usrFullName = usr.getFullName();
+    		rlt = usrFullName != null && usrFullName.length() > 0 ? 
+    				name + " (" + usrFullName + ")" : name;
     	}
         request.getSession().setAttribute(SessionHolder.USER_ID, usrId);
+        request.getSession().setAttribute(SessionHolder.USER_FULLNAME, usrFullName);
 
-        SessionHolder.setContext(usrId);
+        SessionHolder.setContext(usrId, usr.getFullName());
         return rlt;
     }
 

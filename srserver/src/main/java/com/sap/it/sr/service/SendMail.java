@@ -26,6 +26,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.sap.it.sr.entity.PickupData;
+import com.sap.it.sr.util.SessionHolder;
 
 public class SendMail {
 	private static final Logger LOGGER = Logger.getLogger(SendMail.class);
@@ -79,19 +80,12 @@ public class SendMail {
                 message.setRecipients(Message.RecipientType.CC, ccAddr.toArray(new Address[ccAddr.size()]));
             }
             message.setSubject("Global IT - Equipment Received Notification");
-//            String logopath = this.getClass().getResource("/").getFile() + "logo.jpg";
-//            logopath = logopath.replaceAll("%20", " ");
-//            logopath = logopath.substring(1);
             BodyPart imagePart = new MimeBodyPart();
-//            DataSource ds = new FileDataSource(logopath);
             DataSource ds = new ByteArrayDataSource(this.getClass().getClassLoader().getResourceAsStream("META-INF/logo.jpg"), "image/jpeg");
             imagePart.setDataHandler(new DataHandler(ds));
             imagePart.setHeader("Content-ID", "<sap-logo>");
-            String emailPath = this.getClass().getResource("/").getFile() + "confirm-template.html";
-            emailPath = emailPath.replaceAll("%20", " ");
             BufferedReader reader = null;
-//            reader = new BufferedReader(new InputStreamReader(new FileInputStream(emailPath), "UTF-8"));
-            reader = new BufferedReader(new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("META-INF/confirm-template.html"), "CP-1252"));
+            reader = new BufferedReader(new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("META-INF/confirm-template.htm"), "UTF-8"));
             StringBuilder builder = new StringBuilder();
             String line = reader.readLine();
             while (line != null) {
@@ -105,12 +99,13 @@ public class SendMail {
                 pos.add(itm.getPoNumber());
                 desc.add(itm.getItemDesc());
             });
+
             String content = builder.toString();
             content = content.replace("@logopath", "cid:sap-logo");
-            content = content.replaceAll("@empName", pos.toString());
+            content = content.replaceAll("@empName", info.getEmpName());
             content = content.replaceAll("@poNumber", StringUtils.join(pos, ", "));
             content = content.replaceAll("@description", StringUtils.join(desc, ", "));
-            content = content.replaceAll("@ITAA", pos.toString());
+            content = content.replaceAll("@ITAA", SessionHolder.getUserName());
 //            content = content.replaceAll("@empId", recId).
 //                    replaceAll("@pickupTime", info.getPickupTime().toString()).
 //                    replaceAll("@description", desc.toString());

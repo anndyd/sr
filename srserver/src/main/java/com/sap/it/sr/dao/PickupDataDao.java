@@ -17,7 +17,7 @@ public class PickupDataDao extends BaseDao<PickupData> {
     @SuppressWarnings("unchecked")
     public List<PickupData> findAll(String empIdFrom, String empIdTo, String dateFrom, String dateTo, 
     		String poNumber, String location, String equipNo) {
-        String sql = "select t from PickupData t";
+		String sql = "select distinct t from PickupData t";
         
         int i = 0;
         String jn = "";
@@ -26,7 +26,7 @@ public class PickupDataDao extends BaseDao<PickupData> {
         
         if (empIdFrom != null && !empIdFrom.equals("")) {
         	i++;
-        	w = w + " t.empId>=?" + i;
+        	w = w + " t.empId=?" + i;
         	p.add(empIdFrom.toUpperCase());
         }
         if (empIdTo != null && !empIdTo.equals("")) {
@@ -67,18 +67,6 @@ public class PickupDataDao extends BaseDao<PickupData> {
         	}
         	p.add(poNumber);
         }
-        if (location != null && !location.equals("")) {
-        	if (jn.equals("")) {
-        		jn = " join t.items i";
-        	}
-        	i++;
-        	if (i>1) {
-        		w = w + " and i.location=?" + i;
-        	} else {
-        	   	w = w + " i.location=?" + i;
-        	}
-        	p.add(location);
-        }
         if (equipNo != null && !equipNo.equals("")) {
         	if (jn.equals("")) {
         		jn = " join t.items i";
@@ -92,6 +80,17 @@ public class PickupDataDao extends BaseDao<PickupData> {
         	   	w = w + " d.equipNo=?" + i;
         	}
         	p.add(equipNo);
+        }
+        if (location != null && !location.equals("")) {
+        	if (jn.equals("")) {
+        		jn = " join t.items i";
+        	}
+        	i++;
+        	if (i>1) {
+        		w = w + " and i.location IN (" + location + ")";
+        	} else {
+        	   	w = w + " i.location IN (" + location + ")";
+        	}
         }
        
         if (!w.equals("")) {
