@@ -3,6 +3,7 @@ var util = {
     userName: "",
     role: "",
     badgeIdLength: 10,
+    nodataTimeout: 5000,
     openSecondWindow: function (url, winName) {
 		var orgwin = window.open('', winName);
 		if (orgwin) {
