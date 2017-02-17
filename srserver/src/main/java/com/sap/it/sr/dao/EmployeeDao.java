@@ -5,6 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.sap.it.sr.entity.Employee;
+import com.sap.it.sr.entity.User;
+import com.sap.it.sr.util.EncryptHelper;
+import com.sap.it.sr.util.LdapHelper;
 
 @Repository
 public class EmployeeDao extends BaseDao<Employee> {
@@ -22,6 +25,24 @@ public class EmployeeDao extends BaseDao<Employee> {
     	}
         List<Employee> list = em.createQuery("select t from Employee t where t.empId=?1", Employee.class)
                 .setParameter(1, empId).setMaxResults(1).getResultList();
-        return list.isEmpty() ? emp : list.get(0);
+        emp = list.isEmpty() ? emp : list.get(0);
+        if (null == emp.getEmpName()) {
+        	emp.setEmpName(getEmpFullname(empId));
+        }
+        
+        return emp;
+    }
+    
+    private String getEmpFullname(String id) {
+    	String rlt = "";
+        List<User> userList = em.createQuery("select t from User t where t.role=?1", User.class)
+                .setParameter(1, "1").setMaxResults(1).getResultList();
+        if (userList.size() > 0){
+        	String pwd = userList.get(0).getPassword();
+        	pwd = EncryptHelper.decrypt(pwd);
+        	rlt = LdapHelper.getEmployeeFullname(id, userList.get(0).getUserName(), pwd);
+        }
+        
+    	return rlt;
     }
 }

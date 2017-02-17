@@ -19,13 +19,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sap.it.sr.dao.UserDao;
 import com.sap.it.sr.entity.User;
+import com.sap.it.sr.util.EncryptHelper;
 import com.sap.it.sr.util.SessionHolder;
 
 @Controller
 @RequestMapping("user")
 @Scope("request")
 public class UserController {
-
+	private String password;
+	
     @Autowired
     private UserDao uDao;
 
@@ -41,7 +43,9 @@ public class UserController {
 	    if (userName != null) {
 	        userName = userName.toUpperCase();
 	    }
-	    return uDao.findByName(userName);
+	    User user = uDao.findByName(userName);
+	    password = user.getPassword();
+	    return user;
 	}
 	
 	@RequestMapping(value="/upsert", method = RequestMethod.POST)
@@ -53,6 +57,10 @@ public class UserController {
 			if (oU.getId() != null) {
 				user.setId(oU.getId());
 			}
+			if (null != user.getPassword() && !user.getPassword().equals(password) && user.getPassword().length() > 0) {
+				user.setPassword(EncryptHelper.encrypt(user.getPassword()));
+			}
+			password = user.getPassword();
 			uDao.merge(user);
 		}
 	}
