@@ -6,6 +6,7 @@ import java.security.cert.X509Certificate;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -26,15 +27,22 @@ import com.sap.it.sr.util.SessionHolder;
 @RequestMapping("user")
 @Scope("request")
 public class UserController {
-	private String password;
-	
-    @Autowired
+	@Autowired(required=true)
+	private HttpServletRequest request;	
+    
+	@Autowired
     private UserDao uDao;
 
 	@RequestMapping(value="/all", method = RequestMethod.GET)
 	@ResponseBody
 	public List<User> getUsers(){
-		return uDao.findAll();
+		List<User> users = uDao.findAll();
+		HttpSession session = request.getSession();
+		for (User user : users) {
+		    user.getSession().setRole(session.getAttribute(SessionHolder.USER_ROLE).toString());
+		    user.getSession().setCurrentUser(session.getAttribute(SessionHolder.USER_ID).toString());
+		}
+		return users;
 	}
 
 	@RequestMapping(value="/get", method = RequestMethod.GET)
@@ -44,7 +52,9 @@ public class UserController {
 	        userName = userName.toUpperCase();
 	    }
 	    User user = uDao.findByName(userName);
-	    password = user.getPassword();
+		HttpSession session = request.getSession();
+	    user.getSession().setRole(session.getAttribute(SessionHolder.USER_ROLE).toString());
+	    user.getSession().setCurrentUser(session.getAttribute(SessionHolder.USER_ID).toString());
 	    return user;
 	}
 	
@@ -52,15 +62,16 @@ public class UserController {
 	@ResponseBody
 	@Transactional
 	public void upsertUser(@RequestBody User user){
+		String password = "";
 		if (user.getUserName() != null) {
 		    User oU = uDao.findByName(user.getUserName().toUpperCase());
 			if (oU.getId() != null) {
 				user.setId(oU.getId());
+				password = oU.getPassword();
 			}
 			if (null != user.getPassword() && !user.getPassword().equals(password) && user.getPassword().length() > 0) {
 				user.setPassword(EncryptHelper.encrypt(user.getPassword()));
 			}
-			password = user.getPassword();
 			uDao.merge(user);
 		}
 	}
@@ -74,10 +85,10 @@ public class UserController {
 
     @RequestMapping(value = "/active", method = RequestMethod.POST)
     @ResponseBody
-    public String active(HttpServletRequest request) {
+    public String active(HttpServletRequest req) {
     	String rlt = "";
     	// Get the client SSL certificates associated with the request
-		X509Certificate[] certs = (X509Certificate[]) request.getAttribute("javax.servlet.request.X509Certificate");
+		X509Certificate[] certs = (X509Certificate[]) req.getAttribute("javax.servlet.request.X509Certificate");
 		// Check that a certificate was obtained
 		if (certs.length < 1) {
 			rlt = "SSL not client authenticated";
@@ -104,16 +115,20 @@ public class UserController {
 		User usr = uDao.findByName(name);
 		String usrId = null;
 		String usrFullName = "";
+		String usrRole = "";
 		if (usr != null && usr.getStatus()) {
     		usrId = name;
     		usrFullName = usr.getFullName();
+    		usrRole = usr.getRole();
     		rlt = usrFullName != null && usrFullName.length() > 0 ? 
     				name + " (" + usrFullName + ")" : name;
     	}
-        request.getSession().setAttribute(SessionHolder.USER_ID, usrId);
-        request.getSession().setAttribute(SessionHolder.USER_FULLNAME, usrFullName);
+        req.getSession().setAttribute(SessionHolder.USER_ID, usrId);
+        req.getSession().setAttribute(SessionHolder.USER_FULLNAME, usrFullName);
+        req.getSession().setAttribute(SessionHolder.USER_ROLE, usrRole);
 
-        SessionHolder.setContext(usrId, usr.getFullName());
+        SessionHolder.setContext(usrId, usrFullName, usrRole);
+        
         return rlt;
     }
 

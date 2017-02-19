@@ -25,14 +25,14 @@ public class LoginRequiredInterceptor extends HandlerInterceptorAdapter {
         HttpSession session = request.getSession();
         String userId = (String) session.getAttribute(SessionHolder.USER_ID);
         String usrFullName = (String) session.getAttribute(SessionHolder.USER_FULLNAME);
+        String usrRole = (String) session.getAttribute(SessionHolder.USER_ROLE);
 
         if (userId == null) {
             LOGGER.warn("[Login] NO authorized user in the session, should login");
-            SessionHolder.setContext(null, null);
+            SessionHolder.setContext(null, null, null);
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
         } else {
-//            String locale = (String) session.getAttribute(SessionHolder.LOCALE);
-            SessionHolder.setContext(userId, usrFullName);
+            SessionHolder.setContext(userId, usrFullName, usrRole);
         }
         return userId != null;
     }

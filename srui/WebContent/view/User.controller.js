@@ -1,10 +1,13 @@
 sap.ui.define([ 'jquery.sap.global', "sap/it/sr/ui/js/Formatter",
 		"sap/it/sr/ui/view/base/BaseController",
-		"sap/it/sr/ui/service/UserService", "sap/m/MessageToast",
+		"sap/it/sr/ui/service/UserService", 
+	    "sap/it/sr/ui/service/EmployeeService",
+		"sap/m/MessageToast",
 		'sap/ui/model/json/JSONModel' ], function(jQuery, Formatter,
-		BaseController, UserService, MessageToast, JSONModel) {
+		BaseController, UserService, EmployeeService, MessageToast, JSONModel) {
 	"use strict";
 	var us = new UserService();
+	var es = new EmployeeService();
 	var w;
 	return BaseController.extend("sap.it.sr.ui.view.User", {
 
@@ -12,6 +15,9 @@ sap.ui.define([ 'jquery.sap.global', "sap/it/sr/ui/js/Formatter",
 			var that = this;
 			var oModel = new JSONModel();
 			var pModel = new JSONModel();
+			pModel.setData({
+				roleCtl : false
+			});
 			that.getView().setModel(oModel);
 			that.getView().setModel(pModel, "input");
 			that.getView().bindElement("input>/");
@@ -26,7 +32,13 @@ sap.ui.define([ 'jquery.sap.global', "sap/it/sr/ui/js/Formatter",
 				userName : itmCxt.getProperty("userName"),
 				fullName : itmCxt.getProperty("fullName"),
 				status : itmCxt.getProperty("status"),
-				pickLocation : itmCxt.getProperty("pickLocation")
+				pickLocation : itmCxt.getProperty("pickLocation"),
+				password : itmCxt.getProperty("password"),
+				role : itmCxt.getProperty("role"),
+				roleCtl : itmCxt.getProperty("session").role === "1",
+				editCtl : itmCxt.getProperty("session").role === "1" ||
+					itmCxt.getProperty("session").currentUser === itmCxt.getProperty("userName"),
+				pwdCtl : itmCxt.getProperty("session").currentUser === itmCxt.getProperty("userName")
 			});
 			pModel.refresh();
 
@@ -47,6 +59,28 @@ sap.ui.define([ 'jquery.sap.global', "sap/it/sr/ui/js/Formatter",
 				this.oFormFragment.destroy();
 			}
 		},
+		
+		onEmpChange : function(evt) {
+		    var that = this;
+			var pModel = that.getView().getModel("input");
+		    var v = evt.getParameters().value;
+		    if (v && v.length > 6) {
+				var param = {
+				    badgeId : "",
+				    empId : v
+				};
+				es.getEmployee(param).done(function(data) {
+					data.badgeId = param.badgeId;
+					data.empId = param.empId;
+					pModel.setData({
+						userName : data.empId,
+						fullName : data.empName,
+						pwdCtl : false
+					});
+					pModel.refresh();
+				});
+		    }
+		},
 
 		handleAddPress : function() {
 			var that = this;
@@ -54,7 +88,10 @@ sap.ui.define([ 'jquery.sap.global', "sap/it/sr/ui/js/Formatter",
 			pModel.setData({
 				userName : "",
 				fullName : "",
-				status : 0
+				status : 0,
+				pickLocation : "",
+				password : "",
+				pwdCtl : false
 			});
 			pModel.refresh();
 		},

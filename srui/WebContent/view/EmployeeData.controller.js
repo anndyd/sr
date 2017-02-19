@@ -126,10 +126,10 @@ sap.ui.define([
 		_getEmpData: function(param) {
 			var that = this;
 			es.getEmployee(param).done(function(data) {
+				data.badgeId = param.badgeId;
+				data.empId = param.empId;
 			    var tdata = [data];
-			    if (data.empId) {
-			    	that.getView().getModel("input").setData(data);
-			    }
+		    	that.getView().getModel("input").setData(data);
 			    that.getView().getModel().setData(tdata);
 			});
 		},

@@ -11,26 +11,40 @@
 				columnsL="1" columnsM="1" class="editableForm">
 				<f:content>
 					<Label text="{i18n>userName}" />
-					<Input value="{input>userName}" type="Text"
-						enabled="true" editable="true" maxLength="8">
+					<Input value="{input>userName}" type="Text" submit="onEmpChange"
+						enabled="{input>roleCtl}" editable="true" maxLength="8">
 						<layoutData>
 							<l:GridData span="L2 M2 S4" />
 						</layoutData>
 					</Input>
 					<Input value="{input>fullName}" type="Text" placeholder="{i18n>userFullName}"
-						enabled="true" editable="true" >
+						enabled="{input>editCtl}" editable="true" >
 						<layoutData>
 							<l:GridData span="L2 M3 S4" />
 						</layoutData>
 					</Input>						
 					<Label text="{i18n>status}" />
-					<CheckBox selected="{input>status}" text="{i18n>active}">
+					<CheckBox selected="{input>status}" text="{i18n>active}" visible="{input>roleCtl}">
 						<layoutData>
 							<l:GridData span="L2 M2 S4" />
 						</layoutData>
 					</CheckBox>
 					<Label text="{i18n>pickLocation}" />
 					<Input value="{input>pickLocation}" type="Text"
+						enabled="{input>editCtl}" editable="true">
+						<layoutData>
+							<l:GridData span="L2 M2 S4" />
+						</layoutData>
+					</Input>
+					<Label text="{i18n>password}" />
+					<Input value="{input>password}" type="Password" visible="{input>roleCtl}"
+						enabled="{input>pwdCtl}" editable="true">
+						<layoutData>
+							<l:GridData span="L2 M2 S4" />
+						</layoutData>
+					</Input>
+					<Label text="{i18n>role}" />
+					<Input value="{input>role}" type="Text" visible="{input>roleCtl}"
 						enabled="true" editable="true">
 						<layoutData>
 							<l:GridData span="L2 M2 S4" />
@@ -83,9 +97,9 @@
 			<Bar>
 				<contentRight>
 					<Button class="sapUiSmallMarginEnd" id="add" text="{i18n>add}"
-						type="Accept" visible="true" press="handleAddPress" />
+						type="Accept" visible="{input>roleCtl}" press="handleAddPress" />
 					<Button class="sapUiSmallMarginEnd" id="save" text="{i18n>save}"
-						type="Emphasized" visible="true" press="handleSavePress" />
+						type="Emphasized" visible="{input>editCtl}" press="handleSavePress" />
 				</contentRight>
 			</Bar>
 		</footer>
