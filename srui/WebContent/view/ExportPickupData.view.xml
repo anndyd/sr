@@ -2,7 +2,6 @@
 	xmlns="sap.m" 
 	xmlns:l="sap.ui.layout" 
 	xmlns:f="sap.ui.layout.form"
-	xmlns:t="sap.ui.table"
 	controllerName="sap.it.sr.ui.view.ExportPickupData" xmlns:html="http://www.w3.org/1999/xhtml">
 	<Page 
 		title="{i18n>exportPickupData}"
@@ -87,86 +86,72 @@
 				</f:content>
 			</f:SimpleForm>
 		</VBox>
-
-            <t:TreeTable
-                    id="pkTreeTable"
-                    rows="{path:'/', parameters: {arrayNames:['items','itemDetails']}}"
-                    selectionMode="MultiToggle"
-                    enableSelectAll="true"
-                    ariaLabelledBy="title">
-                <t:toolbar>
-                    <Toolbar>
-                        <ToolbarSpacer/>
-                        <Button text="{i18n>collapseAll}" press="onCollapseAll"/>
-                        <Button text="{i18n>expandFirstLevel}" press="onExpandFirstLevel"/>
-                    </Toolbar>
-                </t:toolbar>
-                <t:columns>
-                    <t:Column width="8em">
-                        <Label text="{i18n>empId}"/>
-                        <t:template>
-                            <Text text="{empId}"/>
-                        </t:template>
-                    </t:Column>
-                    <t:Column>
-                        <Label text="{i18n>agentId}"/>
-                        <t:template>
-                            <Text text="{agentId}"/>
-                        </t:template>
-                    </t:Column>
-                    <t:Column>
-                        <Label text="{i18n>pickupTime}"/>
-                        <t:template>
-                            <Text text="{path:'pickupTime', 
-										 formatOptions: {style: 'short'}}"/>
-                        </t:template>
-                    </t:Column>
-                    <t:Column width="8em">
-                        <Label text="{i18n>poNumber}"/>
-                        <t:template>
-                            <Text text="{poNumber}"/>
-                        </t:template>
-                    </t:Column>
-                    <t:Column width="5em">
-                        <Label text="{i18n>poItem}"/>
-                        <t:template>
-                            <Text text="{poItem}"/>
-                        </t:template>
-                    </t:Column>
-                    <t:Column width="18em">
-                        <Label text="{i18n>desc}"/>
-                        <t:template>
-                            <Text text="{itemDesc}"/>
-                        </t:template>
-                    </t:Column>
-                    <t:Column width="5em">
-                        <Label text="{i18n>location}"/>
-                        <t:template>
-                            <Text text="{location}"/>
-                        </t:template>
-                    </t:Column>
-                    <t:Column width="5em">
-                        <Label text="{i18n>quantity}"/>
-                        <t:template>
-                            <ObjectNumber number="{quantity}"/>
-                        </t:template>
-                    </t:Column>
-
-                    <t:Column minScreenWidth="Tablet">
-                        <Label text="{i18n>serialNo}"/>
-                        <t:template>
-                            <Text text="{serialNo}"/>
-                        </t:template>
-                    </t:Column>
-                    <t:Column>
-                        <Label text="{i18n>equipNo}"/>
-                        <t:template>
-                            <Text text="{equipNo}"/>
-                        </t:template>
-                    </t:Column>
-
-                </t:columns>
-            </t:TreeTable>
+		
+		<Table id="pkTable"
+			backgroundDesign="Solid"
+			mode="MultiSelect"
+			inset="false"
+			items="{
+				path: '/',
+				sorter: {
+					path: 'empId'
+				}
+			}">
+			<columns>
+				<Column width="8em">
+					<Text text="{i18n>empId}" />
+				</Column>
+				<Column>
+					<Text text="{i18n>grTime}" />
+				</Column>
+				<Column>
+					<Text text="{i18n>pickupTime}" />
+				</Column>
+				<Column>
+					<Text text="{i18n>usedTime}" />
+				</Column>
+				<Column width="8em">
+					<Text text="{i18n>poNumber}" />
+				</Column>
+				<Column width="5em">
+					<Text text="{i18n>poItem}" />
+				</Column>
+				<Column width="18em">
+					<Text text="{i18n>desc}" />
+				</Column>
+				<Column width="5em">
+					<Text text="{i18n>location}" />
+				</Column>
+				<Column width="5em">
+					<Text text="{i18n>quantity}" />
+				</Column>
+				<Column>
+					<Text text="{i18n>equipNo}" />
+				</Column>
+				<Column minScreenWidth="Tablet">
+					<Text text="{i18n>serialNo}" />
+				</Column>
+			</columns>
+			<items>
+				<ColumnListItem vAlign="Middle" type="Navigation">
+					<cells>
+						<ObjectIdentifier text="{empId}" />
+						<Text text="{path:'grTime', 
+									 formatOptions: {style: 'short'}}"/>
+						<Text text="{path:'pickupTime', 
+									 formatOptions: {style: 'short'}}"/>
+						<Text text="{usedTime}"/>
+						<Text text="{poNumber}"/>
+						<Text text="{poItem}"/>
+						<Text text="{itemDesc}"/>
+						<Text text="{location}"/>
+						<ObjectNumber number="{quantity}"/>
+						<Text text="{equipNo}"/> 
+						<Text text="{serialNo}"/>
+					</cells>
+				</ColumnListItem>
+			</items>
+		</Table>
 
 		<footer>
 			<Bar>

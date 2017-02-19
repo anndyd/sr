@@ -1,4 +1,4 @@
-package com.sap.it.sr.entity;
+package com.sap.it.sr.dto;
 
 public class SessionInfo {
 	private String role;

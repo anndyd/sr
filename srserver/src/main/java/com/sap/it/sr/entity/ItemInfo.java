@@ -1,6 +1,7 @@
 package com.sap.it.sr.entity;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +35,8 @@ public class ItemInfo implements Serializable {
     @JsonManagedReference
     private List<ItemDetail> itemDetails = new ArrayList<ItemDetail>();
 
+    
+    private Timestamp grTime;
     private String poNumber;
     private int poItem;
     private String itemDesc;
@@ -64,6 +67,14 @@ public class ItemInfo implements Serializable {
 
 	public void setItemDetails(List<ItemDetail> itemDetails) {
 		this.itemDetails = itemDetails;
+	}
+
+	public Timestamp getGrTime() {
+		return grTime;
+	}
+
+	public void setGrTime(Timestamp grTime) {
+		this.grTime = grTime;
 	}
 
 	public String getPoNumber() {

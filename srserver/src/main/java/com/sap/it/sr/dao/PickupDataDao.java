@@ -10,12 +10,13 @@ import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 
+import com.sap.it.sr.dto.PickupDataInfo;
 import com.sap.it.sr.entity.PickupData;
 
 @Repository
 public class PickupDataDao extends BaseDao<PickupData> {
     @SuppressWarnings("unchecked")
-    public List<PickupData> findAll(String empIdFrom, String empIdTo, String dateFrom, String dateTo, 
+    public List<PickupData> findAllWithJpql(String empIdFrom, String empIdTo, String dateFrom, String dateTo, 
     		String poNumber, String location, String equipNo) {
 		String sql = "select distinct t from PickupData t";
         
@@ -114,6 +115,104 @@ public class PickupDataDao extends BaseDao<PickupData> {
 	        }
         }
         List<PickupData> list = query.getResultList();
+        return list;
+    }
+    @SuppressWarnings("unchecked")
+    public List<PickupDataInfo> findAll(String empIdFrom, String empIdTo, String dateFrom, String dateTo, 
+    		String poNumber, String location, String equipNo) {
+		String sql = "select p.ID + i.ID + IFNULL(d.ID,0) id, p.EMPID, i.GRTIME, p.PICKUPTIME, TIMESTAMPDIFF(HOUR,i.GRTIME,p.PICKUPTIME) usedTime, " +
+					 "i.PONUMBER, i.POITEM, i.ITEMDESC, i.LOCATION, i.QUANTITY, " +
+					 "d.EQUIPNO, d.SERAILNO " +
+					 "from pickupdata p " +
+					 "join iteminfo i on p.ID = i.PICKUP_DATA_ID " +
+					 "left join  " +
+					 "(select * from itemdetail si where LENGTH(si.EQUIPNO)>0 or LENGTH(si.SERAILNO)>0) d  " +
+					 "on i.ID = d.ITEM_INFO_ID";
+        
+        int i = 0;
+        String w = "";
+        List<String> p = new ArrayList<String>();
+        
+        if (empIdFrom != null && !empIdFrom.equals("")) {
+        	i++;
+        	w = w + " empId=?" + i;
+        	p.add(empIdFrom.toUpperCase());
+        }
+        if (empIdTo != null && !empIdTo.equals("")) {
+        	i++;
+        	if (i>1) {
+        		w = w + " and empId<=?" + i;
+        	} else {
+        		w = w + " empId<=?" + i;
+        	}
+        	p.add(empIdTo.toUpperCase());
+        }
+        if (dateFrom != null && !dateFrom.equals("")) {
+        	i++;
+        	if (i>1) {
+        		w = w + " and pickupTime>=?" + i;
+        	} else {
+        		w = w + " pickupTime>=?" + i;
+        	}
+        	p.add(dateFrom);
+        }
+        if (dateTo != null && !dateTo.equals("")) {
+        	i++;
+        	if (i>1) {
+        		w = w + " and pickupTime<=?" + i;
+        	} else {
+        	   	w = w + " pickupTime<=?" + i;
+        	}
+        	p.add(dateTo);
+        }
+        if (poNumber != null && !poNumber.equals("")) {
+        	i++;
+        	if (i>1) {
+        		w = w + " and poNumber=?" + i;
+        	} else {
+        	   	w = w + " poNumber=?" + i;
+        	}
+        	p.add(poNumber);
+        }
+        if (equipNo != null && !equipNo.equals("")) {
+        	i++;
+        	if (i>1) {
+        		w = w + " and equipNo=?" + i;
+        	} else {
+        	   	w = w + " equipNo=?" + i;
+        	}
+        	p.add(equipNo);
+        }
+        if (location != null && !location.equals("")) {
+        	i++;
+        	if (i>1) {
+        		w = w + " and location IN (" + location + ")";
+        	} else {
+        	   	w = w + " location IN (" + location + ")";
+        	}
+        }
+       
+        if (!w.equals("")) {
+        	w = " where " + w;
+        }
+        
+        Query query = em.createNativeQuery(sql + w, PickupDataInfo.class);
+        if (p.size() > 0) {
+        	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	        for (int j = 0; j < p.size(); j++) {
+				String param = p.get(j);
+	        	if (param.contains(":")) {
+		        	try {
+		        		query.setParameter(j+1, new Timestamp(formatter.parse(param).getTime()));
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+	        	} else {
+	        		query.setParameter(j+1, param);
+	        	}
+	        }
+        }
+        List<PickupDataInfo> list = query.getResultList();
         return list;
     }
 

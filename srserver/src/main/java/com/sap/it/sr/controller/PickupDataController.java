@@ -16,6 +16,7 @@ import com.sap.it.sr.dao.EmployeeDao;
 import com.sap.it.sr.dao.PickupDataDao;
 import com.sap.it.sr.dao.SyncItemDetailDao;
 import com.sap.it.sr.dao.SyncItemInfoDao;
+import com.sap.it.sr.dto.PickupDataInfo;
 import com.sap.it.sr.entity.ItemDetail;
 import com.sap.it.sr.entity.ItemInfo;
 import com.sap.it.sr.entity.PickupData;
@@ -48,7 +49,7 @@ public class PickupDataController {
     
 	@RequestMapping(value="/allwithparam", method = RequestMethod.GET)
 	@ResponseBody
-	public List<PickupData> getPickupDatas(
+	public List<PickupDataInfo> getPickupDatas(
 			@RequestParam(required = true) String empIdFrom,
 			@RequestParam(required = true) String empIdTo,
 			@RequestParam(required = true) String dateFrom,
@@ -82,11 +83,6 @@ public class PickupDataController {
 		}
 		if (pd.getAgentId() != null && pd.getAgentId() != "") {
 			pd.setAgentName(empDao.findByEmpId(pd.getAgentId()).getEmpName());
-		}
-		if (pd.getPickupTime() == null) {
-//			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//			pd.setPickupDate(dateFormat.format(new Date()));
-//			pd.setPickupTime();
 		}
 		return pd;
 	}
@@ -159,6 +155,7 @@ public class PickupDataController {
 		if (sis != null) {
 			sis.forEach(sitm->{
 				ItemInfo itm = new ItemInfo();
+				itm.setGrTime(sitm.getCreateDate());
 				itm.setPoNumber(sitm.getPoNumber());
 				itm.setPoItem(sitm.getPoItem());
 				itm.setItemDesc(sitm.getItemDesc());
@@ -190,6 +187,7 @@ public class PickupDataController {
 		if (sis != null) {
 			sis.forEach(sitm->{
 				ItemInfo itm = new ItemInfo();
+				itm.setGrTime(sitm.getCreateDate());
 				itm.setPoNumber(sitm.getPoNumber());
 				itm.setPoItem(sitm.getPoItem());
 				itm.setItemDesc(sitm.getItemDesc());

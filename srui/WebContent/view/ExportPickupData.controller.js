@@ -61,19 +61,18 @@ sap.ui.define([
 			var param = that.getView().getModel("input").getData();
 			var oModel = that.getView().getModel();
 			ps.getPickupDatas(param).done(function (data) {
+				if (data) {
+					var dtxt = that.getResourceBundle().getText("days");
+					var htxt = that.getResourceBundle().getText("hours");
+					for (var i=0; i<data.length; i++) {
+						var h = data[i].usedTime;
+						var d = Math.floor(h/24);
+						data[i].usedTime = d + " " + dtxt + " " + (h-d*24) + " " + htxt + " ";
+					}
+				}
 				oModel.setData(data);
 				oModel.refresh();
 			});
-		},
-
-		onCollapseAll : function () {
-			var oTreeTable = this.getView().byId("pkTreeTable");
-			oTreeTable.collapseAll();
-		},
-
-		onExpandFirstLevel : function () {
-			var oTreeTable = this.getView().byId("pkTreeTable");
-			oTreeTable.expandToLevel(1);
 		},
 
 		onExit : function () {},
@@ -93,37 +92,7 @@ sap.ui.define([
 
 		handlePress : sap.m.Table.prototype.exportData || function () {
 			sap.ui.core.BusyIndicator.show();
-			var oModel = new JSONModel();
-			var tdata = [], pd = {};
-			var data = this.getView().getModel().getData();
-			if (data) {
-				for (var i = 0, len = data.length; i < len; i++) {
-					pd = {};
-					pd.empId = data[i].empId;
-					pd.agentId = data[i].agentId;
-					pd.pickupTime = data[i].pickupTime;
-					tdata.push(pd);
-					var itms = data[i].items
-					for (var j = 0, lenj = itms.length; j < lenj; j++) {
-						pd = {};
-						pd.poNumber = itms[j].poNumber;
-						pd.poItem = itms[j].poItem;
-						pd.itemDesc = itms[j].itemDesc;
-						pd.location = itms[j].location;
-						pd.quantity = itms[j].quantity;
-						tdata.push(pd);
-						var itds = itms[j].itemDetails
-						for (var k = 0, lenk = itds.length; k < lenk; k++) {
-							pd = {};
-							pd.serialNo = itds[k].serialNo;
-							pd.equipNo = itds[k].equipNo;
-							tdata.push(pd);
-						}						
-					}
-				}
-			}
-			oModel.setData(tdata);
-			
+			var oModel = this.getView().getModel();
 			var i18n = this.getResourceBundle();
 			var oExport = new Export({
 
@@ -151,14 +120,19 @@ sap.ui.define([
 							content : "{empId}"
 						}
 					}, {
-						name : i18n.getText("agentId"),
+						name : i18n.getText("grTime"),
 						template : {
-							content : "{agentId}"
+							content : "{grTime}"
 						}
 					}, {
 						name : i18n.getText("pickupTime"),
 						template : {
 							content : "{pickupTime}"
+						}
+					}, {
+						name : i18n.getText("{usedTime}"),
+						template : {
+							content : "{usedTime}"
 						}
 					}, {
 						name : i18n.getText("poNumber"),
@@ -186,14 +160,14 @@ sap.ui.define([
 							content : "{quantity}"
 						}
 					}, {
-						name : i18n.getText("serialNo"),
-						template : {
-							content : "{serialNo}"
-						}
-					}, {
 						name : i18n.getText("equipNo"),
 						template : {
 							content : "{equipNo}"
+						}
+					}, {
+						name : i18n.getText("serialNo"),
+						template : {
+							content : "{serialNo}"
 						}
 					}
 				]

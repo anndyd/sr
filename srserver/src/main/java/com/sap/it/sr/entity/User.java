@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
+import com.sap.it.sr.dto.SessionInfo;
+
 @Entity
 public class User implements Serializable {
     private static final long serialVersionUID = 185706989928100701L;
