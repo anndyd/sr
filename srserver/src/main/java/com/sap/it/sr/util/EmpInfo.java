@@ -8,6 +8,7 @@ public class EmpInfo {
 	private String location;
 	private String department;
 	private String manager;
+	private String costCenter;
 	
 	public void printInfo() {
 		System.out.println("EmpInfo: ");
@@ -18,6 +19,7 @@ public class EmpInfo {
 		System.out.println("location = " + location);
 		System.out.println("department = " + department);
 		System.out.println("manager = " + manager);
+		System.out.println("costCenter = " + costCenter);
 	}
 	
 	public String getId() {
@@ -61,6 +63,14 @@ public class EmpInfo {
 	}
 	public void setManager(String manager) {
 		this.manager = manager;
+	}
+
+	public String getCostCenter() {
+		return costCenter;
+	}
+
+	public void setCostCenter(String costCenter) {
+		this.costCenter = costCenter;
 	}
 	
 }

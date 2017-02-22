@@ -27,6 +27,13 @@
 							<l:GridData span="L2 M2 S4" />
 						</layoutData>
 					</Input>
+					<Label text="{i18n>costCenter}" />
+					<Input value="{input>costCenter}" type="Text" 
+						enabled="true" editable="true" maxLength="10">
+						<layoutData>
+							<l:GridData span="L2 M2 S4" />
+						</layoutData>
+					</Input>
 
 				</f:content>
 			</f:SimpleForm>

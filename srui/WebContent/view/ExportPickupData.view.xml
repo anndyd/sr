@@ -26,6 +26,14 @@
 						</layoutData>
 					</Input>
 
+					<Label text="{i18n>costCenter}" />
+					<Input value="{input>costCenter}" type="Text"
+						enabled="true" editable="true" submit="handleRefresh">
+						<layoutData>
+							<l:GridData span="L2 M3 S4" />
+						</layoutData>
+					</Input>
+
 					<Label text="{i18n>poNumber}" />
 					<Input value="{input>poNumber}" type="Text"
 						enabled="true" editable="true" submit="handleRefresh">
@@ -131,6 +139,9 @@
 				<Column minScreenWidth="Tablet">
 					<Text text="{i18n>serialNo}" />
 				</Column>
+				<Column width="8em">
+					<Text text="{i18n>costCenter}" />
+				</Column>
 			</columns>
 			<items>
 				<ColumnListItem vAlign="Middle" type="Navigation">
@@ -148,6 +159,7 @@
 						<ObjectNumber number="{quantity}"/>
 						<Text text="{equipNo}"/> 
 						<Text text="{serialNo}"/>
+						<Text text="{costCenter}"/>
 					</cells>
 				</ColumnListItem>
 			</items>

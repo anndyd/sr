@@ -28,6 +28,7 @@ public class PickupDataInfo implements Serializable {
     private int quantity;
     private String serailNo;
 	private String equipNo;
+	private String costCenter;
 	
 	public Long getId() {
 		return id;
@@ -100,5 +101,11 @@ public class PickupDataInfo implements Serializable {
 	}
 	public void setEquipNo(String equipNo) {
 		this.equipNo = equipNo;
+	}
+	public String getCostCenter() {
+		return costCenter;
+	}
+	public void setCostCenter(String costCenter) {
+		this.costCenter = costCenter;
 	}
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.sap.it.sr.entity.Employee;
 import com.sap.it.sr.entity.User;
+import com.sap.it.sr.util.EmpInfo;
 import com.sap.it.sr.util.EncryptHelper;
 import com.sap.it.sr.util.LdapHelper;
 
@@ -26,21 +27,23 @@ public class EmployeeDao extends BaseDao<Employee> {
         List<Employee> list = em.createQuery("select t from Employee t where t.empId=?1", Employee.class)
                 .setParameter(1, empId).setMaxResults(1).getResultList();
         emp = list.isEmpty() ? emp : list.get(0);
-        if (null == emp.getEmpName()) {
-        	emp.setEmpName(getEmpFullname(empId));
+        if (!list.isEmpty() && (null == emp.getEmpName() || null == emp.getCostCenter())) {
+        	EmpInfo ei = getEmpInfo(empId);
+        	emp.setEmpName(ei.getName());
+        	emp.setCostCenter(ei.getCostCenter());
         }
         
         return emp;
     }
     
-    private String getEmpFullname(String id) {
-    	String rlt = "";
+    private EmpInfo getEmpInfo(String id) {
+    	EmpInfo rlt = new EmpInfo();
         List<User> userList = em.createQuery("select t from User t where t.role=?1", User.class)
                 .setParameter(1, "1").setMaxResults(1).getResultList();
         if (userList.size() > 0){
         	String pwd = userList.get(0).getPassword();
         	pwd = EncryptHelper.decrypt(pwd);
-        	rlt = LdapHelper.getEmployeeFullname(id, userList.get(0).getUserName(), pwd);
+        	rlt = LdapHelper.getEmployee(id, userList.get(0).getUserName(), pwd);
         }
         
     	return rlt;

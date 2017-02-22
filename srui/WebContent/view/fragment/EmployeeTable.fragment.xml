@@ -19,6 +19,9 @@
 				<Column>
 					<Text text="{i18n>empName}" />
 				</Column>
+				<Column>
+					<Text text="{i18n>costCenter}" />
+				</Column>
 			</columns>
 			<items>
 				<ColumnListItem vAlign="Middle" type="Navigation">
@@ -26,6 +29,7 @@
 						<ObjectIdentifier text="{empId}" />
 						<Text text="{badgeId}" />
 						<Text text="{empName}" />
+						<Text text="{costCenter}" />
 					</cells>
 				</ColumnListItem>
 			</items>

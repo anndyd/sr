@@ -18,6 +18,7 @@ public class Employee implements Serializable {
 	private String badgeId;
     private String empId;
     private String empName;
+    private String costCenter;
     
     private String remark;
 
@@ -51,6 +52,14 @@ public class Employee implements Serializable {
 
 	public void setEmpName(String empName) {
 		this.empName = empName;
+	}
+
+	public String getCostCenter() {
+		return costCenter;
+	}
+
+	public void setCostCenter(String costCenter) {
+		this.costCenter = costCenter;
 	}
 
 	public String getRemark() {

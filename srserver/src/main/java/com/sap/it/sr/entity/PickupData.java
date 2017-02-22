@@ -38,6 +38,7 @@ public class PickupData implements Serializable {
     private List<ItemInfo> items = new ArrayList<ItemInfo>();
     
     private Timestamp pickupTime;
+    private String costCenter;
     
     private String remark;
 
@@ -103,6 +104,14 @@ public class PickupData implements Serializable {
 
 	public void setPickupTime(Timestamp pickupDate) {
 		this.pickupTime = pickupDate;
+	}
+
+	public String getCostCenter() {
+		return costCenter;
+	}
+
+	public void setCostCenter(String costCenter) {
+		this.costCenter = costCenter;
 	}
 
 	public String getRemark() {

@@ -73,6 +73,11 @@ sap.ui.define([
 					template : {
 						content : "{empName}"
 					}
+				}, {
+					name : i18n.getText("costCenter"),
+					template : {
+						content : "{costCenter}"
+					}
 				}]
 			});
 

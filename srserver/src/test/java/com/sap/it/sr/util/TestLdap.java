@@ -6,6 +6,6 @@ public class TestLdap {
 	@Test
 	public void printInfo() {
 		System.out.println(
-		LdapHelper.getEmployeeFullname("I062672", "I063098", ""));
+		LdapHelper.getEmployee("I063098", "I063098", "asdfJkl1"));
 	}
 }

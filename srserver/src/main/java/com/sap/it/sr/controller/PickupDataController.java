@@ -56,9 +56,10 @@ public class PickupDataController {
 			@RequestParam(required = true) String dateTo,
 			@RequestParam String poNumber,
 			@RequestParam String location,
-			@RequestParam String equipNo
+			@RequestParam String equipNo,
+			@RequestParam String costCenter
 			){
-		return dao.findAll(empIdFrom, empIdTo, dateFrom, dateTo, poNumber, location, equipNo);
+		return dao.findAll(empIdFrom, empIdTo, costCenter, dateFrom, dateTo, poNumber, location, equipNo);
 	}
 
 	@RequestMapping(value="/all", method = RequestMethod.GET)
@@ -112,6 +113,7 @@ public class PickupDataController {
 		    	// do nothing
 		    } else {
 		        pd.setEmpId(pd.getEmpId().toUpperCase());
+		        pd.setCostCenter(empDao.findByEmpId(pd.getEmpId()).getCostCenter());
 		        PickupData opd = dao.findByEmpIdItemInfo(pd.getEmpId(), pd.getItems().get(0).getPoNumber());
 		        if (opd.getId() != null) {
 		        	// for avoiding idempotent problem

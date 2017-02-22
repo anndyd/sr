@@ -19,6 +19,7 @@ sap.ui.define([
 			pModel.setData({
 				empIdFrom : "",
 				empIdTo : "",
+				costCenter : "",
 				dateFrom : "",
 				dateTo : "",
 				poNumber : "",
@@ -130,7 +131,7 @@ sap.ui.define([
 							content : "{pickupTime}"
 						}
 					}, {
-						name : i18n.getText("{usedTime}"),
+						name : i18n.getText("usedTime"),
 						template : {
 							content : "{usedTime}"
 						}
@@ -168,6 +169,11 @@ sap.ui.define([
 						name : i18n.getText("serialNo"),
 						template : {
 							content : "{serialNo}"
+						}
+					}, {
+						name : i18n.getText("costCenter"),
+						template : {
+							content : "{costCenter}"
 						}
 					}
 				]

@@ -118,11 +118,11 @@ public class PickupDataDao extends BaseDao<PickupData> {
         return list;
     }
     @SuppressWarnings("unchecked")
-    public List<PickupDataInfo> findAll(String empIdFrom, String empIdTo, String dateFrom, String dateTo, 
+    public List<PickupDataInfo> findAll(String empIdFrom, String empIdTo, String costCenter, String dateFrom, String dateTo, 
     		String poNumber, String location, String equipNo) {
 		String sql = "select p.ID + i.ID + IFNULL(d.ID,0) id, p.EMPID, i.GRTIME, p.PICKUPTIME, TIMESTAMPDIFF(HOUR,i.GRTIME,p.PICKUPTIME) usedTime, " +
 					 "i.PONUMBER, i.POITEM, i.ITEMDESC, i.LOCATION, i.QUANTITY, " +
-					 "d.EQUIPNO, d.SERAILNO " +
+					 "d.EQUIPNO, d.SERAILNO, p.COSTCENTER " +
 					 "from pickupdata p " +
 					 "join iteminfo i on p.ID = i.PICKUP_DATA_ID " +
 					 "left join  " +
@@ -146,6 +146,15 @@ public class PickupDataDao extends BaseDao<PickupData> {
         		w = w + " empId<=?" + i;
         	}
         	p.add(empIdTo.toUpperCase());
+        }
+        if (costCenter != null && !costCenter.equals("")) {
+        	i++;
+        	if (i>1) {
+        		w = w + " and costCenter=?" + i;
+        	} else {
+        		w = w + " costCenter=?" + i;
+        	}
+        	p.add(costCenter);
         }
         if (dateFrom != null && !dateFrom.equals("")) {
         	i++;

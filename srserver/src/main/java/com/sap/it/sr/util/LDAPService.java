@@ -105,6 +105,9 @@ public class LDAPService {
 					}
 				}
 			}
+			if (attributes.get("extensionattribute2") != null) {
+				employee.setCostCenter(attributes.get("extensionattribute2").get().toString());
+			}
 			return employee;
 		}
 
