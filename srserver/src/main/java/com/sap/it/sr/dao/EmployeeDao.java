@@ -29,8 +29,10 @@ public class EmployeeDao extends BaseDao<Employee> {
         emp = list.isEmpty() ? emp : list.get(0);
         if (list.isEmpty() || (!list.isEmpty() && (null == emp.getEmpName() || null == emp.getCostCenter()))) {
         	EmpInfo ei = getEmpInfo(empId);
-        	emp.setEmpName(ei.getName());
-        	emp.setCostCenter(ei.getCostCenter());
+        	if (null != ei) {
+	        	emp.setEmpName(ei.getName());
+	        	emp.setCostCenter(ei.getCostCenter());
+        	}
         }
         
         return emp;

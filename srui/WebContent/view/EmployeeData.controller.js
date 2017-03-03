@@ -110,6 +110,14 @@ sap.ui.define([
 			subwin.close();
 		},
 	
+		handleResetPress : function() {
+			var that = this;
+			var oModel = new JSONModel();
+			var tModel = new JSONModel();
+			that.getView().setModel(tModel);
+			that.getView().setModel(oModel, "input");
+		},
+	
 		handleSavePress : function() {
 			var that = this;
 		    sap.ui.core.BusyIndicator.show();

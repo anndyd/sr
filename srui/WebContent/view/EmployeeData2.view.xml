@@ -8,6 +8,8 @@
 		<footer>
 			<Bar>
 				<contentRight>
+					<Button class="sapUiSmallMarginEnd" id="reset" text="{i18n>reset}"
+						type="Reject" visible="true" press="handleResetPress" />
 					<Button class="sapUiSmallMarginEnd" id="save" text="{i18n>save}"
 						type="Emphasized" visible="true" press="handleSavePress" />
 				</contentRight>

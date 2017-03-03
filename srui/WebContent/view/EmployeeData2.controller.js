@@ -109,6 +109,14 @@ sap.ui.define([
 			window.removeEventListener("message", onMessage.bind(this));
 			subwin.close();
 		},
+		
+		handleResetPress : function() {
+			var that = this;
+			var oModel = new JSONModel();
+			var tModel = new JSONModel();
+			that.getView().setModel(tModel);
+			that.getView().setModel(oModel, "input");
+		},
 	
 		handleSavePress : function() {
 			var that = this;
