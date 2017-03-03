@@ -5,7 +5,7 @@ import org.junit.Test;
 public class TestLdap {
 	@Test
 	public void printInfo() {
-		System.out.println(
-		LdapHelper.getEmployee("I063098", "I063098", "asdfJkl1"));
+	    EmpInfo ei = LdapHelper.getEmployee("I012193", "I063098", "asdfJkl1");
+	    ei.printInfo();
 	}
 }

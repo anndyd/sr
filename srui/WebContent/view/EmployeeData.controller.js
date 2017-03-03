@@ -126,15 +126,19 @@ sap.ui.define([
 		_getEmpData: function(param) {
 			var that = this;
 			es.getEmployee(param).done(function(data) {
-				if (null === data.badgeId) {
-					data.badgeId = param.badgeId;
-				}
-				if (null === data.empId) {
-					data.empId = param.empId;
-				}
+        if (null === data.badgeId && null === data.empId && 
+            null === data.costCenter && null === data.empName) {
+        } else {
+  				if (null === data.badgeId) {
+  					data.badgeId = param.badgeId;
+  				}
+  				if (null === data.empId) {
+  					data.empId = param.empId;
+  				}
 			    var tdata = [data];
 		    	that.getView().getModel("input").setData(data);
 			    that.getView().getModel().setData(tdata);
+			  }
 			});
 		},
 

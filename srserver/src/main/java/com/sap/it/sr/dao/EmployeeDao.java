@@ -27,7 +27,7 @@ public class EmployeeDao extends BaseDao<Employee> {
         List<Employee> list = em.createQuery("select t from Employee t where t.empId=?1", Employee.class)
                 .setParameter(1, empId).setMaxResults(1).getResultList();
         emp = list.isEmpty() ? emp : list.get(0);
-        if (!list.isEmpty() && (null == emp.getEmpName() || null == emp.getCostCenter())) {
+        if (list.isEmpty() || (!list.isEmpty() && (null == emp.getEmpName() || null == emp.getCostCenter()))) {
         	EmpInfo ei = getEmpInfo(empId);
         	emp.setEmpName(ei.getName());
         	emp.setCostCenter(ei.getCostCenter());
