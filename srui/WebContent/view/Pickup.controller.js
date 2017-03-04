@@ -48,7 +48,7 @@ sap.ui.define([
 			if (__empId !== param.empId) {
 				__empId = param.empId;
 				// only enable on primary screen
-				subwin.postMessage(param, "*");
+				subwin.postMessage({id: "pick", data: param}, "*");
 				// only enable on secondary screen
 				//window.opener.postMessage(param, "*");
 			}
@@ -56,13 +56,16 @@ sap.ui.define([
 
 	    onMessage : function (evt) {
 	    	var that = this;
-	    	__empId = evt.data.empId;
-	    	// refresh page input value
-			that.getView().getModel("input").setData(evt.data);
-			that.getView().getModel("input").refresh();
-	    	// find pickup data
-			var param = {badgeId: "", empId: __empId};
-			that._getEmployeeAndPickupData(param);
+	    	if (evt.data && evt.data.id === "pick2") {
+	    		var data = evt.data.data;
+		    	__empId = data.empId;
+		    	// refresh page input value
+				that.getView().getModel("input").setData(data);
+				that.getView().getModel("input").refresh();
+		    	// find pickup data
+				var param = {badgeId: "", empId: __empId};
+				that._getEmployeeAndPickupData(param);
+	    	}
 	    },
 		
 		onBadgeChange: function (evt) {
@@ -162,43 +165,43 @@ sap.ui.define([
 
 		_getEmployeeAndPickupData : function (param) {
  			var that = this;
-      // get employee data
-      var pModel = that.getView().getModel("input");
-      es.getEmployee(param).done(function(empData) {
-        pModel.getData().badgeId = param.badgeId.length > 0 ? param.badgeId : empData.badgeId;
-        pModel.getData().empName = empData.empName;
-        pModel.getData().empId = param.empId.length > 0 ? param.empId : empData.empId;
-        pModel.refresh();
-        // post message to another window
-        that.postMsg(pModel.getData());
-        if (empData && empData.empId !== null) {
-          clearTimeout(noempTimeout);
-          noempTimeout = null;
-          var paramP = {
-            empId : empData.empId
-          };
-          ps.findPickupData(paramP).done(function(pickData) {
-            that.getView().getModel().setData(pickData);
-            // for cpart pickup, not use now
-            // that.getView().byId("chkCpart").setVisible(pickData.items.length === 0);
-            if (!pickData || pickData.items.length === 0) {
-              MessageToast.show(that.getResourceBundle().getText("pickupDataNotFound"));
-              setTimeout(function() {
-                that.getView().getModel("input").setData({});
-                that.getView().getModel().setData({});
-              }, util.nodataTimeout);
-            }
-          });
-        } else {
-          that.getView().getModel().setData({});
-          MessageToast.show(that.getResourceBundle().getText("employeeNotFound"));
-          noempTimeout = setTimeout(function() {
-            that.getView().getModel("input").setData({});
-            that.getView().getModel().setData({});
-          }, util.nodataTimeout);
-        }
-      });
-    },
+	      // get employee data
+	      var pModel = that.getView().getModel("input");
+	      es.getEmployee(param).done(function(empData) {
+	        pModel.getData().badgeId = param.badgeId && param.badgeId.length > 0 ? param.badgeId : empData.badgeId;
+	        pModel.getData().empName = empData.empName;
+	        pModel.getData().empId = param.empId && param.empId.length > 0 ? param.empId : empData.empId;
+	        pModel.refresh();
+	        // post message to another window
+	        that.postMsg(pModel.getData());
+	        if (empData && empData.empId !== null) {
+	          clearTimeout(noempTimeout);
+	          noempTimeout = null;
+	          var paramP = {
+	            empId : empData.empId
+	          };
+	          ps.findPickupData(paramP).done(function(pickData) {
+	            that.getView().getModel().setData(pickData);
+	            // for cpart pickup, not use now
+	            // that.getView().byId("chkCpart").setVisible(pickData.items.length === 0);
+	            if (!pickData || pickData.items.length === 0) {
+	              MessageToast.show(that.getResourceBundle().getText("pickupDataNotFound"));
+	              setTimeout(function() {
+	                that.getView().getModel("input").setData({});
+	                that.getView().getModel().setData({});
+	              }, util.nodataTimeout);
+	            }
+	          });
+	        } else {
+	          that.getView().getModel().setData({});
+	          MessageToast.show(that.getResourceBundle().getText("employeeNotFound"));
+	          noempTimeout = setTimeout(function() {
+	            that.getView().getModel("input").setData({});
+	            that.getView().getModel().setData({});
+	          }, util.nodataTimeout);
+	        }
+	      });
+	    },
 		
 		_showFormFragment : function () {
 			var oPage = this.getView().byId("pickupPage");

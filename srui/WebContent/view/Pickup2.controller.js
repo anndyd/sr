@@ -43,19 +43,22 @@ sap.ui.define([
 				// only enable on primary screen
 				//subwin.postMessage(param, "*");
 				// only enable on secondary screen
-				window.opener.postMessage(param, "*");
+				window.opener.postMessage({id: "pick2", data: param}, "*");
 			}
 		},
 
 	    onMessage : function (evt) {
 	    	var that = this;
-	    	__empId = evt.data.empId;
-	    	// refresh page input value
-			that.getView().getModel("input").setData(evt.data);
-			that.getView().getModel("input").refresh();
-	    	// find pickup data
-			var param = {badgeId: "", empId: __empId};
-			that._getEmployeeAndPickupData(param);
+	    	if (evt.data && evt.data.id === "pick") {
+	    		var data = evt.data.data;
+		    	__empId = data.empId;
+		    	// refresh page input value
+				that.getView().getModel("input").setData(data);
+				that.getView().getModel("input").refresh();
+		    	// find pickup data
+				var param = {badgeId: "", empId: __empId};
+				that._getEmployeeAndPickupData(param);
+	    	}
 	    },
 		
 		onBadgeChange: function (evt) {
@@ -158,9 +161,9 @@ sap.ui.define([
       // get employee data
       var pModel = that.getView().getModel("input");
       es.getEmployee(param).done(function(empData) {
-        pModel.getData().badgeId = param.badgeId.length > 0 ? param.badgeId : empData.badgeId;
+        pModel.getData().badgeId = param.badgeId && param.badgeId.length > 0 ? param.badgeId : empData.badgeId;
         pModel.getData().empName = empData.empName;
-        pModel.getData().empId = param.empId.length > 0 ? param.empId : empData.empId;
+        pModel.getData().empId = param.empId && param.empId.length > 0 ? param.empId : empData.empId;
         pModel.refresh();
         // post message to another window
         that.postMsg(pModel.getData());

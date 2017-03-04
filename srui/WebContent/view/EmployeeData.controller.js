@@ -36,20 +36,23 @@ sap.ui.define([
 		postMsg : function (param) {
 			__badgeId = param.badgeId;
 			// only enable on primary screen
-			subwin.postMessage(param, "*");
+			subwin.postMessage({id: "empData", data: param}, "*");
 			// only enable on secondary screen
 			//window.opener.postMessage(param, "*");
 		},
 	
 	    onMessage : function (evt) {
 	    	var that = this;
-	    	__badgeId = evt.data.badgeId;
-	    	that.getView().getModel("input").setData(evt.data);
-	    	that.getView().getModel("input").refresh();
-	    	
-	    	if (evt.data.save && evt.data.save === "save") {
-				var param = {badgeId: "", empId: evt.data.empId};
-				that._getEmpData(param);
+	    	if (evt.data && evt.data.id === "empData2") {
+	    		var data = evt.data.data;
+		    	__badgeId = data.badgeId;
+		    	that.getView().getModel("input").setData(data);
+		    	that.getView().getModel("input").refresh();
+		    	
+		    	if (data.save && data.save === "save") {
+					var param = {badgeId: "", empId: data.empId};
+					that._getEmpData(param);
+		    	}
 	    	}
 		},
 	
@@ -83,7 +86,7 @@ sap.ui.define([
 		onBadgeChange: function (evt) {
 			var that = this;
 			var v = evt.getParameters().value;
-			if (v && v.length === util.badgeIdLength) {
+			if (v && v.length >= util.badgeIdLength-1) {
 			    // post message to another window
 		    	var data = that.getView().getModel("input").getData();
 		    	data.save = "";
