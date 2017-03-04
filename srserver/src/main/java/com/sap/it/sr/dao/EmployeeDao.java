@@ -38,14 +38,13 @@ public class EmployeeDao extends BaseDao<Employee> {
         return emp;
     }
     
-    private EmpInfo getEmpInfo(String id) {
+    public EmpInfo getEmpInfo(String id) {
     	EmpInfo rlt = new EmpInfo();
-        List<User> userList = em.createQuery("select t from User t where t.role=?1", User.class)
+        List<User> userList = em.createQuery("select t from User t where length(t.password)>0 and t.role=?1", User.class)
                 .setParameter(1, "1").setMaxResults(1).getResultList();
         if (userList.size() > 0){
         	String pwd = userList.get(0).getPassword();
-        	pwd = EncryptHelper.decrypt(pwd);
-        	rlt = LdapHelper.getEmployee(id, userList.get(0).getUserName(), pwd);
+        	rlt = LdapHelper.getEmployee(id, userList.get(0).getUserName(), EncryptHelper.decrypt(pwd));
         }
         
     	return rlt;

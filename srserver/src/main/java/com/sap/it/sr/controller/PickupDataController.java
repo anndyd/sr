@@ -17,6 +17,7 @@ import com.sap.it.sr.dao.PickupDataDao;
 import com.sap.it.sr.dao.SyncItemDetailDao;
 import com.sap.it.sr.dao.SyncItemInfoDao;
 import com.sap.it.sr.dto.PickupDataInfo;
+import com.sap.it.sr.entity.Employee;
 import com.sap.it.sr.entity.ItemDetail;
 import com.sap.it.sr.entity.ItemInfo;
 import com.sap.it.sr.entity.PickupData;
@@ -113,7 +114,7 @@ public class PickupDataController {
 		    	// do nothing
 		    } else {
 		        pd.setEmpId(pd.getEmpId().toUpperCase());
-		        pd.setCostCenter(empDao.findByEmpId(pd.getEmpId()).getCostCenter());
+		        pd.setCostCenter(empDao.getEmpInfo(pd.getEmpId()).getCostCenter());
 		        PickupData opd = dao.findByEmpIdItemInfo(pd.getEmpId(), pd.getItems().get(0).getPoNumber());
 		        if (opd.getId() != null) {
 		        	// for avoiding idempotent problem
@@ -137,10 +138,16 @@ public class PickupDataController {
 	    	        }
 	    	    });
 		    }
+		    Employee emp = empDao.findByEmpId(pd.getEmpId());
 		    // send mail
 		    SendMail sm = new SendMail();
-		    pd.setEmpName(empDao.findByEmpId(pd.getEmpId()).getEmpName());
+		    pd.setEmpName(emp.getEmpName());
 		    sm.sendPickedEmail(pd, null, null);
+		    // check employee's cost center and update it
+		    if (pd.getCostCenter() != emp.getCostCenter()) {
+		    	emp.setCostCenter(pd.getCostCenter());
+		    	empDao.merge(emp);
+		    }
 		}
 	}
 	
