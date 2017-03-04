@@ -8,7 +8,7 @@ sap.ui.define([
       switch (err.status) {
         case 400:
         case 500:
-        	var resTxt = err.responseText;
+        	var resTxt = err.responseText.replace(/(<([^>]+)>)/g, "");
         	MessageBox.alert(resTxt, {styleClass: "srMessageBoxStyle srMessageBoxError"});
           break;
         case 401:
