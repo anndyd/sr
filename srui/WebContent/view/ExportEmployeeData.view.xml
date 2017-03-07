@@ -7,6 +7,7 @@
 	
 		<Table id="idEmployeeDataTable"
 			backgroundDesign="Solid"
+			growing="true" growingScrollToLoad="true"
 			mode="MultiSelect"
 			inset="false"
 			items="{

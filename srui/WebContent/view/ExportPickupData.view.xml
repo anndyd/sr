@@ -98,6 +98,7 @@
 		<Table id="pkTable"
 			backgroundDesign="Solid"
 			mode="MultiSelect"
+			growing="true" growingScrollToLoad="true"
 			inset="false"
 			items="{
 				path: '/',
