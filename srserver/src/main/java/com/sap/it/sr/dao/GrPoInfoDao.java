@@ -38,9 +38,11 @@ public class GrPoInfoDao extends BaseDao<SyncItemInfo> {
     	String sql = "select CONVERT(BIGINT,i.PO_NUMBER) + i.PO_ITEM as id, p.PO_NUMBER as poNumber, i.PO_ITEM as poItem, " + 
     				 "i.DESCRIPTION as itemDesc, i.LOCATION as location, " +
     			     "i.USERID as userId, i.STATUS as status, " +
-    			     "i.QUANTITY as quantity, i.PLANT as plant, p.CREATE_TIME as createDate " +
+    			     "i.QUANTITY as quantity, i.PLANT as plant, l.CREATE_TIME as createDate " +
     			     "from DBA.PO_INFO p left join DBA.ITEM_INFO i on p.PO_NUMBER = i.PO_NUMBER " +
-    			     "where i.STATUS = 2 and p.CREATE_TIME > ?1";
+    			     "LEFT JOIN DBA.PO_ITEM_LOG l on p.PO_NUMBER = l.PO_NUMBER and i.PO_ITEM = l.PO_ITEM " +
+			         "where i.STATUS = 2 and l.STEP=2 and l.STATUS=0 and  " +
+			         "l.CREATE_TIME > ?1";
     	
         List<SyncItemInfo> list = grem.createNativeQuery(sql, SyncItemInfo.class)
                 .setParameter(1, startTime, TemporalType.TIMESTAMP).getResultList();
@@ -57,7 +59,7 @@ public class GrPoInfoDao extends BaseDao<SyncItemInfo> {
                 "where string(PO_NUMBER,'-',PO_ITEM) in " +
                 "(select string(PO_NUMBER,'-',PO_ITEM) from DBA.ITEM_INFO  " +
                 "where STATUS = 2 and PO_NUMBER in  " +
-                "(select PO_NUMBER from DBA.PO_INFO where CREATE_TIME > ?1))";
+                "(select PO_NUMBER from DBA.PO_ITEM_LOG where STEP=2 and STATUS=0 and CREATE_TIME > ?1))";
     	
         List<SyncItemDetail> list = grem.createNativeQuery(sql, SyncItemDetail.class)
                 .setParameter(1, startTime, TemporalType.TIMESTAMP).getResultList();
