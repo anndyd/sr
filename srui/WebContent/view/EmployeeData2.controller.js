@@ -115,10 +115,8 @@ sap.ui.define([
 		
 		handleResetPress : function() {
 			var that = this;
-			var oModel = new JSONModel();
-			var tModel = new JSONModel();
-			that.getView().setModel(tModel);
-			that.getView().setModel(oModel, "input");
+            that.getView().getModel("input").setData({});
+            that.getView().getModel().setData({});
 		},
 	
 		handleSavePress : function() {
