@@ -149,7 +149,7 @@ sap.ui.define([
 				that.getView().getModel("input").setData({});
 				that.getView().getModel().setData({});
 				var pm = {
-					empId : ""
+					empId : null
 				}
 				// post message to another window
 		        that.postMsg(pm);
