@@ -7,7 +7,7 @@
 				columnsL="1" columnsM="1" class="editableForm">
 				<f:content>
 					<Label text="{i18n>badgeId}" />
-					<Input value="{input>badgeId}" type="Text" liveChange="onBadgeChange"
+					<Input value="{input>badgeId}" type="Text" submit="onBadgeChange"
 						enabled="true" editable="true" maxLength="10">
 						<layoutData>
 							<l:GridData span="L2 M2 S4" />
