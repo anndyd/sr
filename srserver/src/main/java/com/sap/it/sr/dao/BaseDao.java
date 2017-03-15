@@ -9,12 +9,14 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public abstract class BaseDao<T> {
-
+	private static final Logger LOGGER = Logger.getLogger(BaseDao.class);
+	
     @Autowired
     @PersistenceContext(unitName="srserver")
     protected EntityManager em;
@@ -48,7 +50,13 @@ public abstract class BaseDao<T> {
     }
 
     public T merge(T t) {
-        return em.merge(t);
+        try {
+			return em.merge(t);
+		} catch (Exception e) {
+			LOGGER.warn("Merge data failed.");
+			e.printStackTrace();
+			return null;
+		}
     }
 
     /**
