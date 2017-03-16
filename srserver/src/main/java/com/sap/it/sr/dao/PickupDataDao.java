@@ -120,10 +120,11 @@ public class PickupDataDao extends BaseDao<PickupData> {
     @SuppressWarnings("unchecked")
     public List<PickupDataInfo> findAll(String empIdFrom, String empIdTo, String costCenter, String dateFrom, String dateTo, 
     		String poNumber, String location, String equipNo) {
-		String sql = "select p.ID + i.ID + IFNULL(d.ID,0) id, p.EMPID, i.GRTIME, p.PICKUPTIME, TIMESTAMPDIFF(HOUR,i.GRTIME,p.PICKUPTIME) usedTime, " +
+		String sql = "select (@i:=@i+1) id, p.EMPID, i.GRTIME, p.PICKUPTIME, TIMESTAMPDIFF(HOUR,i.GRTIME,p.PICKUPTIME) usedTime, " +
 					 "i.PONUMBER, i.POITEM, i.ITEMDESC, i.LOCATION, i.QUANTITY, " +
 					 "d.EQUIPNO, d.SERAILNO, p.COSTCENTER " +
 					 "from pickupdata p " +
+					 "CROSS JOIN (SELECT @i := 0) AS dummy " +
 					 "join iteminfo i on p.ID = i.PICKUP_DATA_ID " +
 					 "left join  " +
 					 "(select * from itemdetail si where LENGTH(si.EQUIPNO)>0 or LENGTH(si.SERAILNO)>0) d  " +
