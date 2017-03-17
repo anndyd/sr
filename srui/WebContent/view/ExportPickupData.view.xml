@@ -103,7 +103,7 @@
 			items="{
 				path: '/',
 				sorter: {
-					path: 'empId'
+					path: 'pickupTime'
 				}
 			}">
 			<columns>
