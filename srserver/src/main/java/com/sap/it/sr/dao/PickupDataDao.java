@@ -136,69 +136,69 @@ public class PickupDataDao extends BaseDao<PickupData> {
         
         if (empIdFrom != null && !empIdFrom.equals("")) {
         	i++;
-        	w = w + " empId=?" + i;
+        	w = w + " p.EMPID=?" + i;
         	p.add(empIdFrom.toUpperCase());
         }
         if (empIdTo != null && !empIdTo.equals("")) {
         	i++;
         	if (i>1) {
-        		w = w + " and empId<=?" + i;
+        		w = w + " and p.EMPID<=?" + i;
         	} else {
-        		w = w + " empId<=?" + i;
+        		w = w + " p.EMPID<=?" + i;
         	}
         	p.add(empIdTo.toUpperCase());
         }
         if (costCenter != null && !costCenter.equals("")) {
         	i++;
         	if (i>1) {
-        		w = w + " and costCenter=?" + i;
+        		w = w + " and p.costCenter=?" + i;
         	} else {
-        		w = w + " costCenter=?" + i;
+        		w = w + " p.costCenter=?" + i;
         	}
         	p.add(costCenter);
         }
         if (dateFrom != null && !dateFrom.equals("")) {
         	i++;
         	if (i>1) {
-        		w = w + " and pickupTime>=?" + i;
+        		w = w + " and p.pickupTime>=?" + i;
         	} else {
-        		w = w + " pickupTime>=?" + i;
+        		w = w + " p.pickupTime>=?" + i;
         	}
         	p.add(dateFrom);
         }
         if (dateTo != null && !dateTo.equals("")) {
         	i++;
         	if (i>1) {
-        		w = w + " and pickupTime<=?" + i;
+        		w = w + " and p.pickupTime<=?" + i;
         	} else {
-        	   	w = w + " pickupTime<=?" + i;
+        	   	w = w + " p.pickupTime<=?" + i;
         	}
         	p.add(dateTo);
         }
         if (poNumber != null && !poNumber.equals("")) {
         	i++;
         	if (i>1) {
-        		w = w + " and poNumber=?" + i;
+        		w = w + " and i.poNumber=?" + i;
         	} else {
-        	   	w = w + " poNumber=?" + i;
+        	   	w = w + " i.poNumber=?" + i;
         	}
         	p.add(poNumber);
         }
         if (equipNo != null && !equipNo.equals("")) {
         	i++;
         	if (i>1) {
-        		w = w + " and equipNo=?" + i;
+        		w = w + " and d.equipNo=?" + i;
         	} else {
-        	   	w = w + " equipNo=?" + i;
+        	   	w = w + " d.equipNo=?" + i;
         	}
         	p.add(equipNo);
         }
         if (location != null && !location.equals("")) {
         	i++;
         	if (i>1) {
-        		w = w + " and location IN (" + location + ")";
+        		w = w + " and i.location IN (" + location + ")";
         	} else {
-        	   	w = w + " location IN (" + location + ")";
+        	   	w = w + " i.location IN (" + location + ")";
         	}
         }
        

@@ -3,8 +3,6 @@ package com.sap.it.sr.dao;
 import java.sql.Timestamp;
 import java.util.List;
 
-import javax.persistence.TemporalType;
-
 import org.springframework.stereotype.Repository;
 
 import com.sap.it.sr.entity.SyncItemInfo;
@@ -23,9 +21,11 @@ public class SyncItemInfoDao extends BaseDao<SyncItemInfo> {
 
     @SuppressWarnings("unchecked")
 	public List<Long> findByTime(Timestamp startTime) {
-    	String sql = "select CONVERT(poNumber,unsigned integer) + poItem as idd " + 
-			     "from SyncItemInfo where createDate > ?1";
-    	return em.createNativeQuery(sql).setParameter(1, startTime, TemporalType.TIMESTAMP).getResultList();
+    	String sql = "select CONVERT(CONCAT(poNumber,poitem),unsigned integer) + poItem as idd " + 
+			     "from SyncItemInfo"; // where createDate > ?1";
+    	return em.createNativeQuery(sql)
+    	        //.setParameter(1, startTime, TemporalType.TIMESTAMP)
+    	        .getResultList();
     }
 
     public List<SyncItemInfo> findByEmpId(String empId) {
