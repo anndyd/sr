@@ -144,12 +144,25 @@ sap.ui.define([
 			var that = this;
 			sap.ui.core.BusyIndicator.show();
 			var pData = that.getView().getModel("input").getData();
-			var param = that.getView().getModel().getData();
+			var tdata = that.getView().getModel().getData();
+			// get table selected data
+			var selectedIdx = that.getView().byId("pkTreeTable").getSelectedIndices();
+			if (!selectedIdx || selectedIdx.length === 0) {
+				sap.ui.core.BusyIndicator.hide();
+				MessageToast.show(that.getResourceBundle().getText("noSelection"));
+				return;
+			}
 			// for updating pickup data
-			param.empId = pData.empId;
-			param.badgeId = pData.badgeId;
-			param.agentId = pData.agentId;
-			param.pickupTime = (new Date()).getTime();
+			var param = {
+				empId: pData.empId,                
+				badgeId: pData.badgeId,            
+				agentId: pData.agentId,            
+				pickupTime: (new Date()).getTime(),	
+				items: []
+			};
+			selectedIdx.forEach(function(idx) {
+				param.items.push(tdata.items[idx]);
+			});
 			
 			ps.upsertPickupData(param).done(function(){
 				MessageToast.show(that.getResourceBundle().getText("pickupS"));
@@ -162,7 +175,7 @@ sap.ui.define([
 		        that.postMsg(pm);
 			});
 		},
-
+		
 		_getEmployeeAndPickupData : function (param) {
  			var that = this;
 	      // get employee data
@@ -190,6 +203,11 @@ sap.ui.define([
 	                that.getView().getModel("input").setData({});
 	                that.getView().getModel().setData({});
 	              }, util.nodataTimeout);
+	            } else {
+	            	setTimeout(function() {
+		            	var oTreeTable = that.getView().byId("pkTreeTable");
+		            	oTreeTable.selectAll();
+	            	}, 50);
 	            }
 	          });
 	        } else {

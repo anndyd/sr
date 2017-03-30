@@ -4,14 +4,12 @@
             <t:TreeTable
                     id="pkTreeTable"
                     rows="{path:'/items', parameters: {arrayNames:['itemDetails']}}"
-                    selectionMode="None"
+                    selectionMode="MultiSelect" selectAll="true"
                     enableSelectAll="true"
                     ariaLabelledBy="title">
                 <t:toolbar>
                     <Toolbar design="Auto">
                         <ToolbarSpacer/>
-                        <Button text="{i18n>collapseAll}" press="onCollapseAll"/>
-                        <Button text="{i18n>expandFirstLevel}" press="onExpandFirstLevel"/>
                     </Toolbar>
                 </t:toolbar>
                 <t:columns>
