@@ -10,6 +10,8 @@ import javax.persistence.Query;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.eclipse.persistence.config.HintValues;
+import org.eclipse.persistence.config.QueryHints;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -103,7 +105,8 @@ public abstract class BaseDao<T> {
     }
 
     public List<T> findAll() {
-        return em.createQuery("select t from " + clazz.getSimpleName() + " t", clazz).getResultList();
+        return em.createQuery("select t from " + clazz.getSimpleName() + " t", clazz)
+        		.setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
     }
     
     public Query createQuery(String qlString) {

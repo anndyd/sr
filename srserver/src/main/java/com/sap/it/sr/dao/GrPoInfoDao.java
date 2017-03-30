@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.persistence.TemporalType;
 
+import org.eclipse.persistence.config.HintValues;
+import org.eclipse.persistence.config.QueryHints;
 import org.springframework.stereotype.Repository;
 
 import com.sap.it.sr.entity.SyncItemDetail;
@@ -46,6 +48,7 @@ public class GrPoInfoDao extends BaseDao<SyncItemInfo> {
 			         "l.CREATE_TIME > ?1";
     	
         List<SyncItemInfo> list = grem.createNativeQuery(sql, SyncItemInfo.class)
+        		.setHint(QueryHints.REFRESH, HintValues.TRUE)
                 .setParameter(1, startTime, TemporalType.TIMESTAMP).getResultList();
         return list;
     }
@@ -63,6 +66,7 @@ public class GrPoInfoDao extends BaseDao<SyncItemInfo> {
                 "(select PO_NUMBER from DBA.PO_ITEM_LOG where STEP=2 and STATUS=0 and CREATE_TIME > ?1))";
     	
         List<SyncItemDetail> list = grem.createNativeQuery(sql, SyncItemDetail.class)
+        		.setHint(QueryHints.REFRESH, HintValues.TRUE)
                 .setParameter(1, startTime, TemporalType.TIMESTAMP).getResultList();
         return list;
     }

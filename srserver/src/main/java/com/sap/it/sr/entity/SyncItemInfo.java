@@ -13,7 +13,6 @@ public class SyncItemInfo implements Serializable {
 	private static final long serialVersionUID = -2001687870973611013L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	private String poNumber;

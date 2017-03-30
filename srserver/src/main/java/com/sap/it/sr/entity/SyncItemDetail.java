@@ -12,7 +12,6 @@ public class SyncItemDetail implements Serializable {
 	private static final long serialVersionUID = -3517360767968072506L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	private String poNumber;

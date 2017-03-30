@@ -65,20 +65,20 @@ public class SyncData {
         
         List<SyncItemInfo> itmi = dao.findDoneItem(startTime);
         if (itmi != null && itmi.size() > 0) {
-            List<Long> ovs1 = idao.findByTime(startTime);
+//            List<Long> ovs1 = idao.findByTime(startTime);
             for (SyncItemInfo itm : itmi) {
-                if (!ovs1.contains(itm.getId())) {
+//                if (!ovs1.contains(itm.getId())) {
                     idao.merge(itm);
                     rlt++;
-                }
+//                }
             }
             List<SyncItemDetail> itmd = dao.findDoneItemDetail(startTime);
             if (itmd != null && itmd.size() > 0) {
-                List<Long> ovs2 = ddao.findByTime(startTime);
+//                List<Long> ovs2 = ddao.findByTime(startTime);
                 for (SyncItemDetail itm : itmd) {
-                    if (!ovs2.contains(itm.getId())) {
+//                    if (!ovs2.contains(itm.getId())) {
                         ddao.merge(itm);
-                    }
+//                    }
                 }
             }
         }

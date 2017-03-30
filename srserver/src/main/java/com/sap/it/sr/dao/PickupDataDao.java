@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.persistence.Query;
 
+import org.eclipse.persistence.config.HintValues;
+import org.eclipse.persistence.config.QueryHints;
 import org.springframework.stereotype.Repository;
 
 import com.sap.it.sr.dto.PickupDataInfo;
@@ -206,7 +208,7 @@ public class PickupDataDao extends BaseDao<PickupData> {
         	w = " where " + w;
         }
         
-        Query query = em.createNativeQuery(sql + w, PickupDataInfo.class);
+        Query query = em.createNativeQuery(sql + w, PickupDataInfo.class).setHint(QueryHints.REFRESH, HintValues.TRUE);
         if (p.size() > 0) {
         	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	        for (int j = 0; j < p.size(); j++) {

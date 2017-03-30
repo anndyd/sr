@@ -3,6 +3,8 @@ package com.sap.it.sr.dao;
 import java.sql.Timestamp;
 import java.util.List;
 
+import org.eclipse.persistence.config.HintValues;
+import org.eclipse.persistence.config.QueryHints;
 import org.springframework.stereotype.Repository;
 
 import com.sap.it.sr.entity.SyncItemDetail;
@@ -32,6 +34,7 @@ public class SyncItemDetailDao extends BaseDao<SyncItemDetail> {
 			    //"where i.createDate > ?1";
 	
     	return em.createNativeQuery(sql)
+//    			.setHint(QueryHints.REFRESH, HintValues.TRUE)
     	        //.setParameter(1, startTime, TemporalType.TIMESTAMP)
     	        .getResultList();
     }
