@@ -61,7 +61,11 @@ public class SyncData {
         if (ss != null && ss.size() > 0) {
             cs = ss.get(0);
         }
-        Timestamp startTime = cs.getPoCreateTime();
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(cs.getPoCreateTime().getTime());
+        // back 1 second for corvering millisecond cut error
+        cal.add(Calendar.SECOND, -1);
+        Timestamp startTime = new Timestamp(cal.getTime().getTime());
         
         List<SyncItemInfo> itmi = dao.findDoneItem(startTime);
         if (itmi != null && itmi.size() > 0) {
