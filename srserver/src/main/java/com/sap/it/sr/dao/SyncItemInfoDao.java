@@ -3,8 +3,6 @@ package com.sap.it.sr.dao;
 import java.sql.Timestamp;
 import java.util.List;
 
-import org.eclipse.persistence.config.HintValues;
-import org.eclipse.persistence.config.QueryHints;
 import org.springframework.stereotype.Repository;
 
 import com.sap.it.sr.entity.SyncItemInfo;
@@ -31,11 +29,18 @@ public class SyncItemInfoDao extends BaseDao<SyncItemInfo> {
     	        .getResultList();
     }
 
+    @SuppressWarnings("unchecked")
     public List<SyncItemInfo> findByEmpId(String empId) {
         if (empId != null) {
             empId = empId.toUpperCase();
         }
-        return em.createQuery("select t from SyncItemInfo t where t.status=2 and t.userId=?1", SyncItemInfo.class)
+        String sql = "select * from SyncItemInfo t where t.userId=?1 " +
+                     "and (t.ponumber,t.poitem) not in " +
+                     "(select i.ponumber,i.poitem from iteminfo i " + 
+                     "right join pickupdata p on i.PICKUP_DATA_ID = p.ID " +
+                     "where p.EMPID=?1)";
+//        return em.createQuery("select t from SyncItemInfo t where t.status=2 and t.userId=?1", SyncItemInfo.class)
+        return em.createNativeQuery(sql, SyncItemInfo.class)
                 .setParameter(1, empId).getResultList();
     }
 

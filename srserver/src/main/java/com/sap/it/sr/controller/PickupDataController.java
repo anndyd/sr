@@ -128,15 +128,16 @@ public class PickupDataController {
 			        });
 			    });
 	    	    dao.merge(pd);
-	    	    pd.getItems().forEach(itm->{
-	    	        List<SyncItemInfo> sis = sidao.findByPK(itm.getPoNumber(), itm.getPoItem());
-	    	        if (sis != null) {
-		    	        sis.forEach(si->{
-		    	        	si.setStatus(4); // 4 - picked
-			    	        sidao.merge(si);
-		    	        });
-	    	        }
-	    	    });
+// do not use status flag any more.
+//	    	    pd.getItems().forEach(itm->{
+//	    	        List<SyncItemInfo> sis = sidao.findByPK(itm.getPoNumber(), itm.getPoItem());
+//	    	        if (sis != null) {
+//		    	        sis.forEach(si->{
+//		    	        	si.setStatus(4); // 4 - picked
+//			    	        sidao.merge(si);
+//		    	        });
+//	    	        }
+//	    	    });
 		    }
 		    Employee emp = empDao.findByEmpId(pd.getEmpId());
 		    // send mail
