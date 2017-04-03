@@ -26,9 +26,9 @@ sap.ui.define([
 				location : "",
 				equipNo : ""
 			});
-			aModel.setData({
-				locations : [{"Name": "BJ"}, {"Name": "CTU"}, {"Name": "DL"}, {"Name": "GZ"}, {"Name": "NKG"}, {"Name": "PVG"}, {"Name": "SH"}, {"Name": "SZ"}]
-			});
+//			aModel.setData({
+//				locations : [{"Name": "BJ"}, {"Name": "CTU"}, {"Name": "DL"}, {"Name": "GZ"}, {"Name": "NKG"}, {"Name": "PVG"}, {"Name": "SH"}, {"Name": "SZ"}]
+//			});
 			
 			that.getView().setModel(oModel);
 			that.getView().setModel(pModel, "input");
@@ -41,6 +41,19 @@ sap.ui.define([
 //				return oItem.getText().match(new RegExp(sTerm, "i"));
 //			});
 		},
+
+		onAfterRendering: function (evt) {
+      var that = this;
+      var aModel = that.getView().getModel("assist");
+      $.when(ps.getLocations(), ps.getCostCenters(), ps.getPoNumbers())
+      .done(function (ldata, cdata, pdata) {
+        aModel.setData({
+          locations: ldata,
+          costcenter: cdata,
+          ponumber: pdata
+        })
+      });
+    },
 		
 		handleSelectionFinish: function(oEvent) {
 			var selectedItems = oEvent.getParameter("selectedItems");

@@ -28,7 +28,11 @@
 
 					<Label text="{i18n>costCenter}" />
 					<Input value="{input>costCenter}" type="Text"
+						showSuggestion="true"	suggestionItems="{assist>costcenter}" tooltip="{i18n>suggestionEnabled}"
 						enabled="true" editable="true" submit="handleRefresh">
+						<suggestionItems>
+							<core:Item text="{assist>}" />
+						</suggestionItems>
 						<layoutData>
 							<l:GridData span="L2 M3 S4" />
 						</layoutData>
@@ -36,7 +40,11 @@
 
 					<Label text="{i18n>poNumber}" />
 					<Input value="{input>poNumber}" type="Text"
+						showSuggestion="true"	suggestionItems="{assist>ponumber}" tooltip="{i18n>suggestionEnabled}"
 						enabled="true" editable="true" submit="handleRefresh">
+						<suggestionItems>
+							<core:Item text="{assist>}" />
+						</suggestionItems>
 						<layoutData>
 							<l:GridData span="L2 M3 S4" />
 						</layoutData>
@@ -51,7 +59,7 @@
 					</Input-->
 					<MultiComboBox id="cb01" selectionFinish="handleSelectionFinish"
 						items="{assist>locations}">
-						<core:Item key="{assist>Name}" text="{assist>Name}" />
+						<core:Item key="{assist>}" text="{assist>}" />
 						<layoutData>
 							<l:GridData span="L2 M3 S4" />
 						</layoutData>

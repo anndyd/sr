@@ -261,4 +261,21 @@ public class PickupDataDao extends BaseDao<PickupData> {
         }
     	return pd;
     }
+    
+    // the following functions are for user input suggestion
+    @SuppressWarnings("unchecked")
+    public List<String> getAllLocations() {
+        return em.createNativeQuery("select distinct t.location from ItemInfo t order by location").getResultList();
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<String> getAllPoNumbers() {
+        return em.createNativeQuery("select distinct t.ponumber from ItemInfo t order by ponumber").getResultList();
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<String> getAllCostCenters() {
+        return em.createNativeQuery("select distinct t.costcenter from pickupdata t  order by costcenter").getResultList();
+    }
+     
 }

@@ -61,6 +61,46 @@ sap.ui.define([
       });
       return dtd.promise();
     },
+    getLocations: function() {
+      var dtd = $.Deferred();
+      bs.asyncReq({
+        url: "/srserver/pickup/getLocations",
+        type: "GET",
+        contentType: "application/json"
+      }).done(function(data) {
+        dtd.resolve(data);
+      }).fail(function(err) {
+        dtd.reject(err);
+      });
+      return dtd.promise();
+    },
+    getCostCenters: function() {
+      var dtd = $.Deferred();
+      bs.asyncReq({
+        url: "/srserver/pickup/getCostCenters",
+        type: "GET",
+        contentType: "application/json"
+      }).done(function(data) {
+        dtd.resolve(data);
+      }).fail(function(err) {
+        dtd.reject(err);
+      });
+      return dtd.promise();
+    },
+    getPoNumbers: function() {
+      var dtd = $.Deferred();
+      bs.asyncReq({
+        url: "/srserver/pickup/getPoNumbers",
+        type: "GET",
+        contentType: "application/json"
+      }).done(function(data) {
+        dtd.resolve(data);
+      }).fail(function(err) {
+        dtd.reject(err);
+      });
+      return dtd.promise();
+    },
+
     upsertPickupData: function(oData) {
         var dtd = $.Deferred();
         bs.asyncReq({

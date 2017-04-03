@@ -159,6 +159,24 @@ public class PickupDataController {
 		dao.remove(id);
 	}
 
+    @RequestMapping(value="/getLocations", method = RequestMethod.GET)
+    @ResponseBody
+    public List<String> getLocations(){
+        return dao.getAllLocations();
+    }
+
+    @RequestMapping(value="/getPoNumbers", method = RequestMethod.GET)
+    @ResponseBody
+    public List<String> getPoNumbers(){
+        return dao.getAllPoNumbers();
+    }
+
+    @RequestMapping(value="/getCostCenters", method = RequestMethod.GET)
+    @ResponseBody
+    public List<String> getCostCenters(){
+        return dao.getAllCostCenters();
+    }
+
 	private PickupData findItemByEmpId(String empId) {
 		PickupData pd = new PickupData();
 		List<SyncItemInfo> sis = sidao.findByEmpId(empId);
