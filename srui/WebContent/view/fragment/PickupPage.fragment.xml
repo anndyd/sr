@@ -28,6 +28,7 @@
 						</layoutData>
 					</Input>
 						
+					<!--
 					<Label text="{i18n>agentId}" />
 					<Input value="{input>agentId}" type="Text" submit="onAgentChange"
 						enabled="true" editable="true" maxLength="8">
@@ -41,7 +42,6 @@
 							<l:GridData span="L2 M3 S4" />
 						</layoutData>
 					</Input>
-					<!--
 					<Label text="{i18n>cpart}" />
 					<CheckBox id="chkCpart" selected="{input>cpart}" text="{i18n>yes}" visible="false">
 						<layoutData>
