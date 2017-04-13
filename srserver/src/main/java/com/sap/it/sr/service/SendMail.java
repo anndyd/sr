@@ -1,7 +1,9 @@
 package com.sap.it.sr.service;
 
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.FileReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -22,9 +24,9 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import com.sap.it.sr.entity.ItemInfo;
 import com.sap.it.sr.entity.PickupData;
 import com.sap.it.sr.util.SessionHolder;
 
@@ -84,32 +86,11 @@ public class SendMail {
             DataSource ds = new ByteArrayDataSource(this.getClass().getClassLoader().getResourceAsStream("META-INF/logo.jpg"), "image/jpeg");
             imagePart.setDataHandler(new DataHandler(ds));
             imagePart.setHeader("Content-ID", "<sap-logo>");
-            BufferedReader reader = null;
-            reader = new BufferedReader(new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("META-INF/confirm-template.htm"), "UTF-8"));
-            StringBuilder builder = new StringBuilder();
-            String line = reader.readLine();
-            while (line != null) {
-                builder.append(line);
-                line = reader.readLine();
-            }
-            reader.close();
-            List<String> pos = new ArrayList<>();
-            List<String> desc = new ArrayList<>();
-            info.getItems().forEach(itm->{
-                pos.add(itm.getPoNumber());
-                desc.add(itm.getItemDesc());
-            });
-
-            String content = builder.toString();
+            
+            String content = generateMailContent(info);
             content = content.replace("@logopath", "cid:sap-logo");
             content = content.replaceAll("@empName", info.getEmpName());
-            content = content.replaceAll("@poNumber", StringUtils.join(pos, ", "));
-            content = content.replaceAll("@description", StringUtils.join(desc, ", "));
             content = content.replaceAll("@ITAA", SessionHolder.getUserName());
-//            content = content.replaceAll("@empId", recId).
-//                    replaceAll("@pickupTime", info.getPickupTime().toString()).
-//                    replaceAll("@description", desc.toString());
-//            content = content.replaceAll("@location", info.getItems().get(0).getLocation());
             MimeBodyPart part = new MimeBodyPart();
             part.setText(content, "GBK");
             part.setContent(content, "text/html;charset=GBK");
@@ -120,8 +101,70 @@ public class SendMail {
             Transport.send(message);
             LOGGER.info("----Mail sent.----");
         } catch (Exception e) {
+            LOGGER.error("----Send mail failed.----, message: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    private String generateMailContent(PickupData info) throws Exception {
+        String content = "";
+        BufferedReader reader = null;
+        StringBuilder builder;
+        List<ItemInfo> infoItems = info.getItems();
+        String location = infoItems.get(0).getLocation();
+        location = location == null || location.trim().equals("") ? "" : location;
+        String path = "C:/srmreceive/template/confirm-template-table";
+        String fileName = path + "-" + location + ".htm";
+        if (Files.notExists(Paths.get(fileName))) {
+            fileName = path  + ".htm";
+        }
+        reader = new BufferedReader(new FileReader(fileName));
+        builder = new StringBuilder();
+        StringBuilder header = new StringBuilder();
+        StringBuilder tableLine = null;
+        boolean isLineStart = false;
+        boolean isLine = false;
+        boolean isLineEnd = false;
+        StringBuilder ender = new StringBuilder();
+        String line = reader.readLine();
+        while (line != null) {
+            if (!isLine && line.contains("<tr>")) {
+                tableLine = new StringBuilder();
+                isLineStart = true;
+            } else if (line.contains("@poNumber")) {
+                isLine = true;
+            }
+            if (isLine && !isLineEnd && line.contains("</tr>")) {
+                isLineEnd = true;
+            }
+            if (isLineStart) {
+                tableLine.append(line);
+            }
+            if (isLineEnd && !isLineStart) {
+                ender.append(line);
+            } else {
+                header.append(line);
+            }
+            if (isLineEnd) {
+                isLineStart = false;
+            }
+            line = reader.readLine();
+        }
+        reader.close();
+        String lineContent = header.toString();
+        for (int i=0; i<infoItems.size(); i++) {
+            if (i>0) {
+                lineContent = tableLine.toString();
+            }
+            lineContent = lineContent.replaceAll("@poNumber", infoItems.get(i).getPoNumber());
+            lineContent = lineContent.replaceAll("@description", infoItems.get(i).getItemDesc());
+            lineContent = lineContent.replaceAll("@quantity", String.valueOf(infoItems.get(i).getQuantity()));
+            builder.append(lineContent);
+        }
+        builder.append(ender);
+        content = builder.toString();
+
+        return content;
     }
 
 }
