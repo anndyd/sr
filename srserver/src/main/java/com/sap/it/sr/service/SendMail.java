@@ -81,7 +81,7 @@ public class SendMail {
             if (ccAddr.size() > 0) {
                 message.setRecipients(Message.RecipientType.CC, ccAddr.toArray(new Address[ccAddr.size()]));
             }
-            message.setSubject("Global IT - Equipment Received Notification");
+            message.setSubject("China IT - Equipment Received Notification");
             BodyPart imagePart = new MimeBodyPart();
             DataSource ds = new ByteArrayDataSource(this.getClass().getClassLoader().getResourceAsStream("META-INF/logo.jpg"), "image/jpeg");
             imagePart.setDataHandler(new DataHandler(ds));
