@@ -32,7 +32,7 @@
 	  username="root"
       password="Sybase123" 
 	  driverClassName="org.mariadb.jdbc.Driver"
-      url="jdbc:mysql://pekitwin2008vm.pek.sap.corp:3306/srmreceive" />
+      url="jdbc:mysql://pekitwin2008vm.pek.sap.corp:3306/srmbk" />
 	<Resource 
 	  name="grDataSourceJNDI" 
 	  auth="Container" 
