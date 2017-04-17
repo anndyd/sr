@@ -17,7 +17,7 @@ var util = {
     	    orgwin.close();
     	    return null;
     	  }
-  		},1);
+  		},100);
   		return orgwin;
     }
 };

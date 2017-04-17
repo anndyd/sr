@@ -1,13 +1,17 @@
 package com.sap.it.sr.service;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -32,6 +36,7 @@ import com.sap.it.sr.util.SessionHolder;
 
 public class SendMail {
 	private static final Logger LOGGER = Logger.getLogger(SendMail.class);
+	private static String templatePath = "C:/srmreceive/template/";
 	
     public void sendPickedEmail(PickupData info, List<String> cc, List<String> admins) {
         String sender = "SAP_IT_CHINA_BO@exchange.sap.corp";
@@ -82,21 +87,16 @@ public class SendMail {
                 message.setRecipients(Message.RecipientType.CC, ccAddr.toArray(new Address[ccAddr.size()]));
             }
             message.setSubject("China IT - Equipment Received Notification");
-            BodyPart imagePart = new MimeBodyPart();
-            DataSource ds = new ByteArrayDataSource(this.getClass().getClassLoader().getResourceAsStream("META-INF/logo.jpg"), "image/jpeg");
-            imagePart.setDataHandler(new DataHandler(ds));
-            imagePart.setHeader("Content-ID", "<sap-logo>");
             
             String content = generateMailContent(info);
             content = content.replace("@logopath", "cid:sap-logo");
             content = content.replaceAll("@empName", info.getEmpName());
             content = content.replaceAll("@ITAA", SessionHolder.getUserName());
-            MimeBodyPart part = new MimeBodyPart();
-            part.setText(content, "GBK");
-            part.setContent(content, "text/html;charset=GBK");
+            
             Multipart parts = new MimeMultipart();
-            parts.addBodyPart(imagePart);
-            parts.addBodyPart(part);
+            parts.addBodyPart(createImagePart(this.getClass().getClassLoader().getResourceAsStream("META-INF/logo.jpg"), "<sap-logo>"));
+            handleImage(parts, content);
+            
             message.setContent(parts);
             Transport.send(message);
             LOGGER.info("----Mail sent.----");
@@ -106,6 +106,42 @@ public class SendMail {
         }
     }
 
+    private BodyPart createImagePart(InputStream is, String partName) throws Exception {
+        BodyPart imagePart = new MimeBodyPart();
+        DataSource ds = new ByteArrayDataSource(is, "image/jpeg");
+        imagePart.setDataHandler(new DataHandler(ds));
+        imagePart.setHeader("Content-ID", partName);
+        
+        return imagePart;
+    }
+    
+    private void handleImage(Multipart parts, String content) throws Exception {
+		Pattern pImageFilename = Pattern.compile("image[0-9]*\\.jpg");
+		Pattern pattern = Pattern.compile("(?<=\")[^\"]*image[0-9]*\\.jpg(?=\")");
+		Matcher matcher = pattern.matcher(content);
+		StringBuffer sbr = new StringBuffer();
+		while (matcher.find()) {
+			String m = matcher.group();
+			Matcher mF = pImageFilename.matcher(m);
+			if (mF.find()) {
+				String imageFilename = mF.group();
+				
+				try {
+					parts.addBodyPart(createImagePart(new FileInputStream(templatePath + "/image/" + imageFilename), "<" + imageFilename + ">"));
+				} catch (Exception e) {
+					LOGGER.info("Add image file fail: " + imageFilename);
+				}
+			    matcher.appendReplacement(sbr, "cid:" + imageFilename);
+			}
+		}
+		matcher.appendTail(sbr);
+		content = sbr.toString();
+        MimeBodyPart part = new MimeBodyPart();
+        part.setText(content, "GBK");
+        part.setContent(content, "text/html;charset=GBK");
+        parts.addBodyPart(part);
+    }
+    
     private String generateMailContent(PickupData info) throws Exception {
         String content = "";
         BufferedReader reader = null;
@@ -113,7 +149,7 @@ public class SendMail {
         List<ItemInfo> infoItems = info.getItems();
         String location = infoItems.get(0).getLocation();
         location = location == null || location.trim().equals("") ? "" : location;
-        String path = "C:/srmreceive/template/confirm-template-table";
+        String path = templatePath + "confirm-template-table";
         String fileName = path + "-" + location + ".htm";
         if (Files.notExists(Paths.get(fileName))) {
             fileName = path  + ".htm";
