@@ -1,6 +1,8 @@
 package com.sap.it.sr.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -178,6 +180,51 @@ public class PickupDataController {
     }
 
 	private PickupData findItemByEmpId(String empId) {
+		Map<String, ItemInfo> ifs = new HashMap<>();
+		List<SyncItemDetail> sids = sddao.findByEmpId(empId);
+		if (sids != null) {
+			sids.forEach(sid->{
+				String itmKey = sid.getPoNumber() + sid.getPoItem();
+				ItemInfo itm = ifs.get(itmKey);
+				if (itm == null) {
+					itm = new ItemInfo();
+					itm.setPoNumber(sid.getPoNumber());
+					itm.setPoItem(sid.getPoItem());
+				}
+				ItemDetail itd = new ItemDetail();
+				itd.setPoNumber(sid.getPoNumber());
+				itd.setPoItem(sid.getPoItem());
+				itd.setPoItemDetail(sid.getPoItemDetail());
+				itd.setSerailNo(sid.getSerailNo());
+				itd.setEquipNo(sid.getEquipNo());
+				itm.getItemDetails().add(itd);
+				
+				ifs.put(itmKey, itm);
+			});
+		}
+		
+		PickupData pd = new PickupData();
+		ifs.forEach((k,v)->{
+			List<SyncItemInfo> sis = sidao.findByPK(v.getPoNumber(), v.getPoItem());
+			if (sis != null) {
+				sis.forEach(sitm->{
+					v.setGrTime(sitm.getCreateDate());
+					v.setPoNumber(sitm.getPoNumber());
+					v.setPoItem(sitm.getPoItem());
+					v.setItemDesc(sitm.getItemDesc());
+					v.setLocation(sitm.getLocation());
+					v.setQuantity(sitm.getQuantity());
+					
+					pd.getItems().add(v);
+				});
+			}
+		});
+		
+		return pd;
+	}
+
+    /* deprecated, use find by item detail instead
+	private PickupData findItemByEmpId(String empId) {
 		PickupData pd = new PickupData();
 		List<SyncItemInfo> sis = sidao.findByEmpId(empId);
 		if (sis != null) {
@@ -207,7 +254,7 @@ public class PickupDataController {
 		}
 		
 		return pd;
-	}
+	} */
 
 	private PickupData findItemByPoNumber(String poNum) {
 		PickupData pd = new PickupData();
