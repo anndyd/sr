@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sap.it.sr.dao.EmployeeDao;
 import com.sap.it.sr.entity.Employee;
+import com.sap.it.sr.util.EmpInfo;
 
 @Controller
 @RequestMapping("employee")
@@ -31,12 +32,16 @@ public class EmployeeController {
 
 	@RequestMapping(value="/get", method = RequestMethod.GET)
 	@ResponseBody
+	@Transactional
 	public Employee getEmployee(@RequestParam(required = true) String badgeId, @RequestParam(required = true) String empId){
+		Employee emp;
 		if (!badgeId.equals("")) {
-			return dao.findByBadgeId(badgeId);
+			emp = dao.findByBadgeId(badgeId);
 		} else {
-			return dao.findByEmpId(empId);
+			emp = dao.findByEmpId(empId);
 		}
+		
+		return checkEmpExists(emp);
 	}
 	
 	@RequestMapping(value="/upsert", method = RequestMethod.POST)
@@ -59,5 +64,20 @@ public class EmployeeController {
 	public void deleteEmployee(@RequestBody Long id){
 		dao.remove(id);
 	}
+    
+    private Employee checkEmpExists(Employee emp) {
+    	Employee rlt = new Employee();
+    	if (emp.getEmpId() != null) {
+        	EmpInfo ei = dao.getEmpInfo(emp.getEmpId());
+        	if (null != ei) {
+	        	emp.setEmpName(ei.getName());
+	        	emp.setCostCenter(ei.getCostCenter());
+	        	rlt = emp;
+        	} else {
+        		dao.remove(emp);
+        	}
+     	}
+    	return rlt;
+    }
 
 }
