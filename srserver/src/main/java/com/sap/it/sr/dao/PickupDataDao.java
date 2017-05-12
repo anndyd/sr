@@ -123,7 +123,7 @@ public class PickupDataDao extends BaseDao<PickupData> {
     public List<PickupDataInfo> findAll(String empIdFrom, String empIdTo, String costCenter, String dateFrom, String dateTo, 
     		String poNumber, String location, String equipNo) {
 		String sql = "select (@i:=@i+1) id, p.EMPID, i.GRTIME, p.PICKUPTIME, TIMESTAMPDIFF(HOUR,i.GRTIME,p.PICKUPTIME) usedTime, " +
-					 "i.PONUMBER, i.POITEM, i.ITEMDESC, i.LOCATION, i.QUANTITY, " +
+					 "i.PONUMBER, i.POITEM, i.ITEMDESC, i.LOCATION, i.QUANTITY, i.PRICE, " +
 					 "d.EQUIPNO, d.SERAILNO, p.COSTCENTER " +
 					 "from pickupdata p " +
 					 "CROSS JOIN (SELECT @i := 0) AS dummy " +

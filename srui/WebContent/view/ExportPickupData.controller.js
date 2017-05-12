@@ -174,6 +174,11 @@ sap.ui.define([
 							content : "{quantity}"
 						}
 					}, {
+						name : i18n.getText("price"),
+						template : {
+							content : "{price}"
+						}
+					}, {
 						name : i18n.getText("equipNo"),
 						template : {
 							content : "{equipNo}"

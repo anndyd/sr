@@ -1,11 +1,10 @@
 package com.sap.it.sr.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
@@ -24,6 +23,7 @@ public class SyncItemInfo implements Serializable {
 	private int quantity;
 	private Timestamp createDate;
 	private String plant;
+	private BigDecimal price;
 	
 	private String remark;
 
@@ -99,7 +99,15 @@ public class SyncItemInfo implements Serializable {
 		this.createDate = createDate;
 	}
 
-	public String getPlant() {
+	public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public String getPlant() {
 		return plant;
 	}
 

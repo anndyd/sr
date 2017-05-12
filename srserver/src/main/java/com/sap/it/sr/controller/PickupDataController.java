@@ -214,6 +214,7 @@ public class PickupDataController {
 					v.setItemDesc(sitm.getItemDesc());
 					v.setLocation(sitm.getLocation());
 					v.setQuantity(sitm.getQuantity());
+					v.setPrice(sitm.getPrice());
 					
 					pd.getItems().add(v);
 				});
@@ -268,6 +269,7 @@ public class PickupDataController {
 				itm.setItemDesc(sitm.getItemDesc());
 				itm.setLocation(sitm.getLocation());
 				itm.setQuantity(sitm.getQuantity());
+				itm.setPrice(sitm.getPrice());
 				pd.getItems().add(itm);
 			});
 		}

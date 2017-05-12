@@ -1,6 +1,7 @@
 package com.sap.it.sr.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +43,7 @@ public class ItemInfo implements Serializable {
     private String itemDesc;
     private String location;
     private int quantity;
+    private BigDecimal price;
     
     private String remark;
 
@@ -117,7 +119,21 @@ public class ItemInfo implements Serializable {
 		this.quantity = quantity;
 	}
 
-	public String getRemark() {
+	/**
+     * @return the price
+     */
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    /**
+     * @param price the price to set
+     */
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public String getRemark() {
 		return remark;
 	}
 

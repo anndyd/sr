@@ -142,6 +142,9 @@
 				<Column width="5em">
 					<Text text="{i18n>quantity}" />
 				</Column>
+				<Column width="6em">
+					<Text text="{i18n>price}" />
+				</Column>
 				<Column>
 					<Text text="{i18n>equipNo}" />
 				</Column>
@@ -166,6 +169,7 @@
 						<Text text="{itemDesc}"/>
 						<Text text="{location}"/>
 						<ObjectNumber number="{quantity}"/>
+						<ObjectNumber number="{price}"/>
 						<Text text="{equipNo}"/> 
 						<Text text="{serialNo}"/>
 						<Text text="{costCenter}"/>

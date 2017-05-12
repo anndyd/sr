@@ -1,7 +1,7 @@
 package com.sap.it.sr.dto;
 
 import java.io.Serializable;
-import java.sql.Time;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 import javax.persistence.Entity;
@@ -26,6 +26,7 @@ public class PickupDataInfo implements Serializable {
     private String itemDesc;
     private String location;
     private int quantity;
+    private BigDecimal price;
     private String serailNo;
 	private String equipNo;
 	private String costCenter;
@@ -90,7 +91,13 @@ public class PickupDataInfo implements Serializable {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-	public String getSerailNo() {
+	public BigDecimal getPrice() {
+        return price;
+    }
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+    public String getSerailNo() {
 		return serailNo;
 	}
 	public void setSerailNo(String serailNo) {
