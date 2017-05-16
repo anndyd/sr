@@ -204,22 +204,21 @@ public class PickupDataController {
 		}
 		
 		PickupData pd = new PickupData();
-		ifs.forEach((k,v)->{
-			List<SyncItemInfo> sis = sidao.findByPK(v.getPoNumber(), v.getPoItem());
-			if (sis != null) {
-				sis.forEach(sitm->{
-					v.setGrTime(sitm.getCreateDate());
-					v.setPoNumber(sitm.getPoNumber());
-					v.setPoItem(sitm.getPoItem());
-					v.setItemDesc(sitm.getItemDesc());
-					v.setLocation(sitm.getLocation());
-					v.setQuantity(sitm.getQuantity());
-					v.setPrice(sitm.getPrice());
-					
-					pd.getItems().add(v);
-				});
-			}
-		});
+		List<SyncItemInfo> sis = sidao.findByEmpIdFromDetail(empId);
+		if (sis != null) {
+			sis.forEach(sitm->{
+			    ItemInfo itm = ifs.get(sitm.getPoNumber() + sitm.getPoItem());
+			    itm.setGrTime(sitm.getCreateDate());
+			    itm.setPoNumber(sitm.getPoNumber());
+			    itm.setPoItem(sitm.getPoItem());
+			    itm.setItemDesc(sitm.getItemDesc());
+			    itm.setLocation(sitm.getLocation());
+			    itm.setQuantity(sitm.getQuantity());
+			    itm.setPrice(sitm.getPrice());
+				
+				pd.getItems().add(itm);
+			});
+		}
 		
 		return pd;
 	}

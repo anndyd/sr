@@ -28,6 +28,23 @@ public class SyncItemInfoDao extends BaseDao<SyncItemInfo> {
     	        //.setParameter(1, startTime, TemporalType.TIMESTAMP)
     	        .getResultList();
     }
+    
+    @SuppressWarnings("unchecked")
+    public List<SyncItemInfo> findByEmpIdFromDetail(String empId) {
+        if (empId != null) {
+            empId = empId.toUpperCase();
+        }
+        String sql = "select t.* from SyncItemInfo t where (t.poNumber,t.poItem) in " + 
+                "(select t.ponumber,t.poitem from SyncItemdetail t " +
+                "join synciteminfo s on t.ponumber=s.PONUMBER and t.poitem=s.POITEM " +
+                "where s.userid = ?1 and (t.ponumber,t.poitem,t.poitemdetail) not in " +
+                "(select d.ponumber,d.poitem,d.poitemdetail from itemdetail d " +
+                "join iteminfo i on d.ponumber = i.ponumber and d.poitem = i.poitem " +
+                "join pickupdata p on i.PICKUP_DATA_ID = p.ID " +
+                "where p.EMPID=?1))";
+        return em.createNativeQuery(sql, SyncItemInfo.class)
+                .setParameter(1, empId).getResultList();
+    }
 
     @SuppressWarnings("unchecked")
     public List<SyncItemInfo> findByEmpId(String empId) {
