@@ -12,12 +12,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sap.it.sr.dao.CommonSettingsDao;
+import com.sap.it.sr.dao.EmployeeDao;
 import com.sap.it.sr.dao.GrPoInfoDao;
 import com.sap.it.sr.dao.SyncItemDetailDao;
 import com.sap.it.sr.dao.SyncItemInfoDao;
 import com.sap.it.sr.entity.CommonSettings;
+import com.sap.it.sr.entity.Employee;
 import com.sap.it.sr.entity.SyncItemDetail;
 import com.sap.it.sr.entity.SyncItemInfo;
+import com.sap.it.sr.util.EmpInfo;
 
 @Lazy(false)
 @Component
@@ -36,6 +39,9 @@ public class SyncData {
 
     @Autowired
     private SyncItemDetailDao ddao;
+    
+    @Autowired
+    private EmployeeDao edao;
 	
 	@Scheduled(cron="0 0/5 * * * ?")
     @Transactional
@@ -43,6 +49,14 @@ public class SyncData {
 		LOGGER.info("Start synchronize gr data, ...");
 		syncGrData();
 		LOGGER.info("Synchronize gr data end.");
+	}
+	
+	@Scheduled(cron="0 0 1 * * ?")
+    @Transactional
+	public void autoSyncEmpData() {
+		LOGGER.info("Start synchronize employee data, ...");
+		syncEmployeeDataFromLDAP();
+		LOGGER.info("Synchronize employee data end.");
 	}
 	
     @Transactional
@@ -69,20 +83,14 @@ public class SyncData {
         
         List<SyncItemInfo> itmi = dao.findDoneItem(startTime);
         if (itmi != null && itmi.size() > 0) {
-//            List<Long> ovs1 = idao.findByTime(startTime);
             for (SyncItemInfo itm : itmi) {
-//                if (!ovs1.contains(itm.getId())) {
-                    idao.merge(itm);
-                    rlt++;
-//                }
+                idao.merge(itm);
+                rlt++;
             }
             List<SyncItemDetail> itmd = dao.findDoneItemDetail(startTime);
             if (itmd != null && itmd.size() > 0) {
-//                List<Long> ovs2 = ddao.findByTime(startTime);
                 for (SyncItemDetail itm : itmd) {
-//                    if (!ovs2.contains(itm.getId())) {
-                        ddao.merge(itm);
-//                    }
+                    ddao.merge(itm);
                 }
             }
         }
@@ -90,6 +98,25 @@ public class SyncData {
         sdao.merge(cs);
         
         return rlt;
+    }
+    
+    @Transactional
+    private void syncEmployeeDataFromLDAP() {
+        List<Employee> emps = edao.findAll();
+        for (Employee emp : emps) {
+            EmpInfo ei = edao.getEmpInfo(emp.getEmpId());
+            if (null != ei ) {
+                if (!emp.getEmpName().equals(ei.getName()) || emp.getCostCenter().equals(ei.getCostCenter())) {
+                    emp.setEmpName(ei.getName());
+                    emp.setCostCenter(ei.getCostCenter());
+                    edao.merge(emp);
+                    LOGGER.info("Update employee: " + emp.getEmpId());
+                }
+            } else {
+                edao.remove(emp);
+                LOGGER.info("Remove employee: " + emp.getEmpId());
+            }
+        }
     }
 
 }

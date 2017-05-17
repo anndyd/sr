@@ -134,6 +134,7 @@ sap.ui.define([
 		
 		_getEmpData: function(param) {
 			var that = this;
+			param.needADInfo = true;
 			es.getEmployee(param).done(function(data) {
         if (null === data.badgeId && null === data.empId && 
             null === data.costCenter && null === data.empName) {

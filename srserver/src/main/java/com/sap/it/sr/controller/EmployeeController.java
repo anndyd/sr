@@ -33,15 +33,20 @@ public class EmployeeController {
 	@RequestMapping(value="/get", method = RequestMethod.GET)
 	@ResponseBody
 	@Transactional
-	public Employee getEmployee(@RequestParam(required = true) String badgeId, @RequestParam(required = true) String empId){
+	public Employee getEmployee(@RequestParam(required = true) String badgeId, 
+	        @RequestParam(required = true) String empId, 
+	        @RequestParam(required = false) boolean... needADInfo){
 		Employee emp;
 		if (!badgeId.equals("")) {
 			emp = dao.findByBadgeId(badgeId);
 		} else {
 			emp = dao.findByEmpId(empId);
 		}
-		
-		return checkEmpExists(emp);
+		if (null != needADInfo && needADInfo.length > 0 && needADInfo[0]) {
+		    emp.setEmpId(empId);
+		    emp = getADInfo(emp);
+		}
+		return emp;
 	}
 	
 	@RequestMapping(value="/upsert", method = RequestMethod.POST)
@@ -65,19 +70,18 @@ public class EmployeeController {
 		dao.remove(id);
 	}
     
-    private Employee checkEmpExists(Employee emp) {
-    	Employee rlt = new Employee();
-    	if (emp.getEmpId() != null) {
-        	EmpInfo ei = dao.getEmpInfo(emp.getEmpId());
-        	if (null != ei) {
-	        	emp.setEmpName(ei.getName());
-	        	emp.setCostCenter(ei.getCostCenter());
-	        	rlt = emp;
-        	} else {
-        		dao.remove(emp);
-        	}
-     	}
-    	return rlt;
+    private Employee getADInfo(Employee emp) {
+        Employee rlt = new Employee();
+        if (emp.getEmpId() != null) {
+            EmpInfo ei = dao.getEmpInfo(emp.getEmpId());
+            if (null != ei) {
+                emp.setEmpName(ei.getName());
+                emp.setCostCenter(ei.getCostCenter());
+                rlt = emp;
+            } else {
+                dao.remove(emp);
+            }
+        }
+        return rlt;
     }
-
 }
