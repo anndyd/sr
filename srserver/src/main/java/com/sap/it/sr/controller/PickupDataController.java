@@ -118,39 +118,17 @@ public class PickupDataController {
 		        pd.setEmpId(pd.getEmpId().toUpperCase());
 		        pd.setCostCenter(empDao.getEmpInfo(pd.getEmpId()).getCostCenter());
 		        PickupData opd = dao.findByEmpIdItemInfo(pd.getEmpId(), pd.getItems().get(0).getPoNumber());
-		        if (opd.getId() != null) {
-		        	// for avoiding idempotent problem
-		        	pd.setId(opd.getId());
+		        // for avoiding idempotent problem
+		        if (pd.equals(opd)) {
+		        	return;
 		        }
-		        
-		        pd.getItems().forEach(itm->{
-			        itm.setPickupData(pd);
-			        itm.getItemDetails().forEach(itd->{
-			            itd.setItemInfo(itm);
-			        });
-			    });
 	    	    dao.merge(pd);
-// do not use status flag any more.
-//	    	    pd.getItems().forEach(itm->{
-//	    	        List<SyncItemInfo> sis = sidao.findByPK(itm.getPoNumber(), itm.getPoItem());
-//	    	        if (sis != null) {
-//		    	        sis.forEach(si->{
-//		    	        	si.setStatus(4); // 4 - picked
-//			    	        sidao.merge(si);
-//		    	        });
-//	    	        }
-//	    	    });
 		    }
 		    Employee emp = empDao.findByEmpId(pd.getEmpId());
 		    // send mail
 		    SendMail sm = new SendMail();
 		    pd.setEmpName(emp.getEmpName());
 		    sm.sendPickedEmail(pd, null, null);
-		    // check employee's cost center and update it
-		    if (pd.getCostCenter() != emp.getCostCenter()) {
-		    	emp.setCostCenter(pd.getCostCenter());
-		    	empDao.merge(emp);
-		    }
 		}
 	}
 	

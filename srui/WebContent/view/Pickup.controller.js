@@ -187,24 +187,26 @@ sap.ui.define([
 			var itmsBk = {};
 			$.extend(true, itmsBk, tdata.items);
 			var itmIdx = -1;
+			var newItmIdx = -1;
 			var needClean = true;
 			for (var i=0; i<indices.length; i++) {
 				var idxs = ttb.getContextByIndex(indices[i]).sPath.match(/\d+/g);
 				
 				if (idxs[0] !== itmIdx) {
 					param.items.push($.extend(true, {}, itmsBk[idxs[0]]));
+					newItmIdx++;
 					needClean = true;
 					if (idxs.length === 2) {
 						needClean = false;
-						param.items[idxs[0]].itemDetails.length = 0;
-						param.items[idxs[0]].itemDetails.push($.extend(true, {}, itmsBk[idxs[0]].itemDetails[idxs[1]]));
+						param.items[newItmIdx].itemDetails.length = 0;
+						param.items[newItmIdx].itemDetails.push($.extend(true, {}, itmsBk[idxs[0]].itemDetails[idxs[1]]));
 					}
 				} else {
 					if (needClean) {
-						param.items[idxs[0]].itemDetails.length = 0;
+						param.items[newItmIdx].itemDetails.length = 0;
 						needClean = false;
 					}
-					param.items[idxs[0]].itemDetails.push($.extend(true, {}, itmsBk[idxs[0]].itemDetails[idxs[1]]));
+					param.items[newItmIdx].itemDetails.push($.extend(true, {}, itmsBk[idxs[0]].itemDetails[idxs[1]]));
 				}
 				itmIdx = idxs[0];
 			}

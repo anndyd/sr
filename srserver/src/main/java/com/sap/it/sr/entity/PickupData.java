@@ -42,6 +42,44 @@ public class PickupData implements Serializable {
     
     private String remark;
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+        if (this == obj)
+            return true;
+        if (!(obj instanceof PickupData))
+            return false;
+
+        PickupData other = (PickupData) obj;
+        boolean rlt = true;
+        if (this.empId.equals(other.getEmpId()) && 
+                this.items.size() == other.getItems().size() ) {
+            for (int i=0; i<this.items.size(); i++) {
+                ItemInfo itm = this.items.get(i);
+                ItemInfo oitm = other.getItems().get(i);
+                if (itm.getPoNumber().equals(oitm.getPoNumber()) && 
+                        itm.getPoItem() == oitm.getPoItem() && 
+                        itm.getItemDetails().size() == oitm.getItemDetails().size()) {
+                    for (int j=0; j<itm.getItemDetails().size(); j++) {
+                        ItemDetail itd = itm.getItemDetails().get(j);
+                        ItemDetail oitd = oitm.getItemDetails().get(j);
+                        if (itd.getPoItemDetail() == oitd.getPoItemDetail()) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                } else {
+                    return false;
+                }
+            }
+        } else {
+            return false;
+        }
+        return rlt;
+    }
+
     public Long getId() {
         return id;
     }
