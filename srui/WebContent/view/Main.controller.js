@@ -1,10 +1,11 @@
 sap.ui.define([
     'jquery.sap.global',
     "sap/it/sr/ui/view/base/BaseController",
+    "sap/it/sr/ui/service/UserService",
     'sap/ui/model/json/JSONModel'
-  ], function(jQuery, BaseController, JSONModel) {
+  ], function(jQuery, BaseController, UserService, JSONModel) {
   "use strict";
-
+  var us = new UserService();
   return BaseController.extend("sap.it.sr.ui.view.Main", {
 
     onInit : function (evt) {
@@ -63,6 +64,17 @@ sap.ui.define([
 		var oModel = new JSONModel();
 		oModel.setData(tileData);
 		this.getView().setModel(oModel);
+    },
+
+    onBeforeRendering : function (evt) {
+      var that = this;
+      $.when(us.getSession()).done(function (udata) {
+    	if (udata.role === "1" || udata.role === "2") {
+    		// do nothing
+    	} else {
+    	  that.getRouter().navTo("exportPickupData");
+    	}
+      });
     },
     
     onTilePress : function(evt){

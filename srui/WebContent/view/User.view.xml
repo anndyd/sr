@@ -77,6 +77,9 @@
 				<Column id="pickLocation">
 					<Text text="{i18n>pickLocation}" />
 				</Column>
+        <Column id="role" width="4em">
+          <Text text="{i18n>role}" />
+        </Column>
 			</columns>
 			<items>
 				<ColumnListItem type="Active">
@@ -88,6 +91,7 @@
 							formatter: 'sap.it.sr.ui.js.Formatter.userStatus'
 						}" />
 						<Text text="{pickLocation}" />
+						<Text text="{role}" />
 					</cells>
 				</ColumnListItem>
 			</items>

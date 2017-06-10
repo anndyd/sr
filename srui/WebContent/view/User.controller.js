@@ -91,6 +91,7 @@ sap.ui.define([ 'jquery.sap.global', "sap/it/sr/ui/js/Formatter",
 				status : 0,
 				pickLocation : "",
 				password : "",
+				role : null,
 				pwdCtl : false
 			});
 			pModel.refresh();

@@ -1,9 +1,11 @@
 /*global history */
 sap.ui.define([
 		"sap/ui/core/mvc/Controller",
+		"sap/it/sr/ui/service/UserService", 
 		"sap/ui/core/routing/History"
-	], function (Controller, History) {
+	], function (Controller, UserService, History) {
 		"use strict";
+		var us = new UserService();
 		return Controller.extend("sap.it.sr.ui.view.base.BaseController", {
 			/**
 			 * Convenience method for accessing the router in every controller of the application.
@@ -42,8 +44,23 @@ sap.ui.define([
 			 */
 			getResourceBundle : function () {
 				return this.getOwnerComponent().getModel("i18n").getResourceBundle();
+			},
+			
+			onBeforeRendering : function (evt) {
+				var that = this;
+				$.when(us.getSession()).done(function (udata) {
+					if (udata.role === "1" || udata.role === "2") {
+						// do nothing
+					} else {
+						var app = that.getOwnerComponent().byId("app");
+						if (app && app.byId("idAppControl") && app.byId("idAppControl").getCurrentDetailPage() && 
+								app.byId("idAppControl").getCurrentDetailPage().getViewName() !== "sap.it.sr.ui.view.ExportPickupData") {
+							that.getRouter().navTo("exportPickupData");
+							window.location.reload(true);
+						} 
+					}
+				});
 			}
-
 		});
 
 	}

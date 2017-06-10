@@ -27,9 +27,9 @@
 					</Input>
 
 					<Label text="{i18n>costCenter}" />
-					<Input value="{input>costCenter}" type="Text"
-						showSuggestion="true"	suggestionItems="{assist>costcenter}" tooltip="{i18n>suggestionEnabled}"
-						enabled="true" editable="true" submit="handleRefresh">
+					<Input id="constCenterInput" value="{input>costCenter}" type="Text"
+						showSuggestion="true" suggestionItems="{assist>costcenter}" tooltip="{i18n>suggestionEnabled}"
+						editable="true" submit="handleRefresh">
 						<suggestionItems>
 							<core:Item text="{assist>}" />
 						</suggestionItems>

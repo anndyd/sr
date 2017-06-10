@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sap.it.sr.dao.UserDao;
+import com.sap.it.sr.dto.SessionInfo;
 import com.sap.it.sr.entity.User;
 import com.sap.it.sr.util.EncryptHelper;
 import com.sap.it.sr.util.SessionHolder;
@@ -56,6 +57,29 @@ public class UserController {
 	    user.getSession().setRole(session.getAttribute(SessionHolder.USER_ROLE).toString());
 	    user.getSession().setCurrentUser(session.getAttribute(SessionHolder.USER_ID).toString());
 	    return user;
+	}
+
+	@RequestMapping(value="/curuser", method = RequestMethod.GET)
+	@ResponseBody
+	public User getCurrentUser(){
+		HttpSession session = request.getSession();
+		String userName = session.getAttribute(SessionHolder.USER_ID).toString();
+	    User user = uDao.findByName(userName);
+	    user.getSession().setRole(session.getAttribute(SessionHolder.USER_ROLE).toString());
+	    user.getSession().setCurrentUser(userName);
+	    return user;
+	}
+
+	@RequestMapping(value="/session", method = RequestMethod.GET)
+	@ResponseBody
+	public SessionInfo getSession(){
+		SessionInfo si = new SessionInfo();
+		HttpSession session = request.getSession();
+		String userName = session.getAttribute(SessionHolder.USER_ID).toString();
+		String role = session.getAttribute(SessionHolder.USER_ROLE).toString();
+		si.setCurrentUser(userName);
+		si.setRole(role);
+	    return si;
 	}
 	
 	@RequestMapping(value="/upsert", method = RequestMethod.POST)

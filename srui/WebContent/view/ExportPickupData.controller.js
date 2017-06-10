@@ -2,13 +2,17 @@ sap.ui.define([
 		'jquery.sap.global',
 		"sap/it/sr/ui/view/base/BaseController",
 		"sap/it/sr/ui/service/PickupService",
+		"sap/it/sr/ui/service/UserService", 
+		"sap/it/sr/ui/service/EmployeeService",
 		"sap/m/MessageToast",
 		'sap/ui/core/util/Export',
 		'sap/ui/core/util/ExportTypeCSV',
 		'sap/ui/model/json/JSONModel'
-	], function (jQuery, BaseController, PickupService, MessageToast, Export, ExportTypeCSV, JSONModel) {
+	], function (jQuery, BaseController, PickupService, UserService, EmployeeService, MessageToast, Export, ExportTypeCSV, JSONModel) {
 	"use strict";
 	var ps = new PickupService();
+	var us = new UserService();
+	var es = new EmployeeService();
 	return BaseController.extend("sap.it.sr.ui.view.ExportPickupData", {
 
 		onInit : function (oEvent) {
@@ -26,34 +30,50 @@ sap.ui.define([
 				location : "",
 				equipNo : ""
 			});
-//			aModel.setData({
-//				locations : [{"Name": "BJ"}, {"Name": "CTU"}, {"Name": "DL"}, {"Name": "GZ"}, {"Name": "NKG"}, {"Name": "PVG"}, {"Name": "SH"}, {"Name": "SZ"}]
-//			});
 			
 			that.getView().setModel(oModel);
 			that.getView().setModel(pModel, "input");
 			that.getView().setModel(aModel, "assist");
 			that.getView().bindElement("input>/");
 			that.getView().bindElement("assist>/");
-			
-//			this.byId("empIdInput").setFilterFunction(function(sTerm, oItem) {
-//				// A case-insensitive 'string contains' style filter
-//				return oItem.getText().match(new RegExp(sTerm, "i"));
-//			});
 		},
+		
+		onBeforeRendering : function () {
+	      var that = this;
+	      var aModel = that.getView().getModel("assist");
+	      $.when(ps.getLocations(), ps.getCostCenters(), ps.getPoNumbers(), us.getCurrentUser())
+	      .done(function (ldata, cdata, pdata, udata) {
+	        aModel.setData({
+	          locations: ldata,
+	          costcenter: cdata,
+	          ponumber: pdata
+	        });
+	    	that.grantPermission(udata);
+	      });
+	    },
+	    
+	    grantPermission: function (user) {
+	    	var that = this;
+	    	// for cost center manager
+	    	if (user.role === "1" || user.role === "2") {
+	    		// do nothing
+	    	} else {
+		      var param = {
+			    badgeId : "",
+			    empId : user.userName
+	    	  };
+		      $.when(es.getEmployee(param)).done(function (data) {
+			      var mc = that.getOwnerComponent().byId("app").byId("idAppControl")
+			      mc.getCurrentMasterPage().setVisible(false);
+			      mc.setMode(sap.m.SplitAppMode.HideMode);
+			      sap.ui.getCore().byId("homebtn").setVisible(false);
 
-		onAfterRendering: function (evt) {
-      var that = this;
-      var aModel = that.getView().getModel("assist");
-      $.when(ps.getLocations(), ps.getCostCenters(), ps.getPoNumbers())
-      .done(function (ldata, cdata, pdata) {
-        aModel.setData({
-          locations: ldata,
-          costcenter: cdata,
-          ponumber: pdata
-        })
-      });
-    },
+				var cc = that.getView().byId("constCenterInput")	
+	         	cc.setValue(data.costCenter);
+		    	cc.setEnabled(false);
+		      });
+	    	}
+	    },
 		
 		handleSelectionFinish: function(oEvent) {
 			var selectedItems = oEvent.getParameter("selectedItems");
