@@ -6,9 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Transient;
-
-import com.sap.it.sr.dto.SessionInfo;
 
 @Entity
 public class User implements Serializable {
@@ -31,9 +28,6 @@ public class User implements Serializable {
     private String pickLocation;
     
     private String remark;
-    
-    @Transient
-    private SessionInfo session;
 
     public Long getId() {
         return id;
@@ -100,13 +94,6 @@ public class User implements Serializable {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
-	}
-
-	public SessionInfo getSession() {
-		if (null == session) {
-			session = new SessionInfo();
-		}
-		return session;
 	}
 
 }

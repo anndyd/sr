@@ -1,7 +1,6 @@
 var util = {
     isLogin: false,
-    userName: "",
-    role: "",
+    sessionInfo: {},
     badgeIdLength: 10,
     nodataTimeout: 5000,
     openSecondWindow: function (url, winName) {

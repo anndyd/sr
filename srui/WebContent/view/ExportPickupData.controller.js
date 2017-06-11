@@ -2,16 +2,14 @@ sap.ui.define([
 		'jquery.sap.global',
 		"sap/it/sr/ui/view/base/BaseController",
 		"sap/it/sr/ui/service/PickupService",
-		"sap/it/sr/ui/service/UserService", 
 		"sap/it/sr/ui/service/EmployeeService",
 		"sap/m/MessageToast",
 		'sap/ui/core/util/Export',
 		'sap/ui/core/util/ExportTypeCSV',
 		'sap/ui/model/json/JSONModel'
-	], function (jQuery, BaseController, PickupService, UserService, EmployeeService, MessageToast, Export, ExportTypeCSV, JSONModel) {
+	], function (jQuery, BaseController, PickupService, EmployeeService, MessageToast, Export, ExportTypeCSV, JSONModel) {
 	"use strict";
 	var ps = new PickupService();
-	var us = new UserService();
 	var es = new EmployeeService();
 	return BaseController.extend("sap.it.sr.ui.view.ExportPickupData", {
 
@@ -41,34 +39,30 @@ sap.ui.define([
 		onBeforeRendering : function () {
 	      var that = this;
 	      var aModel = that.getView().getModel("assist");
-	      $.when(ps.getLocations(), ps.getCostCenters(), ps.getPoNumbers(), us.getCurrentUser())
-	      .done(function (ldata, cdata, pdata, udata) {
+	      $.when(ps.getLocations(), ps.getCostCenters(), ps.getPoNumbers())
+	      .done(function (ldata, cdata, pdata) {
 	        aModel.setData({
 	          locations: ldata,
 	          costcenter: cdata,
 	          ponumber: pdata
 	        });
-	    	that.grantPermission(udata);
+	    	that.grantPermission();
 	      });
 	    },
 	    
-	    grantPermission: function (user) {
+	    grantPermission: function () {
 	    	var that = this;
 	    	// for cost center manager
-	    	if (user.role === "1" || user.role === "2") {
+	    	if (util.sessionInfo.role === "1" || util.sessionInfo.role === "2") {
 	    		// do nothing
 	    	} else {
+			  that.getOwnerComponent().byId("app").byId("idAppControl-MasterBtn").setVisible(false);
 		      var param = {
 			    badgeId : "",
-			    empId : user.userName
+			    empId : util.sessionInfo.currentUser
 	    	  };
 		      $.when(es.getEmployee(param)).done(function (data) {
-			      var mc = that.getOwnerComponent().byId("app").byId("idAppControl")
-			      mc.getCurrentMasterPage().setVisible(false);
-			      mc.setMode(sap.m.SplitAppMode.HideMode);
-			      sap.ui.getCore().byId("homebtn").setVisible(false);
-
-				var cc = that.getView().byId("constCenterInput")	
+				var cc = that.getView().byId("constCenterInput");
 	         	cc.setValue(data.costCenter);
 		    	cc.setEnabled(false);
 		      });

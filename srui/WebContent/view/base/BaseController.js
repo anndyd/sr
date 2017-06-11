@@ -1,11 +1,9 @@
 /*global history */
 sap.ui.define([
 		"sap/ui/core/mvc/Controller",
-		"sap/it/sr/ui/service/UserService", 
 		"sap/ui/core/routing/History"
 	], function (Controller, UserService, History) {
 		"use strict";
-		var us = new UserService();
 		return Controller.extend("sap.it.sr.ui.view.base.BaseController", {
 			/**
 			 * Convenience method for accessing the router in every controller of the application.
@@ -47,19 +45,25 @@ sap.ui.define([
 			},
 			
 			onBeforeRendering : function (evt) {
-				var that = this;
-				$.when(us.getSession()).done(function (udata) {
-					if (udata.role === "1" || udata.role === "2") {
-						// do nothing
-					} else {
-						var app = that.getOwnerComponent().byId("app");
-						if (app && app.byId("idAppControl") && app.byId("idAppControl").getCurrentDetailPage() && 
-								app.byId("idAppControl").getCurrentDetailPage().getViewName() !== "sap.it.sr.ui.view.ExportPickupData") {
-							that.getRouter().navTo("exportPickupData");
-							window.location.reload(true);
-						} 
-					}
-				});
+				if (util.sessionInfo.role === "1" || util.sessionInfo.role === "2") {
+					// do nothing
+				} else {
+					var app = this.getOwnerComponent().byId("app");
+					if (app && app.byId("idAppControl")) {
+				      var mc = app.byId("idAppControl")
+				      mc.setMode(sap.m.SplitAppMode.HideMode);
+				      sap.ui.getCore().byId("homebtn").setVisible(false);
+
+						if (evt.getSource() && 
+							evt.getSource().getViewName() !== "sap.it.sr.ui.view.App" &&
+						    evt.getSource().getViewName() !== "sap.it.sr.ui.view.Home" && 
+							mc.getCurrentDetailPage() && 
+							mc.getCurrentDetailPage().getViewName() !== "sap.it.sr.ui.view.ExportPickupData") {
+								this.getRouter().navTo("exportPickupData");
+								//window.location.reload(true);
+						}
+					} 
+				}
 			}
 		});
 

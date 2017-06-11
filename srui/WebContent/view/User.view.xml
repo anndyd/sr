@@ -77,7 +77,7 @@
 				<Column id="pickLocation">
 					<Text text="{i18n>pickLocation}" />
 				</Column>
-        <Column id="role" width="4em">
+        <Column id="role" width="4em" visible="{input>roleCtl}">
           <Text text="{i18n>role}" />
         </Column>
 			</columns>

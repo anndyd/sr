@@ -35,10 +35,10 @@ sap.ui.define([ 'jquery.sap.global', "sap/it/sr/ui/js/Formatter",
 				pickLocation : itmCxt.getProperty("pickLocation"),
 				password : itmCxt.getProperty("password"),
 				role : itmCxt.getProperty("role"),
-				roleCtl : itmCxt.getProperty("session").role === "1",
-				editCtl : itmCxt.getProperty("session").role === "1" ||
-					itmCxt.getProperty("session").currentUser === itmCxt.getProperty("userName"),
-				pwdCtl : itmCxt.getProperty("session").currentUser === itmCxt.getProperty("userName")
+				roleCtl : util.sessionInfo.role === "1",
+				editCtl : util.sessionInfo.role === "1" ||
+				util.sessionInfo.currentUser === itmCxt.getProperty("userName"),
+				pwdCtl : util.sessionInfo.currentUser === itmCxt.getProperty("userName")
 			});
 			pModel.refresh();
 

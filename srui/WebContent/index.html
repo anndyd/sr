@@ -39,8 +39,9 @@
 						    type: 'POST',
 						    async: false
 						}).done(function(data){
-							if (data && data !== "") {
-							    userName = data;
+							if (data && !data.error) {
+							    util.sessionInfo = data;
+							    userName = util.sessionInfo.userFullName;
 							} else {
 								alert("You don't have permission to access!", {styleClass: "srMessageBoxStyle srMessageBoxError"});
 							}

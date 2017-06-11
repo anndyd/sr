@@ -38,11 +38,6 @@ public class UserController {
 	@ResponseBody
 	public List<User> getUsers(){
 		List<User> users = uDao.findAll();
-		HttpSession session = request.getSession();
-		for (User user : users) {
-		    user.getSession().setRole(session.getAttribute(SessionHolder.USER_ROLE).toString());
-		    user.getSession().setCurrentUser(session.getAttribute(SessionHolder.USER_ID).toString());
-		}
 		return users;
 	}
 
@@ -53,33 +48,7 @@ public class UserController {
 	        userName = userName.toUpperCase();
 	    }
 	    User user = uDao.findByName(userName);
-		HttpSession session = request.getSession();
-	    user.getSession().setRole(session.getAttribute(SessionHolder.USER_ROLE).toString());
-	    user.getSession().setCurrentUser(session.getAttribute(SessionHolder.USER_ID).toString());
 	    return user;
-	}
-
-	@RequestMapping(value="/curuser", method = RequestMethod.GET)
-	@ResponseBody
-	public User getCurrentUser(){
-		HttpSession session = request.getSession();
-		String userName = session.getAttribute(SessionHolder.USER_ID).toString();
-	    User user = uDao.findByName(userName);
-	    user.getSession().setRole(session.getAttribute(SessionHolder.USER_ROLE).toString());
-	    user.getSession().setCurrentUser(userName);
-	    return user;
-	}
-
-	@RequestMapping(value="/session", method = RequestMethod.GET)
-	@ResponseBody
-	public SessionInfo getSession(){
-		SessionInfo si = new SessionInfo();
-		HttpSession session = request.getSession();
-		String userName = session.getAttribute(SessionHolder.USER_ID).toString();
-		String role = session.getAttribute(SessionHolder.USER_ROLE).toString();
-		si.setCurrentUser(userName);
-		si.setRole(role);
-	    return si;
 	}
 	
 	@RequestMapping(value="/upsert", method = RequestMethod.POST)
@@ -109,13 +78,13 @@ public class UserController {
 
     @RequestMapping(value = "/active", method = RequestMethod.POST)
     @ResponseBody
-    public String active(HttpServletRequest req) {
-    	String rlt = "";
+    public SessionInfo active(HttpServletRequest req) {
+    	SessionInfo rlt = new SessionInfo();
     	// Get the client SSL certificates associated with the request
 		X509Certificate[] certs = (X509Certificate[]) req.getAttribute("javax.servlet.request.X509Certificate");
 		// Check that a certificate was obtained
 		if (certs.length < 1) {
-			rlt = "SSL not client authenticated";
+			rlt.setError("SSL not client authenticated");
 		}
 		// The base of the certificate chain contains the client's info
 		X509Certificate principalCert = certs[0];
@@ -144,8 +113,10 @@ public class UserController {
     		usrId = name;
     		usrFullName = usr.getFullName();
     		usrRole = usr.getRole();
-    		rlt = usrFullName != null && usrFullName.length() > 0 ? 
-    				name + " (" + usrFullName + ")" : name;
+    		rlt.setUserFullName(usrFullName != null && usrFullName.length() > 0 ? 
+    				name + " (" + usrFullName + ")" : name);
+    		rlt.setCurrentUser(usrId);
+    		rlt.setRole(usrRole);
     	}
         req.getSession().setAttribute(SessionHolder.USER_ID, usrId);
         req.getSession().setAttribute(SessionHolder.USER_FULLNAME, usrFullName);
