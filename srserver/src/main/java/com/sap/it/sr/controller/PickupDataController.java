@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -26,11 +29,15 @@ import com.sap.it.sr.entity.PickupData;
 import com.sap.it.sr.entity.SyncItemDetail;
 import com.sap.it.sr.entity.SyncItemInfo;
 import com.sap.it.sr.service.SendMail;
+import com.sap.it.sr.util.SessionHolder;
 
 @Controller
 @RequestMapping("pickup")
 @Scope("request")
 public class PickupDataController {
+	
+	@Autowired(required=true)
+	private HttpServletRequest request;	
 
     @Autowired
     private PickupDataDao dao;
@@ -107,7 +114,10 @@ public class PickupDataController {
 	@ResponseBody
 	@Transactional
 	public void upsertPickupData(@RequestBody PickupData pd){
-		if (pd != null) {
+		HttpSession session = request.getSession();
+	    String role = session.getAttribute(SessionHolder.USER_ROLE).toString();
+		
+		if (pd != null && null != role && (role.equals("1") || role.equals("2"))) {
 		    // upper case for employee id
 		    if (pd.getAgentId() != null){
 		        pd.setAgentId(pd.getAgentId().toUpperCase());

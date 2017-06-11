@@ -8,6 +8,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -28,6 +30,8 @@ import com.sap.it.sr.util.SessionHolder;
 @RequestMapping("user")
 @Scope("request")
 public class UserController {
+	private static final Logger LOGGER = Logger.getLogger(UserController.class);
+	
 	@Autowired(required=true)
 	private HttpServletRequest request;	
     
@@ -56,16 +60,47 @@ public class UserController {
 	@Transactional
 	public void upsertUser(@RequestBody User user){
 		String password = "";
+		String fullName = "";
+		String location = "";
 		if (user.getUserName() != null) {
-		    User oU = uDao.findByName(user.getUserName().toUpperCase());
-			if (oU.getId() != null) {
-				user.setId(oU.getId());
-				password = oU.getPassword();
-			}
-			if (null != user.getPassword() && !user.getPassword().equals(password) && user.getPassword().length() > 0) {
-				user.setPassword(EncryptHelper.encrypt(user.getPassword()));
-			}
-			uDao.merge(user);
+			HttpSession session = request.getSession();
+		    String role = session.getAttribute(SessionHolder.USER_ROLE).toString();
+		    String currentUser = session.getAttribute(SessionHolder.USER_ID).toString();
+		    
+		    if (null != role && (role.equals("1") || role.equals("2"))) {
+			    User oU = uDao.findByName(user.getUserName().toUpperCase());
+				if (oU.getId() != null) {
+					user.setId(oU.getId());
+					password = oU.getPassword();
+					
+					fullName = user.getFullName();
+					location = user.getPickLocation();
+					// role 2 only can modify full name and location
+					if (role.equals("2") && currentUser.equals(user.getUserName())) {
+						try {
+							BeanUtils.copyProperties(user, oU);
+						} catch (Exception e) {
+							LOGGER.info(e);
+						}
+						user.setFullName(fullName);
+						user.setPickLocation(location);
+					} else if (role.equals("2")) {
+						return;
+					}
+				} else if (role.equals("2")) {
+					// role 2 can't add user.
+					return;
+				}
+		    	if (currentUser.equals(user.getUserName())) {
+					if (null != user.getPassword() && !user.getPassword().equals(password) && user.getPassword().length() > 0) {
+						user.setPassword(EncryptHelper.encrypt(user.getPassword()));
+					}
+		    	} else {
+		    		// if it is not self, use old value.
+		    		user.setPassword(password);
+		    	}
+				uDao.merge(user);
+		    }
 		}
 	}
 	

@@ -2,6 +2,9 @@ package com.sap.it.sr.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -15,11 +18,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sap.it.sr.dao.EmployeeDao;
 import com.sap.it.sr.entity.Employee;
 import com.sap.it.sr.util.EmpInfo;
+import com.sap.it.sr.util.SessionHolder;
 
 @Controller
 @RequestMapping("employee")
 @Scope("request")
 public class EmployeeController {
+	
+	@Autowired(required=true)
+	private HttpServletRequest request;	
 
     @Autowired
     private EmployeeDao dao;
@@ -53,13 +60,18 @@ public class EmployeeController {
 	@ResponseBody
 	@Transactional
 	public void upsertEmployee(@RequestBody Employee emp){
-		Employee emp1 = dao.findByEmpId(emp.getEmpId());
-		if (emp.getEmpId() != null) {
-			if (emp1.getId() != null) {
-				emp.setId(emp1.getId());
+		HttpSession session = request.getSession();
+	    String role = session.getAttribute(SessionHolder.USER_ROLE).toString();
+
+	    if (null != role && (role.equals("1") || role.equals("2"))) {
+			Employee emp1 = dao.findByEmpId(emp.getEmpId());
+			if (emp.getEmpId() != null) {
+				if (emp1.getId() != null) {
+					emp.setId(emp1.getId());
+				}
+				emp.setEmpId(emp.getEmpId().toUpperCase());
+				dao.merge(emp);
 			}
-			emp.setEmpId(emp.getEmpId().toUpperCase());
-			dao.merge(emp);
 		}
 	}
 	
