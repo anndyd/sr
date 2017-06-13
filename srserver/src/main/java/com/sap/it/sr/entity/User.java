@@ -1,11 +1,16 @@
 package com.sap.it.sr.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 
 @Entity
 public class User implements Serializable {
@@ -28,6 +33,14 @@ public class User implements Serializable {
     private String pickLocation;
     
     private String remark;
+    
+    @ElementCollection
+    @CollectionTable(
+          name="costcenter",
+          joinColumns=@JoinColumn(name="EMPID", referencedColumnName="USERNAME")
+    )
+    @Column(name="CHARGECC")
+    private List<String> chargeCC;
 
     public Long getId() {
         return id;
@@ -94,6 +107,14 @@ public class User implements Serializable {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public List<String> getChargeCC() {
+		return chargeCC;
+	}
+
+	public void setChargeCC(List<String> chargeCC) {
+		this.chargeCC = chargeCC;
 	}
 
 }
