@@ -106,7 +106,8 @@ public class SyncData {
         for (Employee emp : emps) {
             EmpInfo ei = edao.getEmpInfo(emp.getEmpId());
             if (null != ei ) {
-                if (!emp.getEmpName().equals(ei.getName()) || emp.getCostCenter().equals(ei.getCostCenter())) {
+                if ((null != ei.getName() && !ei.getName().equals(emp.getEmpName())) ||
+                    (null != ei.getCostCenter() && !ei.getCostCenter().equals(emp.getCostCenter()))) {
                     emp.setEmpName(ei.getName());
                     emp.setCostCenter(ei.getCostCenter());
                     edao.merge(emp);
