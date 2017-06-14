@@ -60,11 +60,13 @@ sap.ui.define([
 	    		// do nothing
 	    	} else {
   			  that.getOwnerComponent().byId("app").byId("idAppControl-MasterBtn").setVisible(false);
-   	        aModel.setData({
-  	          ccs: util.sessionInfo.chargeCC,
-              visccinput: false,
-              viscccb: true
-  		      });
+	   	        aModel.setData({
+	  	          ccs: util.sessionInfo.chargeCC,
+	              visccinput: false,
+	              viscccb: true
+	  		    });
+	   	        var cccb = that.getView().byId("cbcc");
+	   	        cccb.setSelectedKeys(util.sessionInfo.chargeCC);
 	    	}
 	    },
 		
@@ -82,7 +84,12 @@ sap.ui.define([
 		},
 		
 		handleCCSelectionFinish: function(oEvent) {
-			var selectedItems = oEvent.getParameter("selectedItems");
+//			var selectedItems = oEvent.getParameter("selectedItems");
+//			this.getSelectedCostCenters(selectedItems);
+//			this.handleRefresh();
+		},
+		
+		getSelectedCostCenters: function(selectedItems) {
 			var costcenters = "";
 			for (var i = 0; i < selectedItems.length; i++) {
 				costcenters += "'" + selectedItems[i].getText() + "'";
@@ -91,13 +98,14 @@ sap.ui.define([
 				}
 			}
 			this.getView().getModel("input").getData().costCenter = costcenters;
-			this.handleRefresh();
 		},
 		
 		handleRefresh : function (oEvent) {
 			sap.ui.core.BusyIndicator.show();
 			var that = this;
-
+			
+			that.getSelectedCostCenters(that.getView().byId("cbcc").getSelectedItems());
+			
 			var param = that.getView().getModel("input").getData();
 			var oModel = that.getView().getModel();
 			ps.getPickupDatas(param).done(function (data) {

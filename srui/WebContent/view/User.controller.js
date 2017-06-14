@@ -35,6 +35,8 @@ sap.ui.define([ 'jquery.sap.global', "sap/it/sr/ui/js/Formatter",
 				pickLocation : itmCxt.getProperty("pickLocation"),
 				password : itmCxt.getProperty("password"),
 				role : itmCxt.getProperty("role"),
+				chargeCC : itmCxt.getProperty("chargeCC"),
+				
 				roleCtl : util.sessionInfo.role === "1",
 				editCtl : util.sessionInfo.role === "1" ||
 				util.sessionInfo.currentUser === itmCxt.getProperty("userName"),
@@ -49,7 +51,7 @@ sap.ui.define([ 'jquery.sap.global', "sap/it/sr/ui/js/Formatter",
 			var oModel = this.getView().getModel();
 			us.getUsers().done(function(data) {
 				oModel.setData(data);
-				oModel.refresh();
+//				oModel.refresh();
 			});
 			sap.ui.core.BusyIndicator.hide();
 		},

@@ -50,17 +50,22 @@
 							<l:GridData span="L2 M2 S4" />
 						</layoutData>
 					</Input>
+          <Label text="{i18n>chargeCC}" />
+          <Input value="{input>chargeCC}" type="Text" visible="{input>roleCtl}"
+            enabled="true" editable="true">
+            <layoutData>
+              <l:GridData span="L2 M2 S4" />
+            </layoutData>
+          </Input>
 
 				</f:content>
 			</f:SimpleForm>
 		</VBox>
 		<Table id="idUserlist" inset="false"
 			backgroundDesign="Solid"
+			growing="true" growingScrollToLoad="true"
 			items="{
-				path: '/',
-				sorter: {
-					path: 'userName'
-				}
+				path: '/'
 			}"
 			itemPress="onTablePress"
 		>

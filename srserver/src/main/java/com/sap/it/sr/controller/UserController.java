@@ -41,7 +41,7 @@ public class UserController {
 	@RequestMapping(value="/all", method = RequestMethod.GET)
 	@ResponseBody
 	public List<User> getUsers(){
-		List<User> users = uDao.findAll();
+		List<User> users = uDao.findAll("role,userName");
 		return users;
 	}
 

@@ -153,9 +153,9 @@ public class PickupDataDao extends BaseDao<PickupData> {
         if (costCenter != null && !costCenter.equals("")) {
         	i++;
         	if (i>1) {
-        		w = w + " and p.costCenter IN (?" + i + ")";
+        		w = w + " and p.costCenter IN (" + costCenter + ")";
         	} else {
-        		w = w + " p.costCenter IN (?" + i + ")";
+        		w = w + " p.costCenter IN (" + costCenter + ")";
         	}
         	p.add(costCenter);
         }
