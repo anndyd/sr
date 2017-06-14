@@ -29,7 +29,7 @@
 					<Label text="{i18n>costCenter}" />
 					<Input id="constCenterInput" value="{input>costCenter}" type="Text"
 						showSuggestion="true" suggestionItems="{assist>costcenter}" tooltip="{i18n>suggestionEnabled}"
-						editable="true" submit="handleRefresh">
+						visible="{assist>visccinput}" editable="true" submit="handleRefresh">
 						<suggestionItems>
 							<core:Item text="{assist>}" />
 						</suggestionItems>
@@ -37,6 +37,13 @@
 							<l:GridData span="L2 M3 S4" />
 						</layoutData>
 					</Input>
+					<MultiComboBox id="cbcc" selectionFinish="handleCCSelectionFinish"
+						editable="false" visible="{assist>viscccb}" items="{assist>ccs}">
+						<core:Item key="{assist>}" text="{assist>}" />
+						<layoutData>
+							<l:GridData span="L2 M3 S4" />
+						</layoutData>
+					</MultiComboBox>
 
 					<Label text="{i18n>poNumber}" />
 					<Input value="{input>poNumber}" type="Text"
@@ -57,7 +64,7 @@
 							<l:GridData span="L2 M3 S4" />
 						</layoutData>
 					</Input-->
-					<MultiComboBox id="cb01" selectionFinish="handleSelectionFinish"
+					<MultiComboBox id="cb01" selectionFinish="handleLocationSelectionFinish"
 						items="{assist>locations}">
 						<core:Item key="{assist>}" text="{assist>}" />
 						<layoutData>

@@ -7,10 +7,13 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+
+import org.eclipse.persistence.annotations.JoinFetch;
 
 @Entity
 public class User implements Serializable {
@@ -34,12 +37,13 @@ public class User implements Serializable {
     
     private String remark;
     
-    @ElementCollection
+    @ElementCollection(fetch=FetchType.EAGER)
     @CollectionTable(
           name="costcenter",
           joinColumns=@JoinColumn(name="EMPID", referencedColumnName="USERNAME")
     )
     @Column(name="CHARGECC")
+    @JoinFetch
     private List<String> chargeCC;
 
     public Long getId() {

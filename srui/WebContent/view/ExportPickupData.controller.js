@@ -44,32 +44,31 @@ sap.ui.define([
 	        aModel.setData({
 	          locations: ldata,
 	          costcenter: cdata,
-	          ponumber: pdata
+	          ponumber: pdata,
+	          ccs: null,
+	          visccinput: true,
+	          viscccb: false
 	        });
-	    	that.grantPermission();
+	    	that.grantPermission(aModel);
 	      });
 	    },
 	    
-	    grantPermission: function () {
+	    grantPermission: function (aModel) {
 	    	var that = this;
 	    	// for cost center manager
 	    	if (util.sessionInfo.role === "1" || util.sessionInfo.role === "2") {
 	    		// do nothing
 	    	} else {
-			  that.getOwnerComponent().byId("app").byId("idAppControl-MasterBtn").setVisible(false);
-		      var param = {
-			    badgeId : "",
-			    empId : util.sessionInfo.currentUser
-	    	  };
-		      $.when(es.getEmployee(param)).done(function (data) {
-				var cc = that.getView().byId("constCenterInput");
-	         	cc.setValue(data.costCenter);
-		    	cc.setEnabled(false);
-		      });
+  			  that.getOwnerComponent().byId("app").byId("idAppControl-MasterBtn").setVisible(false);
+   	        aModel.setData({
+  	          ccs: util.sessionInfo.chargeCC,
+              visccinput: false,
+              viscccb: true
+  		      });
 	    	}
 	    },
 		
-		handleSelectionFinish: function(oEvent) {
+		handleLocationSelectionFinish: function(oEvent) {
 			var selectedItems = oEvent.getParameter("selectedItems");
 			var locations = "";
 			for (var i = 0; i < selectedItems.length; i++) {
@@ -79,6 +78,19 @@ sap.ui.define([
 				}
 			}
 			this.getView().getModel("input").getData().location = locations;
+			this.handleRefresh();
+		},
+		
+		handleCCSelectionFinish: function(oEvent) {
+			var selectedItems = oEvent.getParameter("selectedItems");
+			var costcenters = "";
+			for (var i = 0; i < selectedItems.length; i++) {
+				costcenters += "'" + selectedItems[i].getText() + "'";
+				if (i != selectedItems.length-1) {
+					costcenters += ",";
+				}
+			}
+			this.getView().getModel("input").getData().costCenter = costcenters;
 			this.handleRefresh();
 		},
 		

@@ -1,10 +1,13 @@
 package com.sap.it.sr.dto;
 
+import java.util.List;
+
 public class SessionInfo {
 	private String role;
 	private String currentUser;
 	private String userFullName;
 	private String error;
+	private List<String> chargeCC;
 	
 	public String getRole() {
 		return role;
@@ -30,5 +33,11 @@ public class SessionInfo {
 	public void setError(String error) {
 		this.error = error;
 	}
+    public List<String> getChargeCC() {
+        return chargeCC;
+    }
+    public void setChargeCC(List<String> chargeCC) {
+        this.chargeCC = chargeCC;
+    }
 	
 }

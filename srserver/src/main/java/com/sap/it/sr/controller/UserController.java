@@ -152,6 +152,7 @@ public class UserController {
     				name + " (" + usrFullName + ")" : name);
     		rlt.setCurrentUser(usrId);
     		rlt.setRole(usrRole);
+    		rlt.setChargeCC(usr.getChargeCC());
     	}
         req.getSession().setAttribute(SessionHolder.USER_ID, usrId);
         req.getSession().setAttribute(SessionHolder.USER_FULLNAME, usrFullName);

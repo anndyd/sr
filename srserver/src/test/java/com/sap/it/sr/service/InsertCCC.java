@@ -51,7 +51,7 @@ public class InsertCCC {
  		Map<String, List<String>> all3Cs = new HashMap<>();
         try {
 			String sCurrentLine;
-			br = new BufferedReader(new FileReader("C:\\temp\\ccc.txt"));
+			br = new BufferedReader(new FileReader("E:/Work/sr/doc/ccc.txt"));
 			while ((sCurrentLine = br.readLine()) != null) {
 				Pattern pattern = Pattern.compile("(\\d+)\\t(\\w\\d+)");
 				Matcher matcher = pattern.matcher(sCurrentLine);
@@ -69,7 +69,6 @@ public class InsertCCC {
 				    }
 				}
 			}
-			int i = 0;
 			// Begin a new local transaction so that we can persist a new entity
 	        em.getTransaction().begin();
 			
