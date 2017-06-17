@@ -37,13 +37,12 @@
 							<l:GridData span="L2 M3 S4" />
 						</layoutData>
 					</Input>
-					<MultiComboBox id="cbcc" selectionFinish="handleCCSelectionFinish"
-						editable="false" visible="{assist>viscccb}" items="{assist>ccs}">
-						<core:Item key="{assist>}" text="{assist>}" />
+					<Input id="constCenterInputCC" value="{input>costCenter}" type="Text"
+						visible="{assist>viscccb}" enabled="false" >
 						<layoutData>
 							<l:GridData span="L4 M4 S6" />
 						</layoutData>
-					</MultiComboBox>
+					</Input>
 
 					<Label text="{i18n>poNumber}" />
 					<Input value="{input>poNumber}" type="Text"

@@ -1,19 +1,11 @@
 package com.sap.it.sr.entity;
 
 import java.io.Serializable;
-import java.util.List;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-
-import org.eclipse.persistence.annotations.JoinFetch;
 
 @Entity
 public class User implements Serializable {
@@ -37,14 +29,7 @@ public class User implements Serializable {
     
     private String remark;
     
-    @ElementCollection(fetch=FetchType.EAGER)
-    @CollectionTable(
-          name="costcenter",
-          joinColumns=@JoinColumn(name="EMPID", referencedColumnName="USERNAME")
-    )
-    @Column(name="CHARGECC")
-    @JoinFetch
-    private List<String> chargeCC;
+    private String chargeCC;
 
     public Long getId() {
         return id;
@@ -113,11 +98,11 @@ public class User implements Serializable {
 		this.remark = remark;
 	}
 
-	public List<String> getChargeCC() {
+	public String getChargeCC() {
 		return chargeCC;
 	}
 
-	public void setChargeCC(List<String> chargeCC) {
+	public void setChargeCC(String chargeCC) {
 		this.chargeCC = chargeCC;
 	}
 

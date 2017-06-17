@@ -65,8 +65,8 @@ sap.ui.define([
 	              visccinput: false,
 	              viscccb: true
 	  		    });
-	   	        var cccb = that.getView().byId("cbcc");
-	   	        cccb.setSelectedKeys(util.sessionInfo.chargeCC);
+	   	        var cccb = that.getView().byId("constCenterInputCC");
+	   	        cccb.setValue(util.sessionInfo.chargeCC);
 	    	}
 	    },
 		
@@ -83,28 +83,9 @@ sap.ui.define([
 			this.handleRefresh();
 		},
 		
-		handleCCSelectionFinish: function(oEvent) {
-//			var selectedItems = oEvent.getParameter("selectedItems");
-//			this.getSelectedCostCenters(selectedItems);
-//			this.handleRefresh();
-		},
-		
-		getSelectedCostCenters: function(selectedItems) {
-			var costcenters = "";
-			for (var i = 0; i < selectedItems.length; i++) {
-				costcenters += "'" + selectedItems[i].getText() + "'";
-				if (i != selectedItems.length-1) {
-					costcenters += ",";
-				}
-			}
-			this.getView().getModel("input").getData().costCenter = costcenters;
-		},
-		
 		handleRefresh : function (oEvent) {
 			sap.ui.core.BusyIndicator.show();
 			var that = this;
-			
-			that.getSelectedCostCenters(that.getView().byId("cbcc").getSelectedItems());
 			
 			var param = that.getView().getModel("input").getData();
 			var oModel = that.getView().getModel();

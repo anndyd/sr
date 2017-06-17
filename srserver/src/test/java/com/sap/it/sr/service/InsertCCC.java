@@ -2,7 +2,6 @@ package com.sap.it.sr.service;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +47,7 @@ public class InsertCCC {
     @Test
     public void insertCCC() {
  		BufferedReader br = null;
- 		Map<String, List<String>> all3Cs = new HashMap<>();
+ 		Map<String, String> all3Cs = new HashMap<>();
         try {
 			String sCurrentLine;
 			br = new BufferedReader(new FileReader("E:/Work/sr/doc/ccc.txt"));
@@ -61,11 +60,9 @@ public class InsertCCC {
 				    System.out.print("group 1: " + cc);
 				    System.out.println("group 2: " + empId);
 				    if (null == all3Cs.get(empId)) {
-				    	List<String> cs = new ArrayList<>();
-				    	cs.add(cc);
-				    	all3Cs.put(empId, cs);
+				    	all3Cs.put(empId, cc);
 				    } else {
-				    	all3Cs.get(empId).add(cc);
+				        all3Cs.computeIfPresent(empId, (k,v) -> v + "," + cc);
 				    }
 				}
 			}
@@ -79,7 +76,7 @@ public class InsertCCC {
 				user.setStatus(true);
 				user.setChargeCC(v);
 				em.persist(user);
-				System.out.println("emp: " + k);
+				System.out.println("emp: " + k + "," + v);
 			});
 			
 			// Commit the transaction, which will cause the entity to
