@@ -8,7 +8,7 @@ sap.ui.define([ 'jquery.sap.global', "sap/it/sr/ui/js/Formatter",
 	"use strict";
 	var us = new UserService();
 	var es = new EmployeeService();
-	var w;
+	var w, start = 0, count = 0, page = 0, PAGESIZE = 8;
 	return BaseController.extend("sap.it.sr.ui.view.User", {
 
 		onInit : function(oEvent) {
@@ -21,7 +21,10 @@ sap.ui.define([ 'jquery.sap.global', "sap/it/sr/ui/js/Formatter",
 			that.getView().setModel(oModel);
 			that.getView().setModel(pModel, "input");
 			that.getView().bindElement("input>/");
-			that.refreshTable();
+			us.getSize().done(function(data) {
+				count = data;
+			});
+			that.refreshTable(0);
 		},
 
 		onTablePress : function(evt) {
@@ -46,12 +49,16 @@ sap.ui.define([ 'jquery.sap.global', "sap/it/sr/ui/js/Formatter",
 
 		},
 
-		refreshTable : function() {
+		refreshTable : function(start) {
 			sap.ui.core.BusyIndicator.show();
 			var oModel = this.getView().getModel();
-			us.getUsers().done(function(data) {
+			var param = {
+				start: start,
+				max: PAGESIZE
+			}
+			us.getUsers(param).done(function(data) {
 				oModel.setData(data);
-//				oModel.refresh();
+				oModel.refresh();
 			});
 			sap.ui.core.BusyIndicator.hide();
 		},
@@ -71,15 +78,37 @@ sap.ui.define([ 'jquery.sap.global', "sap/it/sr/ui/js/Formatter",
 				    badgeId : "",
 				    empId : v
 				};
-				es.getEmployee(param).done(function(data) {
-					data.badgeId = param.badgeId;
-					data.empId = param.empId;
-					pModel.setData({
-						userName : data.empId,
-						fullName : data.empName,
-						pwdCtl : false
-					});
-					pModel.refresh();
+				us.getUser({userName: v}).done(function(udata){
+					if (udata) {
+						var pModel = that.getView().getModel("input");
+						pModel.setData({
+							userName : udata.userName,
+							fullName : udata.fullName,
+							status : udata.status,
+							pickLocation : udata.pickLocation,
+							password : udata.password,
+							role : udata.role,
+							chargeCC : udata.chargeCC,
+							
+							roleCtl : util.sessionInfo.role === "1",
+							editCtl : util.sessionInfo.role === "1" ||
+							util.sessionInfo.currentUser === udata.userName,
+							pwdCtl : util.sessionInfo.currentUser === udata.userName
+						});
+						pModel.refresh();
+					} else {
+						es.getEmployee(param).done(function(data) {
+							data.badgeId = param.badgeId;
+							data.empId = param.empId;
+							pModel.setData({
+								userName : data.empId,
+								fullName : data.empName,
+								pwdCtl : false
+							});
+							pModel.refresh();
+						});
+						
+					}
 				});
 		    }
 		},
@@ -120,8 +149,43 @@ sap.ui.define([ 'jquery.sap.global', "sap/it/sr/ui/js/Formatter",
 			} catch (err) {
 				return "None";
 			}
-		}
+		},
 
+		handleNext : function() {
+			if (page < 0) {
+				page = 1;
+			} else {
+				page += 1;
+			}
+			start = page * PAGESIZE;
+			if (start === count) {
+				var Btn = this.getView().byId("btnNext");
+				Btn.setEnabled(false);
+			}
+			if (start >= PAGESIZE) {
+				var Btn = this.getView().byId("btnPrevious");
+				Btn.setEnabled(true);
+			}
+			this.refreshTable(start);
+		},
+
+		handlePrevious : function() {
+			page -= 1;
+			if (page <= 0) {
+				start = 0;
+			} else {
+				start = page * PAGESIZE;
+			}
+			if (start < count) {
+				var Btn = this.getView().byId("btnNext");
+				Btn.setEnabled(true);
+			}
+			if (start === 0) {
+				var Btn = this.getView().byId("btnPrevious");
+				Btn.setEnabled(false);
+			}
+			this.refreshTable(start);
+		}
 	});
 
 });

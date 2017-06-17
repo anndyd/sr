@@ -54,7 +54,7 @@
           <Input value="{input>chargeCC}" type="Text" visible="{input>roleCtl}"
             enabled="true" editable="true">
             <layoutData>
-              <l:GridData span="L2 M2 S4" />
+              <l:GridData span="L4 M5 S8" />
             </layoutData>
           </Input>
 
@@ -105,6 +105,10 @@
 		<footer>
 			<Bar>
 				<contentRight>
+          <Button class="sapUiSmallMarginEnd" id="btnPrevious"
+             icon="sap-icon://sys-prev-page" press="handlePrevious" />
+          <Button class="sapUiSmallMarginEnd" id="btnNext"
+             icon="sap-icon://sys-next-page" press="handleNext" />
 					<Button class="sapUiSmallMarginEnd" id="add" text="{i18n>add}"
 						type="Accept" visible="{input>roleCtl}" press="handleAddPress" />
 					<Button class="sapUiSmallMarginEnd" id="save" text="{i18n>save}"

@@ -38,10 +38,17 @@ public class UserController {
 	@Autowired
     private UserDao uDao;
 
+	@RequestMapping(value="/getSize", method = RequestMethod.GET)
+	@ResponseBody
+	public long getSize(){
+	    Object rlt = uDao.createNativeQuery("select count(id) from user").getSingleResult();
+		return (long) rlt;
+	}
+
 	@RequestMapping(value="/all", method = RequestMethod.GET)
 	@ResponseBody
-	public List<User> getUsers(){
-		List<User> users = uDao.findAll("role,userName");
+	public List<User> getUsers(@RequestParam(required = true) int start, @RequestParam(required = true) int max){
+		List<User> users = uDao.findAll("role,userName", start, max);
 		return users;
 	}
 

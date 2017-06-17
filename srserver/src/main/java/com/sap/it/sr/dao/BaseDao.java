@@ -109,8 +109,12 @@ public abstract class BaseDao<T> {
         		.setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
     }
     
-    public Query createQuery(String qlString) {
-        return em.createQuery(qlString);
+    public Query createQuery(String sqlString) {
+        return em.createQuery(sqlString);
+    }
+    
+    public Query createNativeQuery(String sqlString) {
+        return em.createNativeQuery(sqlString);
     }
 
     /**
@@ -139,5 +143,38 @@ public abstract class BaseDao<T> {
         }
 
         return em.createQuery(hql.toString(), clazz).getResultList();
+    }
+    
+    /**
+     * 
+     * @param orderBy
+     * @param start
+     * @param max
+     * @return
+     */
+    public List<T> findAll(String orderBy, int start, int max) {
+        StringBuilder hql = new StringBuilder("select t from " + clazz.getSimpleName() + " t");
+
+        if (StringUtils.isNotEmpty(orderBy)) {
+            String[] expressions = orderBy.split(",");
+            for (int i = 0; i < expressions.length; i++) {
+                String expression = StringUtils.trim(expressions[i]);
+                if (StringUtils.isEmpty(expression)) {
+                    continue;
+                }
+
+                if (i == 0) {
+                    hql.append(" order by ");
+                } else if (i > 0) {
+                    hql.append(", ");
+                }
+                hql.append("t.").append(expression);
+            }
+        }
+
+        return em.createQuery(hql.toString(), clazz)
+        		.setFirstResult(start)
+        		.setMaxResults(max)
+        		.getResultList();
     }
 }
