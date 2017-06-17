@@ -1,0 +1,197 @@
+<core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m" 
+	xmlns:l="sap.ui.layout" 
+	xmlns:f="sap.ui.layout.form"
+	controllerName="sap.it.sr.ui.view.ExportPickupData" xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page 
+		title="{i18n>exportPickupData}"
+		id="exportPickupDataPage">
+		<VBox>
+			<f:SimpleForm id="epdForm" minWidth="1024" backgroundDesign="Solid"
+				maxContainerCols="2" editable="true" layout="ResponsiveGridLayout"
+				labelSpanL="4" labelSpanM="4" emptySpanL="1" emptySpanM="1"
+				columnsL="1" columnsM="1" class="editableForm">
+				<f:content>
+					<Label text="{i18n>empId}" />
+					<Input id="empIdInput" value="{input>empIdFrom}" type="Text"
+						enabled="true" editable="true" maxLength="8" submit="handleRefresh">
+						
+						<!--suggestionItems>
+						showSuggestion="true" suggestionItems="{assist>employees}" 
+							<core:Item text="{/}" />
+						</suggestionItems-->
+						
+						<layoutData>
+							<l:GridData span="L2 M3 S4" />
+						</layoutData>
+					</Input>
+
+					<Label text="{i18n>costCenter}" />
+					<Input id="constCenterInput" value="{input>costCenter}" type="Text"
+						showSuggestion="true" suggestionItems="{assist>costcenter}" tooltip="{i18n>suggestionEnabled}"
+						visible="{assist>visccinput}" editable="true" submit="handleRefresh">
+						<suggestionItems>
+							<core:Item text="{assist>}" />
+						</suggestionItems>
+						<layoutData>
+							<l:GridData span="L2 M3 S4" />
+						</layoutData>
+					</Input>
+					<Input id="constCenterInputCC" value="{input>costCenter}" type="Text"
+						visible="{assist>viscccb}" enabled="false" >
+						<layoutData>
+							<l:GridData span="L4 M4 S6" />
+						</layoutData>
+					</Input>
+
+					<Label text="{i18n>poNumber}" />
+					<Input value="{input>poNumber}" type="Text"
+						showSuggestion="true"	suggestionItems="{assist>ponumber}" tooltip="{i18n>suggestionEnabled}"
+						enabled="true" editable="true" submit="handleRefresh">
+						<suggestionItems>
+							<core:Item text="{assist>}" />
+						</suggestionItems>
+						<layoutData>
+							<l:GridData span="L2 M3 S4" />
+						</layoutData>
+					</Input>
+
+					<Label text="{i18n>location}" />
+					<!--Input value="{input>location}" type="Text"
+						enabled="true" editable="true" submit="handleRefresh">
+						<layoutData>
+							<l:GridData span="L2 M3 S4" />
+						</layoutData>
+					</Input-->
+					<MultiComboBox id="cb01" selectionFinish="handleLocationSelectionFinish"
+						items="{assist>locations}">
+						<core:Item key="{assist>}" text="{assist>}" />
+						<layoutData>
+							<l:GridData span="L2 M3 S4" />
+						</layoutData>
+					</MultiComboBox>
+	
+					<Label text="{i18n>equipNo}" />
+					<Input value="{input>equipNo}" type="Text"
+						enabled="true" editable="true" submit="handleRefresh">
+						<layoutData>
+							<l:GridData span="L2 M3 S4" />
+						</layoutData>
+					</Input>
+					
+					<Label text="{i18n>pickupTime}" />
+					<DateTimePicker
+						id="DP1"
+						value="{input>dateFrom}"
+						valueFormat="yyyy-MM-dd HH:mm:ss" displayFormat="short"
+						placeholder="{i18n>from}"
+						change="handleChange" submit="handleRefresh"
+						class="sapUiSmallMarginBottom">
+						<layoutData>
+							<l:GridData span="L2 M3 S4" />
+						</layoutData>
+					</DateTimePicker>	
+					<DateTimePicker
+						id="DP2"
+						value="{input>dateTo}"
+						valueFormat="yyyy-MM-dd HH:mm:ss" displayFormat="short"
+						placeholder="{i18n>to}"
+						change="handleChange" submit="handleRefresh"
+						class="sapUiSmallMarginBottom">
+						<layoutData>
+							<l:GridData span="L2 M3 S4" />
+						</layoutData>
+					</DateTimePicker>
+					<Button class="sapUiSmallMarginEnd" icon="sap-icon://refresh"
+						visible="true" press="handleRefresh" width="20px">
+					</Button>
+				</f:content>
+			</f:SimpleForm>
+		</VBox>
+		
+		<Table id="pkTable"
+			backgroundDesign="Solid"
+			mode="MultiSelect"
+			growing="true" growingScrollToLoad="true"
+			inset="false"
+			items="{
+				path: '/',
+				sorter: {
+					path: 'pickupTime'
+				}
+			}">
+			<columns>
+				<Column width="8em">
+					<Text text="{i18n>empId}" />
+				</Column>
+				<Column>
+					<Text text="{i18n>grTime}" />
+				</Column>
+				<Column>
+					<Text text="{i18n>pickupTime}" />
+				</Column>
+				<Column>
+					<Text text="{i18n>usedTime}" />
+				</Column>
+				<Column width="8em">
+					<Text text="{i18n>poNumber}" />
+				</Column>
+				<Column width="5em">
+					<Text text="{i18n>poItem}" />
+				</Column>
+				<Column width="18em">
+					<Text text="{i18n>desc}" />
+				</Column>
+				<Column width="5em">
+					<Text text="{i18n>location}" />
+				</Column>
+				<Column width="5em">
+					<Text text="{i18n>quantity}" />
+				</Column>
+				<Column width="6em">
+					<Text text="{i18n>price}" />
+				</Column>
+				<Column>
+					<Text text="{i18n>equipNo}" />
+				</Column>
+				<Column minScreenWidth="Tablet">
+					<Text text="{i18n>serialNo}" />
+				</Column>
+				<Column width="8em">
+					<Text text="{i18n>costCenter}" />
+				</Column>
+			</columns>
+			<items>
+				<ColumnListItem vAlign="Middle" type="Navigation">
+					<cells>
+						<ObjectIdentifier text="{empId}" />
+						<Text text="{path:'grTime', 
+									 formatOptions: {style: 'short'}}"/>
+						<Text text="{path:'pickupTime', 
+									 formatOptions: {style: 'short'}}"/>
+						<Text text="{usedTime}"/>
+						<Text text="{poNumber}"/>
+						<Text text="{poItem}"/>
+						<Text text="{itemDesc}"/>
+						<Text text="{location}"/>
+						<ObjectNumber number="{quantity}"/>
+						<ObjectNumber number="{price}"/>
+						<Text text="{equipNo}"/> 
+						<Text text="{serialNo}"/>
+						<Text text="{costCenter}"/>
+					</cells>
+				</ColumnListItem>
+			</items>
+		</Table>
+
+		<footer>
+			<Bar>
+				<contentRight>
+					<Button class="sapUiSmallMarginEnd" id="export" text="{i18n>export}"
+						type="Emphasized" visible="true" press="handlePress" icon="sap-icon://download" />
+				</contentRight>
+			</Bar>
+		</footer>
+	</Page>
+
+</core:View>
