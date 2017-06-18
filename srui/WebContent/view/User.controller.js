@@ -8,7 +8,7 @@ sap.ui.define([ 'jquery.sap.global', "sap/it/sr/ui/js/Formatter",
 	"use strict";
 	var us = new UserService();
 	var es = new EmployeeService();
-	var w, start = 0, count = 0, page = 0, PAGESIZE = 8;
+	var w, start = 0, count = 0, page = 0, PAGESIZE = 8， addMode = false;
 	return BaseController.extend("sap.it.sr.ui.view.User", {
 
 		onInit : function(oEvent) {
@@ -60,7 +60,6 @@ sap.ui.define([ 'jquery.sap.global', "sap/it/sr/ui/js/Formatter",
 				oModel.setData(data);
 				oModel.refresh();
 			});
-			sap.ui.core.BusyIndicator.hide();
 		},
 
 		onExit : function() {
@@ -126,16 +125,22 @@ sap.ui.define([ 'jquery.sap.global', "sap/it/sr/ui/js/Formatter",
 				pwdCtl : false
 			});
 			pModel.refresh();
+			addMode = true;
 		},
 
 		handleSavePress : function() {
 			var that = this;
 			us.upsertUser(that.getView().getModel("input").getData()).done(
 				function() {
+					if (addMode) {
+						count++;
+					}
 					that.refreshTable();
 					MessageToast.show(that.getResourceBundle().getText(
 							"updateUserS"));
-				});
+				}
+			);
+			addMode = false;
 		},
 		
 		userStatus :  function (fValue) {
