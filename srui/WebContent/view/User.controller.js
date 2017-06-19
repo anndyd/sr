@@ -8,7 +8,7 @@ sap.ui.define([ 'jquery.sap.global', "sap/it/sr/ui/js/Formatter",
 	"use strict";
 	var us = new UserService();
 	var es = new EmployeeService();
-	var w, start = 0, count = 0, page = 0, PAGESIZE = 8， addMode = false;
+	var w, start = 0, count = 0, page = 0, PAGESIZE = 10, addMode = false;
 	return BaseController.extend("sap.it.sr.ui.view.User", {
 
 		onInit : function(oEvent) {
@@ -163,7 +163,7 @@ sap.ui.define([ 'jquery.sap.global', "sap/it/sr/ui/js/Formatter",
 				page += 1;
 			}
 			start = page * PAGESIZE;
-			if (start === count) {
+			if ((start + PAGESIZE) >= count) {
 				var Btn = this.getView().byId("btnNext");
 				Btn.setEnabled(false);
 			}
