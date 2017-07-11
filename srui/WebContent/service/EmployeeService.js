@@ -42,6 +42,20 @@ sap.ui.define([
           dtd.resolve(data);
         });
         return dtd.promise();
+    },
+    getAA: function(oData) {
+        var dtd = $.Deferred();
+        bs.asyncReq({
+          url: "https://sapitctfdev.wdf.global.corp.sap/CardId/odata/CardIdUsers", //?$filter=CardNo eq '16A1283C",
+          type: "POST",
+          contentType: "application/json",
+          username: "UsrCI_OD_RPO01",
+          password: "IF_POpo_01",
+          data: JSON.stringify(oData)
+        }).done(function(data) {
+          dtd.resolve(data);
+        });
+        return dtd.promise();
      }
   
   });
