@@ -9,6 +9,9 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.net.ssl.SSLContext;
@@ -21,10 +24,10 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 
@@ -32,69 +35,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class TestHttps {
-	private String HOST = "sapitctfdev.wdf.global.corp.sap";
-	
-	class CardMeta {
-	
-		public CardMeta() {
-		}
-		private String odatametadata;
-		private List<CardInfo> value;
-		public String getOdatametadata() {
-			return odatametadata;
-		}
-		public void setOdatametadata(String odatametadata) {
-			this.odatametadata = odatametadata;
-		}
-		public List<CardInfo> getValue() {
-			return value;
-		}
-		public void setValue(List<CardInfo> value) {
-			this.value = value;
-		}
-		
-	}
-	class CardInfo {
-		
-		public CardInfo() {
-		}
-		private String id;
-		private String userLogon;
-		private String fullName;
-		private String EMail;
-		private String CardNo;
-		public String getId() {
-			return id;
-		}
-		public void setId(String id) {
-			this.id = id;
-		}
-		public String getUserLogon() {
-			return userLogon;
-		}
-		public void setUserLogon(String userLogon) {
-			this.userLogon = userLogon;
-		}
-		public String getFullName() {
-			return fullName;
-		}
-		public void setFullName(String fullName) {
-			this.fullName = fullName;
-		}
-		public String getEMail() {
-			return EMail;
-		}
-		public void setEMail(String eMail) {
-			EMail = eMail;
-		}
-		public String getCardNo() {
-			return CardNo;
-		}
-		public void setCardNo(String cardNo) {
-			CardNo = cardNo;
-		}
-		
-	}
+	private final String HOST = "sapitctfdev.wdf.global.corp.sap";
+    private final String CLIENT_KEYSTORE = "C:/Users/i063098/.keystore";
+    private final String storePassword = "changeit";
 	
 	@Test
 	public void accessCardService() throws KeyManagementException, KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException, URISyntaxException{
@@ -137,6 +80,7 @@ public class TestHttps {
                 JsonNode rootNode = objectMapper.readTree(res);
                 JsonNode idNode = rootNode.path("value").get(0).path("CardNo");
                 System.out.println(idNode.asText());
+                System.out.println(toDec(idNode.asText()));
             } finally {
                 response.close();
             }
@@ -145,18 +89,28 @@ public class TestHttps {
         }
 
 	}
-	
+    private long toDec(String hex) {
+        List<String> hexStr = Arrays.asList(hex.split("(?<=\\G.{2})"));
+        Collections.reverse(hexStr);
+        String dec = String.join("", hexStr);
+        return Long.parseLong(dec, 16);
+    }
+
     private SSLContext getSSLContext() throws KeyStoreException, 
     NoSuchAlgorithmException, CertificateException, IOException, KeyManagementException {
         KeyStore trustStore  = KeyStore.getInstance(KeyStore.getDefaultType());
-        FileInputStream instream = new FileInputStream(new File("C:\\Work\\IT\\cert\\.keystore"));
+        FileInputStream instream = new FileInputStream(new File(CLIENT_KEYSTORE));
         try {
-            trustStore.load(instream, "changeit".toCharArray());
+            trustStore.load(instream, storePassword.toCharArray());
         } finally {
             instream.close();
         }
-        return SSLContexts.custom()
-                .loadTrustMaterial(trustStore)
-                .build();
+        return new SSLContextBuilder().loadTrustMaterial(
+                        null,
+                        (X509Certificate[] arg0, String arg1) -> {
+                            return true;
+                        }) // trust all
+                        .build();
+
     }
 }
