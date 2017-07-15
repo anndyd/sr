@@ -39,7 +39,7 @@ public class TestHttps {
     private final String CLIENT_KEYSTORE = "C:/Users/i063098/.keystore";
     private final String storePassword = "changeit";
 	
-	@Test
+	//@Test
 	public void accessCardService() throws KeyManagementException, KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException, URISyntaxException{
         // Allow TLSv1 protocol only
         SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
@@ -113,4 +113,14 @@ public class TestHttps {
                         .build();
 
     }
+    
+    @Test
+    public void toHex() {
+    	String hex = Long.toHexString(3936910085l);
+        List<String> hexStr = Arrays.asList(hex.split("(?<=\\G.{2})"));
+        Collections.reverse(hexStr);
+        String nhex = String.join("", hexStr);
+        System.out.println(nhex);
+    }
+
 }

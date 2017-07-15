@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.sap.it.sr.entity.Employee;
 import com.sap.it.sr.entity.User;
+import com.sap.it.sr.util.CardServiceHelper;
 import com.sap.it.sr.util.EmpInfo;
 import com.sap.it.sr.util.EncryptHelper;
 import com.sap.it.sr.util.LdapHelper;
@@ -16,7 +18,12 @@ public class EmployeeDao extends BaseDao<Employee> {
     	Employee emp = new Employee();
         List<Employee> list = em.createQuery("select t from Employee t where t.badgeId=?1", Employee.class)
                 .setParameter(1, badgeId).setMaxResults(1).getResultList();
-        return list.isEmpty() ? emp : list.get(0);
+        if (list.isEmpty()) {
+        	emp = findFromCardService(badgeId);
+        } else {
+        	emp = list.get(0);
+        }
+        return emp;
     }
 
     public Employee findByEmpId(String empId) {
@@ -40,5 +47,19 @@ public class EmployeeDao extends BaseDao<Employee> {
         }
         
     	return rlt;
+    }
+    
+    private Employee findFromCardService(String badgeId) {
+    	Employee emp = new Employee();
+    	CardServiceHelper csp = new CardServiceHelper();
+    	JsonNode empNode = csp.getEmpInfoByCardNo(badgeId);
+    	if (null != empNode) {
+    		emp.setBadgeId(badgeId);
+    		emp.setEmpId(empNode.path("UserLogon").asText());
+    		emp.setEmpName(empNode.path("FullName").asText());
+    		// save employee information
+    		merge(emp);
+    	}
+    	return emp;
     }
 }

@@ -67,6 +67,7 @@ sap.ui.define([
 	  		    });
 	   	        var cccb = that.getView().byId("constCenterInputCC");
 	   	        cccb.setValue(util.sessionInfo.chargeCC);
+	   	        that.handleRefresh();
 	    	}
 	    },
 		
