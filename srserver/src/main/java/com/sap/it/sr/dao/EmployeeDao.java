@@ -54,8 +54,10 @@ public class EmployeeDao extends BaseDao<Employee> {
     	CardServiceHelper csp = new CardServiceHelper();
     	JsonNode empNode = csp.getEmpInfoByCardNo(badgeId);
     	if (null != empNode) {
+    	    String empId = empNode.path("UserLogon").asText();
+    	    emp = findByEmpId(empId);
     		emp.setBadgeId(badgeId);
-    		emp.setEmpId(empNode.path("UserLogon").asText());
+    		emp.setEmpId(empId);
     		emp.setEmpName(empNode.path("FullName").asText());
     		// save employee information
     		merge(emp);

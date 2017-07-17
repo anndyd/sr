@@ -116,11 +116,21 @@ public class TestHttps {
     
     @Test
     public void toHex() {
-    	String hex = Long.toHexString(3936910085l);
+    	String hex = Long.toHexString(205590530l);
+    	if (hex.length()<8) {
+    	    hex = "0" + hex;
+    	}
         List<String> hexStr = Arrays.asList(hex.split("(?<=\\G.{2})"));
         Collections.reverse(hexStr);
         String nhex = String.join("", hexStr);
         System.out.println(nhex);
+    }
+    
+//    @Test
+    public void TestCardServiceHelper() {
+        CardServiceHelper csp = new CardServiceHelper();
+        JsonNode empNode = csp.getEmpInfoByCardNo("205590530");
+        System.out.println(empNode.path("FullName").asText());
     }
 
 }

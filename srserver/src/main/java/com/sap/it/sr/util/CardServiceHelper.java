@@ -1,7 +1,6 @@
 package com.sap.it.sr.util;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -15,7 +14,6 @@ import java.util.List;
 import javax.net.ssl.SSLContext;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.ParseException;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.NTCredentials;
 import org.apache.http.client.CredentialsProvider;
@@ -85,6 +83,9 @@ public class CardServiceHelper {
     
     private String toHexThenReverse(String dec) {
     	String hex = Long.toHexString(Long.parseLong(dec));
+        if (hex.length()<8) {
+            hex = "0" + hex;
+        }
         List<String> hexStr = Arrays.asList(hex.split("(?<=\\G.{2})"));
         Collections.reverse(hexStr);
         return String.join("", hexStr);
