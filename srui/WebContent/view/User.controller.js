@@ -135,7 +135,7 @@ sap.ui.define([ 'jquery.sap.global', "sap/it/sr/ui/js/Formatter",
 					if (addMode) {
 						count++;
 					}
-					that.refreshTable();
+					that.refreshTable(start);
 					MessageToast.show(that.getResourceBundle().getText(
 							"updateUserS"));
 				}
