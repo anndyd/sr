@@ -36,7 +36,7 @@ public class CardServiceHelper {
     private final String TRUSTSTORE = "trust.keystore";
     private final String STORE_PASSWORD = "changeit";
     private final String NTLM_USER = "UsrCI_OD_RPO01";
-    private final String NTLM_PASSWORD = "IF_POpo_01";
+    private final String NTLM_PASSWORD = "IF_POPo_01_FRES";
     private final String NTLM_DOMAIN = "global";
 	
 	public JsonNode getEmpInfoByCardNo(String cardNo) {
