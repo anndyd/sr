@@ -26,11 +26,13 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class CardServiceHelper {
+    private static final Logger LOGGER = Logger.getLogger(CardServiceHelper.class);
 	private final String HOST = "sapitctfdev.wdf.global.corp.sap";
 	private final String SERVICE_PATH = "/CardId/odata/CardIdUsers";
     private final String TRUSTSTORE = "trust.keystore";
@@ -68,7 +70,11 @@ public class CardServiceHelper {
 			        HttpEntity entity = response.getEntity();
 			        String res = EntityUtils.toString(entity);
 			        ObjectMapper objectMapper = new ObjectMapper();
-			        rlt = objectMapper.readTree(res).path("value").get(0);
+			        try {
+                        rlt = objectMapper.readTree(res).path("value").get(0);
+                    } catch (Exception e) {
+                        LOGGER.info("----- read card no from card service failed. -----");
+                    }
 			    } finally {
 			        response.close();
 			    }
