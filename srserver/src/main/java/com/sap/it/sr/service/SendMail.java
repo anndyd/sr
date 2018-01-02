@@ -90,7 +90,9 @@ public class SendMail {
             
             String content = generateMailContent(info);
             content = content.replace("@logopath", "cid:sap-logo");
-            content = content.replaceAll("@empName", info.getEmpName());
+            if (null != info.getEmpName()) {
+                content = content.replaceAll("@empName", info.getEmpName());
+            }
             content = content.replaceAll("@ITAA", SessionHolder.getUserName());
             
             Multipart parts = new MimeMultipart();
@@ -101,7 +103,7 @@ public class SendMail {
             Transport.send(message);
             LOGGER.info("----Mail sent.----");
         } catch (Exception e) {
-            LOGGER.error("----Send mail failed.----, message: " + e.getMessage());
+            LOGGER.error("----Send mail failed.---- Employee: " + info.getEmpId() + ", message: " + e.getMessage());
             e.printStackTrace();
         }
     }
