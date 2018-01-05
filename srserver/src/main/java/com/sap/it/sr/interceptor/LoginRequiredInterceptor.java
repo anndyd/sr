@@ -21,16 +21,19 @@ public class LoginRequiredInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws IOException {
 
-        LOGGER.debug(String.format("request preHandle: {}, {}, {}", request.getRequestURL(), request.getQueryString(), request.getMethod()));
         HttpSession session = request.getSession();
         String userId = (String) session.getAttribute(SessionHolder.USER_ID);
         String usrFullName = (String) session.getAttribute(SessionHolder.USER_FULLNAME);
         String usrRole = (String) session.getAttribute(SessionHolder.USER_ROLE);
 
+        LOGGER.debug(String.format("=======request preHandle: userId: %s, request url: %s, query string: %s, method: %s", 
+        		userId, request.getRequestURL(), request.getQueryString(), request.getMethod()));
+
         if (userId == null) {
-            LOGGER.warn("[Login] NO authorized user in the session, should login");
+            LOGGER.warn("---[Login]--- NO authorized user in the session, should login");
             SessionHolder.setContext(null, null, null);
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            //response.sendRedirect("/srui");
         } else {
             SessionHolder.setContext(userId, usrFullName, usrRole);
         }
