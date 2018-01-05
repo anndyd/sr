@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -111,6 +112,7 @@ public class PickupDataController {
 	
 	@RequestMapping(value="/upsert", method = RequestMethod.POST)
 	@ResponseBody
+	@Transactional
 	public void upsertPickupData(@RequestBody PickupData pd){
 		HttpSession session = request.getSession();
 	    String role = session.getAttribute(SessionHolder.USER_ROLE).toString();
@@ -142,6 +144,7 @@ public class PickupDataController {
 	
 	@RequestMapping(value="/delete", method = RequestMethod.POST)
 	@ResponseBody
+	@Transactional
 	public void deletePickupData(@RequestBody Long id){
 		dao.remove(id);
 	}

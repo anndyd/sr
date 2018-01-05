@@ -44,6 +44,7 @@ public class SyncData {
     private EmployeeDao edao;
 
     @Scheduled(cron = "0 0/5 * * * ?")
+    @Transactional
     public void autoSyncGrData() {
         LOGGER.info("Start synchronize gr data, ...");
         syncGrData();
@@ -51,6 +52,7 @@ public class SyncData {
     }
 
     @Scheduled(cron = "0 0 1 * * ?")
+    @Transactional
     public void autoSyncEmpData() {
         LOGGER.info("Start synchronize employee data, ...");
         syncEmployeeDataFromLDAP();
@@ -98,13 +100,14 @@ public class SyncData {
             cs.setPoCreateTime(currentTime);
             sdao.merge(cs);
         } catch (Exception e) {
-            LOGGER.error("======== Synchronize GR data failed. ========");
+            LOGGER.error("======== Synchronize employee data failed. ========");
             e.printStackTrace();
         }
 
         return rlt;
     }
 
+    @Transactional
     private void syncEmployeeDataFromLDAP() {
         List<Employee> emps = edao.findAll();
         for (Employee emp : emps) {

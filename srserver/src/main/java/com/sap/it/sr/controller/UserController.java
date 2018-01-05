@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -63,6 +64,7 @@ public class UserController {
 	
 	@RequestMapping(value="/upsert", method = RequestMethod.POST)
 	@ResponseBody
+	@Transactional
 	public void upsertUser(@RequestBody User user){
 		String password = "";
 		String fullName = "";
@@ -111,6 +113,7 @@ public class UserController {
 	
 	@RequestMapping(value="/delete", method = RequestMethod.POST)
 	@ResponseBody
+	@Transactional
 	public void deleteUser(@RequestBody Long id){
 		uDao.remove(id);
 	}
