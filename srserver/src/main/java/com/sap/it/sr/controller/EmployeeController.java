@@ -8,7 +8,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -39,7 +38,6 @@ public class EmployeeController {
 
 	@RequestMapping(value="/get", method = RequestMethod.GET)
 	@ResponseBody
-	@Transactional
 	public Employee getEmployee(@RequestParam(required = true) String badgeId, 
 	        @RequestParam(required = true) String empId, 
 	        @RequestParam(required = false) boolean... needADInfo){
@@ -58,7 +56,6 @@ public class EmployeeController {
 	
 	@RequestMapping(value="/upsert", method = RequestMethod.POST)
 	@ResponseBody
-	@Transactional
 	public void upsertEmployee(@RequestBody Employee emp){
 		HttpSession session = request.getSession();
 	    String role = session.getAttribute(SessionHolder.USER_ROLE).toString();
@@ -77,7 +74,6 @@ public class EmployeeController {
 	
 	@RequestMapping(value="/delete", method = RequestMethod.POST)
 	@ResponseBody
-	@Transactional
 	public void deleteEmployee(@RequestBody Long id){
 		dao.remove(id);
 	}
