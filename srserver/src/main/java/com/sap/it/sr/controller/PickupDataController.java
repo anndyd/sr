@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -35,6 +36,7 @@ import com.sap.it.sr.util.SessionHolder;
 @RequestMapping("pickup")
 @Scope("request")
 public class PickupDataController {
+    private static final Logger LOGGER = Logger.getLogger(PickupDataController.class);
 	
 	@Autowired(required=true)
 	private HttpServletRequest request;	
@@ -114,6 +116,7 @@ public class PickupDataController {
 	@ResponseBody
 	@Transactional
 	public void upsertPickupData(@RequestBody PickupData pd){
+	    LOGGER.info("---- PickupData.upsert start ----");
 		HttpSession session = request.getSession();
 	    String role = session.getAttribute(SessionHolder.USER_ROLE).toString();
 		
@@ -132,14 +135,18 @@ public class PickupDataController {
 		        if (pd.equals(opd)) {
 		        	return;
 		        }
+		        LOGGER.info("---- PickupData.upsert -> merge data ----");
 	    	    dao.merge(pd);
 		    }
+		    LOGGER.info("---- PickupData.upsert -> findByEmpId ----");
 		    Employee emp = empDao.findByEmpId(pd.getEmpId());
 		    // send mail
+		    LOGGER.info("---- PickupData.upsert -> send mail ----");
 		    SendMail sm = new SendMail();
 		    pd.setEmpName(emp.getEmpName());
 		    sm.sendPickedEmail(pd, null, null);
 		}
+		LOGGER.info("---- PickupData.upsert end ----");
 	}
 	
 	@RequestMapping(value="/delete", method = RequestMethod.POST)

@@ -2,6 +2,7 @@ package com.sap.it.sr.dao;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -14,15 +15,20 @@ import com.sap.it.sr.util.LdapHelper;
 
 @Repository
 public class EmployeeDao extends BaseDao<Employee> {
+    private static final Logger LOGGER = Logger.getLogger(EmployeeDao.class);
+    
     public Employee findByBadgeId(String badgeId) {
+        LOGGER.info("---- EmployeeDao.findByBadgeId start ----");
     	Employee emp = new Employee();
         List<Employee> list = em.createQuery("select t from Employee t where t.badgeId=?1", Employee.class)
                 .setParameter(1, badgeId).setMaxResults(1).getResultList();
         if (list.isEmpty()) {
+            LOGGER.info("---- EmployeeDao.findByBadgeId -> findFromCardService ----");
         	emp = findFromCardService(badgeId);
         } else {
         	emp = list.get(0);
         }
+        LOGGER.info("---- EmployeeDao.findByBadgeId end ----");
         return emp;
     }
 
