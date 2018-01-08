@@ -34,7 +34,8 @@ public class LoginRequiredInterceptor extends HandlerInterceptorAdapter {
             SessionHolder.setContext(null, null, null);
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             LOGGER.warn("---[Login]--- redirect to login page");
-            response.sendRedirect("/srui/index.html");
+            String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+            response.sendRedirect(baseUrl + "/srui/index.html");
         } else {
             SessionHolder.setContext(userId, usrFullName, usrRole);
         }
