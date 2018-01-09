@@ -20,25 +20,25 @@ public class LoginRequiredInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws IOException {
-
+    		String loginPage = "/srui/index.html";
         HttpSession session = request.getSession();
         String userId = (String) session.getAttribute(SessionHolder.USER_ID);
         String usrFullName = (String) session.getAttribute(SessionHolder.USER_FULLNAME);
         String usrRole = (String) session.getAttribute(SessionHolder.USER_ROLE);
 
-        LOGGER.debug(String.format("=======request preHandle: userId: %s, request url: %s, query string: %s, method: %s", 
-        		userId, request.getRequestURL(), request.getQueryString(), request.getMethod()));
-
-        if (userId == null) {
-            LOGGER.warn("---[Login]--- NO authorized user in the session, should login");
-            SessionHolder.setContext(null, null, null);
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            LOGGER.warn("---[Login]--- redirect to login page");
-            String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-            response.sendRedirect(baseUrl + "/srui/index.html");
-        } else {
-            SessionHolder.setContext(userId, usrFullName, usrRole);
-        }
+//        LOGGER.debug(String.format("=======request preHandle: userId: %s, request url: %s, query string: %s, method: %s", 
+//        		userId, request.getRequestURL(), request.getQueryString(), request.getMethod()));
+//
+//        if (userId == null && !loginPage.equals(request.getRequestURI())) {
+//            LOGGER.warn("---[Login]--- NO authorized user in the session, should login");
+//            SessionHolder.setContext(null, null, null);
+//            LOGGER.warn("---[Login]--- redirect to login page");
+//            String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+//            response.sendRedirect(baseUrl + loginPage);
+//            return false;
+//        } else {
+//            SessionHolder.setContext(userId, usrFullName, usrRole);
+//        }
         return userId != null;
     }
 

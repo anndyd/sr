@@ -54,10 +54,10 @@ public class EmployeeController {
 		}
 		if (null != needADInfo && needADInfo.length > 0 && needADInfo[0]) {
 		    emp.setEmpId(empId);
-		    LOGGER.info("---- Employee.upsert -> get AD information ----");
+		    LOGGER.info("---- Employee.get -> get AD information ----");
 		    emp = getADInfo(emp);
 		}
-		LOGGER.info("---- Employee.upsert end ----");
+		LOGGER.info("---- Employee.get end ----");
 		return emp;
 	}
 	
