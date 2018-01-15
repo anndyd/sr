@@ -40,6 +40,7 @@ public class UserController {
 
 	@RequestMapping(value="/getSize", method = RequestMethod.GET)
 	@ResponseBody
+	@Transactional
 	public long getSize(){
 	    Object rlt = uDao.createNativeQuery("select count(id) from user").getSingleResult();
 		return (long) rlt;
@@ -47,6 +48,7 @@ public class UserController {
 
 	@RequestMapping(value="/all", method = RequestMethod.GET)
 	@ResponseBody
+	@Transactional
 	public List<User> getUsers(@RequestParam(required = true) int start, @RequestParam(required = true) int max){
 		List<User> users = uDao.findAll("role,userName", start, max);
 		return users;
@@ -54,6 +56,7 @@ public class UserController {
 
 	@RequestMapping(value="/get", method = RequestMethod.GET)
 	@ResponseBody
+	@Transactional
 	public User getUser(@RequestParam(required = true) String userName){
 	    if (userName != null) {
 	        userName = userName.toUpperCase();
@@ -120,6 +123,7 @@ public class UserController {
 
     @RequestMapping(value = "/active", method = RequestMethod.POST)
     @ResponseBody
+    @Transactional
     public SessionInfo active(HttpServletRequest req) {
     	SessionInfo rlt = new SessionInfo();
     	// Get the client SSL certificates associated with the request

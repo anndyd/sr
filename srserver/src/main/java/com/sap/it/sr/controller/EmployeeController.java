@@ -35,6 +35,7 @@ public class EmployeeController {
 
 	@RequestMapping(value="/all", method = RequestMethod.GET)
 	@ResponseBody
+	@Transactional
 	public List<Employee> getEmployees(){
 		return dao.findAll();
 	}
@@ -90,6 +91,7 @@ public class EmployeeController {
 		dao.remove(id);
 	}
     
+	@Transactional
     private Employee getADInfo(Employee emp) {
         Employee rlt = new Employee();
         if (emp.getEmpId() != null) {

@@ -61,6 +61,7 @@ public class PickupDataController {
     
 	@RequestMapping(value="/allwithparam", method = RequestMethod.GET)
 	@ResponseBody
+	@Transactional
 	public List<PickupDataInfo> getPickupDatas(
 			@RequestParam(required = true) String empIdFrom,
 			@RequestParam(required = true) String empIdTo,
@@ -76,12 +77,14 @@ public class PickupDataController {
 
 	@RequestMapping(value="/all", method = RequestMethod.GET)
 	@ResponseBody
+	@Transactional
 	public List<PickupData> getPickupDatas(){
 		return dao.findAll();
 	}
 
 	@RequestMapping(value="/get", method = RequestMethod.GET)
 	@ResponseBody
+	@Transactional
 	public PickupData getPickupData(@RequestParam(required = true) String badgeId, 
 			@RequestParam(required = true) String empId){
 		PickupData pd = new PickupData();
@@ -102,12 +105,14 @@ public class PickupDataController {
 
 	@RequestMapping(value="/find", method = RequestMethod.GET)
 	@ResponseBody
+	@Transactional
 	public PickupData findPickupData(@RequestParam(required = true) String empId){
 		return findItemByEmpId(empId);
 	}
 
 	@RequestMapping(value="/findbypo", method = RequestMethod.GET)
 	@ResponseBody
+	@Transactional
 	public PickupData findPickupDataByPo(@RequestParam(required = true) String poNum){
 		return findItemByPoNumber(poNum);
 	}
@@ -158,22 +163,26 @@ public class PickupDataController {
 
     @RequestMapping(value="/getLocations", method = RequestMethod.GET)
     @ResponseBody
+    @Transactional
     public List<String> getLocations(){
         return dao.getAllLocations();
     }
 
     @RequestMapping(value="/getPoNumbers", method = RequestMethod.GET)
     @ResponseBody
+    @Transactional
     public List<String> getPoNumbers(){
         return dao.getAllPoNumbers();
     }
 
     @RequestMapping(value="/getCostCenters", method = RequestMethod.GET)
     @ResponseBody
+    @Transactional
     public List<String> getCostCenters(){
         return dao.getAllCostCenters();
     }
 
+    @Transactional
 	private PickupData findItemByEmpId(String empId) {
 		Map<String, ItemInfo> ifs = new HashMap<>();
 		List<SyncItemDetail> sids = sddao.findByEmpId(empId);
@@ -251,6 +260,7 @@ public class PickupDataController {
 		return pd;
 	} */
 
+    @Transactional
 	private PickupData findItemByPoNumber(String poNum) {
 		PickupData pd = new PickupData();
 		List<SyncItemInfo> sis = sidao.findByPoNum(poNum);
