@@ -26,19 +26,19 @@ public class LoginRequiredInterceptor extends HandlerInterceptorAdapter {
         String usrFullName = (String) session.getAttribute(SessionHolder.USER_FULLNAME);
         String usrRole = (String) session.getAttribute(SessionHolder.USER_ROLE);
 
-//        LOGGER.debug(String.format("=======request preHandle: userId: %s, request url: %s, query string: %s, method: %s", 
-//        		userId, request.getRequestURL(), request.getQueryString(), request.getMethod()));
-//
-//        if (userId == null && !loginPage.equals(request.getRequestURI())) {
-//            LOGGER.warn("---[Login]--- NO authorized user in the session, should login");
+        LOGGER.debug(String.format("=======request preHandle: userId: %s, request url: %s, query string: %s, method: %s", 
+        		userId, request.getRequestURL(), request.getQueryString(), request.getMethod()));
+
+        if (userId == null && !loginPage.equals(request.getRequestURI())) {
+            LOGGER.warn("---[Login]--- NO authorized user in the session, should login");
 //            SessionHolder.setContext(null, null, null);
 //            LOGGER.warn("---[Login]--- redirect to login page");
 //            String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
 //            response.sendRedirect(baseUrl + loginPage);
-//            return false;
-//        } else {
-//            SessionHolder.setContext(userId, usrFullName, usrRole);
-//        }
+            return false;
+        } else {
+            SessionHolder.setContext(userId, usrFullName, usrRole);
+        }
         return userId != null;
     }
 
