@@ -35,14 +35,14 @@ public class EmployeeController {
 
 	@RequestMapping(value="/all", method = RequestMethod.GET)
 	@ResponseBody
-	@Transactional
+	@Transactional(readOnly = true)
 	public List<Employee> getEmployees(){
 		return dao.findAll();
 	}
 
 	@RequestMapping(value="/get", method = RequestMethod.GET)
 	@ResponseBody
-	@Transactional
+	@Transactional(readOnly = true)
 	public Employee getEmployee(@RequestParam(required = true) String badgeId, 
 	        @RequestParam(required = true) String empId, 
 	        @RequestParam(required = false) boolean... needADInfo){
@@ -91,7 +91,7 @@ public class EmployeeController {
 		dao.remove(id);
 	}
     
-	@Transactional
+	@Transactional(readOnly = true)
     private Employee getADInfo(Employee emp) {
         Employee rlt = new Employee();
         if (emp.getEmpId() != null) {
