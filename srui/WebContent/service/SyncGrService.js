@@ -5,11 +5,13 @@ sap.ui.define([
   "use strict";
   var bs = new BaseService();
   return BaseService.extend("sap.it.sr.ui.service.SyncGrService", {
-	  syncGrData: function() {
+	  syncGrData: function(oData) {
       var dtd = $.Deferred();
       bs.asyncReq({
         url: "/srserver/grData/sync",
-        type: "GET"
+        type: "GET",
+    		contentType: "application/json",
+    		data: oData
       }).done(function(data) {
         dtd.resolve(data);
       }).fail(function(err) {

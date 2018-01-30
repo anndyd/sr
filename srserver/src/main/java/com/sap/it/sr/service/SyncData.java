@@ -1,6 +1,8 @@
 package com.sap.it.sr.service;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -47,7 +49,7 @@ public class SyncData {
     @Transactional
     public void autoSyncGrData() {
         LOGGER.info("Start synchronize gr data, ...");
-        syncGrData();
+        syncGrData(null);
         LOGGER.info("Synchronize gr data end.");
     }
 
@@ -60,24 +62,26 @@ public class SyncData {
     }
 
     @Transactional
-    public long syncGrData() {
+    public long syncGrData(String syncStartTime) {
         long rlt = 0;
         try {
-            // SimpleDateFormat formatter = new
-            // SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-            // String dateInString = "2016-11-20 15:23:01";
-
             Timestamp currentTime = new Timestamp(Calendar.getInstance().getTimeInMillis());
-            // try {
-            // currentTime = new
-            // Timestamp(formatter.parse(dateInString).getTime());
-            // } catch (ParseException e) {}
             List<CommonSettings> ss = sdao.findAll();
             CommonSettings cs = new CommonSettings();
             cs.setPoCreateTime(currentTime);
             if (ss != null && ss.size() > 0) {
                 cs = ss.get(0);
             }
+			if (null != syncStartTime && !"".equals(syncStartTime)) {
+				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+				Timestamp tmpTime = currentTime;
+				try {
+					tmpTime = new Timestamp(formatter.parse(syncStartTime).getTime());
+				} catch (ParseException e) {
+					tmpTime = currentTime;
+				}
+				cs.setPoCreateTime(tmpTime);
+			}
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(cs.getPoCreateTime().getTime());
             // back 1 second for corvering millisecond cut error
