@@ -31,7 +31,9 @@ public class LoginRequiredInterceptor extends HandlerInterceptorAdapter {
 
         if (userId == null && !loginPage.equals(request.getRequestURI())) {
             LOGGER.warn("---[Login]--- NO authorized user in the session, should login");
-//            SessionHolder.setContext(null, null, null);
+            SessionHolder.setContext(null, null, null);
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+
 //            LOGGER.warn("---[Login]--- redirect to login page");
 //            String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
 //            response.sendRedirect(baseUrl + loginPage);

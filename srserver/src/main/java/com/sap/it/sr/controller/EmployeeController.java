@@ -54,7 +54,7 @@ public class EmployeeController {
 			emp = dao.findByEmpId(empId);
 		}
 		if (null != needADInfo && needADInfo.length > 0 && needADInfo[0]) {
-		    emp.setEmpId(empId);
+		    emp.setEmpId(empId.toUpperCase());
 		    LOGGER.info("---- Employee.get -> get AD information ----");
 		    emp = getADInfo(emp);
 		}
