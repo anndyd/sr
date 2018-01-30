@@ -88,6 +88,7 @@ public class SyncData {
             cal.add(Calendar.SECOND, -1);
             Timestamp startTime = new Timestamp(cal.getTime().getTime());
 
+            LOGGER.info("Start synchronize gr data, time from: " + startTime.toString());
             List<SyncItemInfo> itmi = dao.findDoneItem(startTime);
             if (itmi != null && itmi.size() > 0) {
                 for (SyncItemInfo itm : itmi) {

@@ -27,8 +27,9 @@ sap.ui.define([
 			sap.ui.core.BusyIndicator.show();
 			var i18n = this.getResourceBundle();
 			var date1 = new Date();
+			var param = that.getView().getModel().getData();
 			
-			ss.syncGrData().done(function(data){
+			ss.syncGrData(param).done(function(data){
 				var date2 = new Date();
 				var diff = date2 - date1;
 				
