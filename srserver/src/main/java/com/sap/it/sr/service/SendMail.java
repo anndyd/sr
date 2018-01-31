@@ -118,8 +118,8 @@ public class SendMail {
     }
     
     private void handleImage(Multipart parts, String content) throws Exception {
-		Pattern pImageFilename = Pattern.compile("image[0-9]*\\.jpg");
-		Pattern pattern = Pattern.compile("(?<=\")[^\"]*image[0-9]*\\.jpg(?=\")");
+		Pattern pImageFilename = Pattern.compile("image[0-9]*\\.(jpg|png|gif)");
+		Pattern pattern = Pattern.compile("(?<=\")[^\"]*image[0-9]*\\.(jpg|png|gif)(?=\")");
 		Matcher matcher = pattern.matcher(content);
 		StringBuffer sbr = new StringBuffer();
 		while (matcher.find()) {

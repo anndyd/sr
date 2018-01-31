@@ -27,7 +27,7 @@ import com.sap.it.sr.entity.PickupData;
 
 public class TestSendMail {
 	private final SendMail sm = new SendMail();
-	//@Test
+	@Test
 	public void TestSendEquipmentReadyNotificationEmail() {
 		PickupData pd = new PickupData();
 				ItemInfo itm = new ItemInfo();
@@ -68,7 +68,7 @@ public class TestSendMail {
 		sm.sendPickedEmail(pd, Arrays.asList(""), Arrays.asList("I063098"));
 	}
 	
-	@Test
+	//@Test
 	public void SendMailSSL() {
         String sender = "Tester@exchange.sap.corp";
         String receiver = "%s@exchange.sap.corp";
