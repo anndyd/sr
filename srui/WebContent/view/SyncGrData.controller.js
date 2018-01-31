@@ -27,7 +27,8 @@ sap.ui.define([
 			sap.ui.core.BusyIndicator.show();
 			var i18n = this.getResourceBundle();
 			var date1 = new Date();
-			var param = that.getView().getModel().getData();
+			var st = that.getView().getModel().getData().startTime;
+      var param = {startTime: st ? st : null};
 			
 			ss.syncGrData(param).done(function(data){
 				var date2 = new Date();

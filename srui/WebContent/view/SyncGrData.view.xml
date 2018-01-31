@@ -18,7 +18,7 @@
 						valueFormat="yyyy-MM-dd HH:mm:ss" displayFormat="short"
 						class="sapUiSmallMarginBottom">
 						<layoutData>
-							<l:GridData span="L2 M3 S4" />
+							<l:GridData span="L3 M4 S5" />
 						</layoutData>
 					</DateTimePicker>	
 				</f:content>

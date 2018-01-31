@@ -73,7 +73,7 @@ public class SyncData {
                 cs = ss.get(0);
             }
 			if (null != syncStartTime && !"".equals(syncStartTime)) {
-				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				Timestamp tmpTime = currentTime;
 				try {
 					tmpTime = new Timestamp(formatter.parse(syncStartTime).getTime());
