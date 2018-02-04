@@ -48,17 +48,17 @@ public class SyncData {
     @Scheduled(cron = "0 0/5 * * * ?")
     @Transactional
     public void autoSyncGrData() {
-        LOGGER.info("Start synchronize gr data, ...");
+        LOGGER.info("====Start synchronize gr data, ...");
         syncGrData(null);
-        LOGGER.info("Synchronize gr data end.");
+        LOGGER.info("====Synchronize gr data end.");
     }
 
     @Scheduled(cron = "0 0 1 * * ?")
     @Transactional
     public void autoSyncEmpData() {
-        LOGGER.info("Start synchronize employee data, ...");
+        LOGGER.info("****Start synchronize employee data, ...");
         syncEmployeeDataFromLDAP();
-        LOGGER.info("Synchronize employee data end.");
+        LOGGER.info("****Synchronize employee data end.");
     }
 
     @Transactional
@@ -105,31 +105,35 @@ public class SyncData {
             cs.setPoCreateTime(currentTime);
             sdao.merge(cs);
         } catch (Exception e) {
-            LOGGER.error("======== Synchronize employee data failed. ========");
+            LOGGER.error("======== Synchronize gr data failed. ========");
             e.printStackTrace();
         }
 
         return rlt;
     }
 
-    @Transactional
     private void syncEmployeeDataFromLDAP() {
-        List<Employee> emps = edao.findAll();
-        for (Employee emp : emps) {
-            EmpInfo ei = edao.getEmpInfo(emp.getEmpId());
-            if (null != ei) {
-                if ((null != ei.getName() && !ei.getName().equals(emp.getEmpName()))
-                        || (null != ei.getCostCenter() && !ei.getCostCenter().equals(emp.getCostCenter()))) {
-                    emp.setEmpName(ei.getName());
-                    emp.setCostCenter(ei.getCostCenter());
-                    edao.merge(emp);
-                    LOGGER.info("Update employee: " + emp.getEmpId());
-                }
-            } else {
-                edao.remove(emp);
-                LOGGER.info("Remove employee: " + emp.getEmpId());
-            }
-        }
+        try {
+			List<Employee> emps = edao.findAll();
+			for (Employee emp : emps) {
+			    EmpInfo ei = edao.getEmpInfo(emp.getEmpId());
+			    if (null != ei) {
+			        if ((null != ei.getName() && !ei.getName().equals(emp.getEmpName()))
+			                || (null != ei.getCostCenter() && !ei.getCostCenter().equals(emp.getCostCenter()))) {
+			            emp.setEmpName(ei.getName());
+			            emp.setCostCenter(ei.getCostCenter());
+			            edao.merge(emp);
+			            LOGGER.info("****Update employee: " + emp.getEmpId());
+			        }
+			    } else {
+			        edao.remove(emp);
+			        LOGGER.info("****Remove employee: " + emp.getEmpId());
+			    }
+			}
+		} catch (Exception e) {
+			LOGGER.error("******** Synchronize employee data failed. ********");
+			e.printStackTrace();
+		}
     }
 
 }
