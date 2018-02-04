@@ -4,7 +4,9 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,7 @@ import com.sap.it.sr.util.LdapHelper;
 // @Scope("request")
 public class SyncData {
     private static final Logger LOGGER = Logger.getLogger(SyncData.class);
+    private boolean syncGrDataEnabled = true;
 
     @Autowired
     private GrPoInfoDao dao;
@@ -49,24 +52,23 @@ public class SyncData {
     private EmployeeDao edao;
 
     @Scheduled(cron = "0 0/5 * * * ?")
-    @Transactional
     public void autoSyncGrData() {
-        LOGGER.info("====Start synchronize gr data, ...");
-        syncGrData(null);
-        LOGGER.info("====Synchronize gr data end.");
+    		if (syncGrDataEnabled) {
+    			syncGrData(null);
+    		}
     }
-
-    @Scheduled(cron = "0 0 1 * * ?")
-    @Transactional
+// comment for avoiding db connection close
+//    @Scheduled(cron = "0 0 1 * * ?")
     public void autoSyncEmpData() {
-        LOGGER.info("****Start synchronize employee data, ...");
-        syncEmployeeDataFromLDAP();
-        LOGGER.info("****Synchronize employee data end.");
+//        LOGGER.info("****Start synchronize employee data, ...");
+//        syncEmployeeDataFromLDAP();
+//        LOGGER.info("****Synchronize employee data end.");
     }
 
     @Transactional
     public long syncGrData(String syncStartTime) {
-        long rlt = 0;
+	    long rlt = 0;
+		LOGGER.info("====Start synchronize gr data, ...");
         try {
             Timestamp currentTime = new Timestamp(Calendar.getInstance().getTimeInMillis());
             List<CommonSettings> ss = sdao.findAll();
@@ -111,38 +113,60 @@ public class SyncData {
             LOGGER.error("======== Synchronize gr data failed. ========");
             e.printStackTrace();
         }
-
+        LOGGER.info("====Synchronize gr data end.");
         return rlt;
     }
 
     private void syncEmployeeDataFromLDAP() {
         try {
-        		User admin = edao.getAdminInfo();
-        		if (admin.getPassword() != null && "".equals(admin.getPassword())) {
-        			String pwd = EncryptHelper.decrypt(admin.getPassword());
-	    			List<Employee> emps = edao.findAll();
-				for (Employee emp : emps) {
-				    EmpInfo ei = LdapHelper.getEmployee(emp.getEmpId(), admin.getUserName(), pwd);
-				    if (null != ei) {
-				        if ((null != ei.getName() && !ei.getName().equals(emp.getEmpName()))
-				                || (null != ei.getCostCenter() && !ei.getCostCenter().equals(emp.getCostCenter()))) {
-				            emp.setEmpName(ei.getName());
-				            emp.setCostCenter(ei.getCostCenter());
-				            edao.merge(emp);
-				            LOGGER.info("****Update employee: " + emp.getEmpId());
-				        }
-				    } else {
-				        edao.remove(emp);
-				        LOGGER.info("****Remove employee: " + emp.getEmpId());
-				    }
-				}
-        		} else {
-        			LOGGER.error("**** Can't find admin information!");
-        		}
+        		syncGrDataEnabled = false;
+    			List<Employee> emps = edao.findAll();
+    			Map<String, EmpInfo> eis = new HashMap<>();
+    			queryEmployees(emps, eis);
+    			updateEmployees(emps, eis);
 		} catch (Exception e) {
 			LOGGER.error("******** Synchronize employee data failed. ********");
 			e.printStackTrace();
+		} finally {
+			syncGrDataEnabled = true;
 		}
     }
 
+    
+    @Transactional(readOnly = true)
+    private void queryEmployees(List<Employee> emps, Map<String, EmpInfo> eis) {
+    		LOGGER.info("**** Start query employee... ");
+		User admin = edao.getAdminInfo();
+		if (admin.getPassword() != null && !"".equals(admin.getPassword())) {
+			String pwd = EncryptHelper.decrypt(admin.getPassword());
+			for (Employee emp : emps) {
+			    EmpInfo ei = LdapHelper.getEmployee(emp.getEmpId(), admin.getUserName(), pwd);
+			    eis.put(emp.getEmpId(), ei);
+			}
+		} else {
+			LOGGER.error("**** Can't find admin information!");
+		}
+		LOGGER.info("**** End query employee. ");
+    }
+    
+    @Transactional
+    private void updateEmployees(List<Employee> emps, Map<String, EmpInfo> eis) {
+    		LOGGER.info("**** Start update employee... ");
+    		emps.forEach(emp -> {
+    			EmpInfo ei = eis.get(emp.getEmpId());
+	 	    if (null != ei) {
+		        if ((null != ei.getName() && !ei.getName().equals(emp.getEmpName()))
+		                || (null != ei.getCostCenter() && !ei.getCostCenter().equals(emp.getCostCenter()))) {
+		            emp.setEmpName(ei.getName());
+		            emp.setCostCenter(ei.getCostCenter());
+		            edao.merge(emp);
+		            LOGGER.info("****Update employee: " + emp.getEmpId());
+		        }
+		    } else {
+		        edao.remove(emp);
+		        LOGGER.info("****Remove employee: " + emp.getEmpId());
+		    }
+    		});
+    		LOGGER.info("**** End update employee. ");
+    }
 }

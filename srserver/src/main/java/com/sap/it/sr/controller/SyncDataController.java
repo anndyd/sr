@@ -12,18 +12,25 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sap.it.sr.service.SyncData;
 
 @Controller
-@RequestMapping("grData")
+@RequestMapping("syncData")
 @Scope("request")
-public class GrDataController {
+public class SyncDataController {
 //	private static final Logger LOGGER = Logger.getLogger(GrDataController.class);
 	
     @Autowired
     private SyncData sync;
 
-	@RequestMapping(value="/sync", method = RequestMethod.GET)
+	@RequestMapping(value="/syncGr", method = RequestMethod.GET)
 	@ResponseBody
 	@Transactional
 	public long syncGrData(@RequestParam String startTime){
 		return sync.syncGrData(startTime);
+	}
+
+	@RequestMapping(value="/syncEmp", method = RequestMethod.GET)
+	@ResponseBody
+	@Transactional
+	public void syncEmpData(){
+		sync.autoSyncEmpData();
 	}
 }

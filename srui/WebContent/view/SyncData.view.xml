@@ -1,10 +1,10 @@
 <core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
 	xmlns="sap.m" xmlns:l="sap.ui.layout"
 	xmlns:f="sap.ui.layout.form"
-	controllerName="sap.it.sr.ui.view.SyncGrData" xmlns:html="http://www.w3.org/1999/xhtml">
+	controllerName="sap.it.sr.ui.view.SyncData" xmlns:html="http://www.w3.org/1999/xhtml">
 	<Page 
-		title="{i18n>syncGrDataTitle}"
-		id="SyncGrDataPage">
+		title="{i18n>syncDataTitle}"
+		id="SyncDataPage">
 		<VBox>
 			<f:SimpleForm id="syncForm" minWidth="1024" backgroundDesign="Solid"
 				maxContainerCols="2" editable="true" layout="ResponsiveGridLayout"
@@ -25,7 +25,7 @@
 			</f:SimpleForm>
 		</VBox>
 	
-		<Table id="idSyncGrDataTable"
+		<Table id="idSyncDataTable"
 			backgroundDesign="Solid"
 			inset="false"
 			items="{
@@ -51,6 +51,8 @@
 		<footer>
 			<Bar>
 				<contentRight>
+					<Button class="sapUiSmallMarginEnd" id="syncEmp" text="{i18n>syncEmpData}"
+						visible="false" press="refreshEmpData" icon="sap-icon://synchronize" />
 					<Button class="sapUiSmallMarginEnd" id="sync" text="{i18n>syncGrData}"
 						type="Emphasized" visible="true" press="refreshData" icon="sap-icon://synchronize" />
 				</contentRight>

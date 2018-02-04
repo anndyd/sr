@@ -123,9 +123,9 @@
 					"target": ["home", "exportPickupData"]
 				},
 				{
-					"pattern": "syncGrData",
-					"name": "syncGrData",
-					"target": ["home", "syncGrData"]
+					"pattern": "syncData",
+					"name": "syncData",
+					"target": ["home", "syncData"]
 				},
                 {
                     "pattern": ["main",""],
@@ -182,8 +182,8 @@
 					
 					"controlAggregation": "detailPages"
 				},
-				"syncGrData": {
-					"viewName": "SyncGrData",
+				"syncData": {
+					"viewName": "SyncData",
 					"viewLevel": 1
 				},
 				"home": {

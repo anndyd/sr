@@ -57,8 +57,8 @@
 	            		icon="sap-icon://user-settings" key="user">
 	            </NavigationListItem>
 	            <NavigationListItem 
-	            		text="{i18n>syncGrData}"
-	            		icon="sap-icon://synchronize" key="syncGrData">
+	            		text="{i18n>syncDataTitle}"
+	            		icon="sap-icon://synchronize" key="syncData">
 	            </NavigationListItem>
 	            <NavigationListItem 
 	            		text="{i18n>help}"
