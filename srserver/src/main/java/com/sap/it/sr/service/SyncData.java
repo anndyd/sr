@@ -22,7 +22,10 @@ import com.sap.it.sr.entity.CommonSettings;
 import com.sap.it.sr.entity.Employee;
 import com.sap.it.sr.entity.SyncItemDetail;
 import com.sap.it.sr.entity.SyncItemInfo;
+import com.sap.it.sr.entity.User;
 import com.sap.it.sr.util.EmpInfo;
+import com.sap.it.sr.util.EncryptHelper;
+import com.sap.it.sr.util.LdapHelper;
 
 @Lazy(false)
 @Component
@@ -114,22 +117,28 @@ public class SyncData {
 
     private void syncEmployeeDataFromLDAP() {
         try {
-			List<Employee> emps = edao.findAll();
-			for (Employee emp : emps) {
-			    EmpInfo ei = edao.getEmpInfo(emp.getEmpId());
-			    if (null != ei) {
-			        if ((null != ei.getName() && !ei.getName().equals(emp.getEmpName()))
-			                || (null != ei.getCostCenter() && !ei.getCostCenter().equals(emp.getCostCenter()))) {
-			            emp.setEmpName(ei.getName());
-			            emp.setCostCenter(ei.getCostCenter());
-			            edao.merge(emp);
-			            LOGGER.info("****Update employee: " + emp.getEmpId());
-			        }
-			    } else {
-			        edao.remove(emp);
-			        LOGGER.info("****Remove employee: " + emp.getEmpId());
-			    }
-			}
+        		User admin = edao.getAdminInfo();
+        		if (admin.getPassword() != null && "".equals(admin.getPassword())) {
+        			String pwd = EncryptHelper.decrypt(admin.getPassword());
+	    			List<Employee> emps = edao.findAll();
+				for (Employee emp : emps) {
+				    EmpInfo ei = LdapHelper.getEmployee(emp.getEmpId(), admin.getUserName(), pwd);
+				    if (null != ei) {
+				        if ((null != ei.getName() && !ei.getName().equals(emp.getEmpName()))
+				                || (null != ei.getCostCenter() && !ei.getCostCenter().equals(emp.getCostCenter()))) {
+				            emp.setEmpName(ei.getName());
+				            emp.setCostCenter(ei.getCostCenter());
+				            edao.merge(emp);
+				            LOGGER.info("****Update employee: " + emp.getEmpId());
+				        }
+				    } else {
+				        edao.remove(emp);
+				        LOGGER.info("****Remove employee: " + emp.getEmpId());
+				    }
+				}
+        		} else {
+        			LOGGER.error("**** Can't find admin information!");
+        		}
 		} catch (Exception e) {
 			LOGGER.error("******** Synchronize employee data failed. ********");
 			e.printStackTrace();
