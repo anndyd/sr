@@ -3,6 +3,7 @@ package com.sap.it.sr.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,14 +23,14 @@ public class SyncDataController {
 
 	@RequestMapping(value="/syncGr", method = RequestMethod.GET)
 	@ResponseBody
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public long syncGrData(@RequestParam String startTime){
 		return sync.syncGrData(startTime);
 	}
 
 	@RequestMapping(value="/syncEmp", method = RequestMethod.GET)
 	@ResponseBody
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void syncEmpData(){
 		sync.autoSyncEmpData();
 	}

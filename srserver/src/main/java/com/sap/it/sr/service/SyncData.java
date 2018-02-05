@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sap.it.sr.dao.CommonSettingsDao;
@@ -52,20 +53,21 @@ public class SyncData {
     private EmployeeDao edao;
 
     @Scheduled(cron = "0 0/5 * * * ?")
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void autoSyncGrData() {
-    		if (syncGrDataEnabled) {
-    			syncGrData(null);
-    		}
+    	if (syncGrDataEnabled) {
+    		syncGrData(null);
+    	}
     }
 // comment for avoiding db connection close
-//    @Scheduled(cron = "0 0 1 * * ?")
+//    @Scheduled(cron = "0 0 1 ? * 7L *") // every month last Saturday 01:00
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void autoSyncEmpData() {
 //        LOGGER.info("****Start synchronize employee data, ...");
 //        syncEmployeeDataFromLDAP();
 //        LOGGER.info("****Synchronize employee data end.");
     }
 
-    @Transactional
     public long syncGrData(String syncStartTime) {
 	    long rlt = 0;
 		LOGGER.info("====Start synchronize gr data, ...");
@@ -132,8 +134,6 @@ public class SyncData {
 		}
     }
 
-    
-    @Transactional(readOnly = true)
     private void queryEmployees(List<Employee> emps, Map<String, EmpInfo> eis) {
     		LOGGER.info("**** Start query employee... ");
 		User admin = edao.getAdminInfo();
@@ -149,7 +149,6 @@ public class SyncData {
 		LOGGER.info("**** End query employee. ");
     }
     
-    @Transactional
     private void updateEmployees(List<Employee> emps, Map<String, EmpInfo> eis) {
     		LOGGER.info("**** Start update employee... ");
     		emps.forEach(emp -> {
