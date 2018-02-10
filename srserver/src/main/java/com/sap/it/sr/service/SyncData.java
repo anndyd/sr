@@ -60,7 +60,7 @@ public class SyncData {
     	}
     }
 
-    @Scheduled(cron = "0 0 1 ? * 7L *") // every month last Saturday 01:00
+//    @Scheduled(cron = "0 0 1 ? * 7L *") // every month last Saturday 01:00
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void autoSyncEmpData() {
         LOGGER.info("****Start synchronize employee data, ...");
