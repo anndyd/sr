@@ -26,27 +26,27 @@
 	  type="javax.sql.DataSource"
 	  factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
 	  validationQuery="SELECT 1 FROM dummy"
-    initialSize="10"
-    maxIdle="50"
+      initialSize="10"
+      maxIdle="50"
 	  maxActive="100"
-    minIdle="10"
-    maxWait="10000"
-	  removeAbandoned="true"
+      minIdle="10"
+      maxWait="10000"
+	  removeAbandoned="false"
 	  timeBetweenEvictionRunsMillis="5000"
 	  username="root"
-    password="Sybase123" 
+      password="Sybase123" 
 	  driverClassName="org.mariadb.jdbc.Driver"
-    url="jdbc:mysql://pekitwin2008vm.pek.sap.corp:3306/srmbk" />
+      url="jdbc:mysql://pekitwin2008vm.pek.sap.corp:3306/srmbk" />
 	<Resource 
 	  name="grDataSourceJNDI" 
 	  auth="Container" 
 	  type="javax.sql.DataSource"
-    maxTotal="100" 
+      maxTotal="100" 
 	  maxIdle="30" 
 	  username="bgr"
-    password="Sap12345"
+      password="Sap12345"
 	  driverClassName="com.sybase.jdbc4.jdbc.SybDriver"
-    url="jdbc:sybase:Tds:10.58.32.248:3001/ServiceName=grcn" />
+      url="jdbc:sybase:Tds:10.58.32.248:3001/ServiceName=grcn" />
     <!-- web application will be reloaded.                                   -->
     <WatchedResource>WEB-INF/web.xml</WatchedResource>
     <WatchedResource>${catalina.base}/conf/web.xml</WatchedResource>

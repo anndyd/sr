@@ -14,7 +14,7 @@ sap.ui.define(
 					that.getView().setModel(oModel);
 					that.getView().bindElement("/");
 					
-//					that.getView().byId("syncEmp").setVisible(util.sessionInfo.role === "1");
+					that.getView().byId("syncEmp").setVisible(util.sessionInfo.role === "1");
 					// that.refreshData();
 				},
 

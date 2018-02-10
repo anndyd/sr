@@ -59,13 +59,13 @@ public class SyncData {
     		syncGrData(null);
     	}
     }
-// comment for avoiding db connection close
-//    @Scheduled(cron = "0 0 1 ? * 7L *") // every month last Saturday 01:00
+
+    @Scheduled(cron = "0 0 1 ? * 7L *") // every month last Saturday 01:00
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void autoSyncEmpData() {
-//        LOGGER.info("****Start synchronize employee data, ...");
-//        syncEmployeeDataFromLDAP();
-//        LOGGER.info("****Synchronize employee data end.");
+        LOGGER.info("****Start synchronize employee data, ...");
+        syncEmployeeDataFromLDAP();
+        LOGGER.info("****Synchronize employee data end.");
     }
 
     public long syncGrData(String syncStartTime) {
