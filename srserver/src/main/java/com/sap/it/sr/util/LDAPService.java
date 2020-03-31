@@ -137,6 +137,24 @@ public class LDAPService {
 
 	}
 
+	public SearchResult searchComputer(String name) throws NamingException {
+
+		String searchFilter = "(&(objectClass=computer)(name=*" + name + "*))";
+		SearchControls searchControls = new SearchControls();
+		searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+
+		NamingEnumeration<SearchResult> results = ldapContext.search("OU=APJ,OU=UserComputers,DC=global,DC=corp,DC=sap", searchFilter,
+				searchControls);
+
+		if (results.hasMoreElements()) {
+			SearchResult searchResult = results.nextElement();
+			return searchResult;
+		} else {
+			return null;
+		}
+
+	}
+
 	public void close() throws NamingException {
 
 		this.ldapContext.close();
